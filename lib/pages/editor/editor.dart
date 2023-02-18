@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -49,8 +50,24 @@ class _EditorState extends State<Editor> {
     });
   }
 
+  String profile = "";
+  String name = "";
+  bool callOneTime = true;
+
+  void get() async {
+    String email = FirebaseAuth.instance.currentUser!.email!;
+    final json =
+        await FirebaseFirestore.instance.collection('user').doc(email).get();
+    setState(() {
+      profile = json['profile'];
+      name = json['name'];
+      callOneTime = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (callOneTime) get();
     return Scaffold(
       body: Center(
         child: ListView(
@@ -82,176 +99,177 @@ class _EditorState extends State<Editor> {
                     showCupertinoModalPopup(
                       context: context,
                       builder: (context) => Center(
-                        child: Container(
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.height -
                               MediaQuery.of(context).size.height / 10,
                           width: MediaQuery.of(context).size.width -
                               MediaQuery.of(context).size.width / 10,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.white,
-                          ),
-                          child: Scaffold(
-                            backgroundColor: Colors.transparent,
-                            body: Center(
-                              child: Form(
-                                key: key,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      TextFormField(
-                                        maxLength: 10,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        controller: docNumber,
-                                        validator: (value) {
-                                          try {
-                                            double x = double.parse(value!);
-                                            if (x <= 0) {
-                                              return "Tutorial ID must be a positive number.";
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Scaffold(
+                              body: Center(
+                                child: Form(
+                                  key: key,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        TextFormField(
+                                          maxLength: 10,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          controller: docNumber,
+                                          validator: (value) {
+                                            try {
+                                              double x = double.parse(value!);
+                                              if (x <= 0) {
+                                                return "Tutorial ID must be a positive number.";
+                                              }
+                                            } catch (e) {
+                                              return "Tutorial ID must be a number.";
                                             }
-                                          } catch (e) {
-                                            return "Tutorial ID must be a number.";
-                                          }
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              "type the Tutorial number...",
-                                          labelText: "Tutorial Number",
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            hintText:
+                                                "type the Tutorial number...",
+                                            labelText: "Tutorial Number",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      TextFormField(
-                                        maxLength: 50,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        controller: titel,
-                                        validator: (value) {
-                                          if (value!.length < 5) {
-                                            return "Titel is too short";
-                                          }
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                          hintText: "give a titele",
-                                          labelText: "Titel",
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFormField(
+                                          maxLength: 50,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          controller: titel,
+                                          validator: (value) {
+                                            if (value!.length < 5) {
+                                              return "Titel is too short";
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            hintText: "give a titele",
+                                            labelText: "Titel",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      TextFormField(
-                                        maxLength: 200,
-                                        autovalidateMode:
-                                            AutovalidateMode.onUserInteraction,
-                                        controller: shortDes,
-                                        validator: (value) {
-                                          if (value!.length < 10) {
-                                            return "Description is too short";
-                                          }
-                                          return null;
-                                        },
-                                        decoration: InputDecoration(
-                                          hintText:
-                                              "give a short description about this.",
-                                          labelText: "Description",
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        TextFormField(
+                                          maxLength: 200,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          controller: shortDes,
+                                          validator: (value) {
+                                            if (value!.length < 10) {
+                                              return "Description is too short";
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                            hintText:
+                                                "Short description about tutorial.",
+                                            labelText: "Description",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () async {
-                                              String email = FirebaseAuth
-                                                  .instance.currentUser!.email!;
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () async {
+                                                int len = json.length;
+                                                json.addAll({
+                                                  "info": {
+                                                    "len": "$len",
+                                                    "title": titel.text,
+                                                    "des": shortDes.text,
+                                                    "email": FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .email!,
+                                                    "name": name,
+                                                    "profile": profile
+                                                  }
+                                                });
 
-                                              int len = json.length;
-                                              json.addAll({
-                                                "info": {
-                                                  "len": "$len",
-                                                  "title": titel.text,
-                                                  "des": shortDes.text,
-                                                  "writer": email,
-                                                  "name": "Developer"
+                                                double id = double.parse(
+                                                    docNumber.text);
+                                                id = id * 10000000000;
+                                                final cheakRef =
+                                                    FirebaseFirestore.instance
+                                                        .collection(widget
+                                                            .contributionArea)
+                                                        .doc("$id");
+                                                final temdoc =
+                                                    await cheakRef.get();
+                                                if (temdoc.exists) {
+                                                  showModalBottomSheet(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        const Text(
+                                                            'This Document Number already exists. Try to change it'),
+                                                  );
+                                                } else {
+                                                  final ref = FirebaseFirestore
+                                                      .instance
+                                                      .collection(widget
+                                                          .contributionArea)
+                                                      .doc("$id");
+                                                  final myEncodedJson =
+                                                      jsonEncode(json);
+                                                  await ref.set(
+                                                      {'doc': myEncodedJson});
                                                 }
-                                              });
-
-                                              double id =
-                                                  double.parse(docNumber.text);
-                                              id = id * 10000000000;
-                                              final cheakRef = FirebaseFirestore
-                                                  .instance
-                                                  .collection(
-                                                      widget.contributionArea)
-                                                  .doc("$id");
-                                              final temdoc =
-                                                  await cheakRef.get();
-                                              if (temdoc.exists) {
+                                                Navigator.pop(context);
                                                 showModalBottomSheet(
                                                   context: context,
-                                                  builder: (context) => const Text(
-                                                      'This Document Number already exists. Try to change it'),
-                                                );
-                                              } else {
-                                                final ref = FirebaseFirestore
-                                                    .instance
-                                                    .collection(
-                                                        widget.contributionArea)
-                                                    .doc("$id");
-                                                final myEncodedJson =
-                                                    jsonEncode(json);
-                                                await ref.set(
-                                                    {'doc': myEncodedJson});
-                                              }
-                                              Navigator.pop(context);
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder: (context) =>
-                                                    const Center(
-                                                  child: Text(
-                                                    'Published Successfull',
-                                                    style:
-                                                        TextStyle(fontSize: 24),
+                                                  builder: (context) =>
+                                                      const Center(
+                                                    child: Text(
+                                                      'Published Successfull',
+                                                      style: TextStyle(
+                                                          fontSize: 24),
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                            child: const Text("Publish"),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('Cancel'),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                                );
+                                              },
+                                              child: const Text("Publish"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Cancel'),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -449,7 +467,6 @@ class _EditorState extends State<Editor> {
                 QuillCustomButton(
                   icon: Icons.dataset_linked_outlined,
                   onTap: () {
-                    final key = GlobalKey<FormState>();
                     final temController = TextEditingController();
                     showModalBottomSheet(
                       context: context,
@@ -458,18 +475,9 @@ class _EditorState extends State<Editor> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Form(
-                              key: key,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
-                                validator: (value) {
-                                  if (value!.endsWith('.jpg') ||
-                                      value.endsWith('.jepg') ||
-                                      value.endsWith('.png') ||
-                                      value.endsWith('.webp')) {
-                                    return null;
-                                  }
-                                  return "Not a valid image link";
-                                },
                                 autofocus: true,
                                 controller: temController,
                                 decoration: InputDecoration(
@@ -490,25 +498,23 @@ class _EditorState extends State<Editor> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (key.currentState!.validate()) {
-                                      setState(() {
-                                        listOfContent.add(
-                                          Padding(
-                                            padding: const EdgeInsets.all(10),
-                                            child: Image.network(
-                                                temController.text),
-                                          ),
-                                        );
-                                        json.addAll({
-                                          "$count": {
-                                            "doc": temController.text,
-                                            "type": "image"
-                                          }
-                                        });
-                                        count++;
+                                    setState(() {
+                                      listOfContent.add(
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
+                                          child:
+                                              Image.network(temController.text),
+                                        ),
+                                      );
+                                      json.addAll({
+                                        "$count": {
+                                          "doc": temController.text,
+                                          "type": "image"
+                                        }
                                       });
-                                      Navigator.pop(context);
-                                    }
+                                      count++;
+                                    });
+                                    Navigator.pop(context);
                                   },
                                   child: const Text("Done"),
                                 ),
@@ -565,6 +571,18 @@ class _EditorState extends State<Editor> {
                             color: Colors.greenAccent,
                             borderRadius: BorderRadius.circular(100),
                           ),
+                          child: CachedNetworkImage(
+                            imageUrl: profile,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.image_outlined),
+                          ),
                         ),
                         const SizedBox(
                           width: 20,
@@ -572,12 +590,12 @@ class _EditorState extends State<Editor> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
-                              'Name',
-                              style: TextStyle(fontSize: 20),
+                              name,
+                              style: const TextStyle(fontSize: 20),
                             ),
-                            Text("example@gmail.com")
+                            Text(FirebaseAuth.instance.currentUser!.email!)
                           ],
                         )
                       ],

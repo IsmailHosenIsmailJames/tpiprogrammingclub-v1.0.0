@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../widget/stram_builder.dart';
 
-class Docs extends StatefulWidget {
-  const Docs({super.key});
+class CSharp extends StatefulWidget {
+  const CSharp({super.key});
 
   @override
-  State<Docs> createState() => _DocsState();
+  State<CSharp> createState() => _CSharpState();
 }
 
-class _DocsState extends State<Docs> {
+class _CSharpState extends State<CSharp> {
   @override
   Widget build(BuildContext context) {
     return const MyStramBuilder(
-      language: "doc",
+      language: "c#",
     );
   }
 }

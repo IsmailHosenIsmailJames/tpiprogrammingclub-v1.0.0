@@ -2,18 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../widget/stram_builder.dart';
 
-class Docs extends StatefulWidget {
-  const Docs({super.key});
+class CPlusPlus extends StatefulWidget {
+  const CPlusPlus({super.key});
 
   @override
-  State<Docs> createState() => _DocsState();
+  State<CPlusPlus> createState() => _CPlusPlusState();
 }
 
-class _DocsState extends State<Docs> {
+class _CPlusPlusState extends State<CPlusPlus> {
   @override
   Widget build(BuildContext context) {
     return const MyStramBuilder(
-      language: "doc",
+      language: "c++",
     );
   }
 }

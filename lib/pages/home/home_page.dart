@@ -1,11 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tpiprogrammingclub/pages/java/learn_java.dart';
 import '../../theme/change_button_theme.dart';
 import '../blogs/blogs.dart';
 import '../community/community.dart';
 import '../contributors/contributors.dart';
+import '../css/learn_css.dart';
 import '../docs/docs.dart';
-import '../learn_c_plus_plus/learn_c_plus_plus.dart';
-import '../learn_c_sharp/learn_c_sharp.dart';
+import '../html/learn_html.dart';
+import '../c++/learn_c_plus_plus.dart';
+import '../c_sharp/learn_c_sharp.dart';
 import '../learn_python/learn_python.dart';
 import 'home.dart';
 
@@ -19,9 +25,25 @@ class HomePage extends StatefulWidget {
 Widget currentPage = const Home();
 
 class _HomePageState extends State<HomePage> {
-  Widget title = Row(
-    children: const [Text("Home "), Icon(Icons.home)],
-  );
+  Widget title = const Text("Home");
+  bool callOneTime = true;
+  String? profileLink;
+  String? name;
+
+  void getdata() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final json = await FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.email!)
+          .get();
+      setState(() {
+        profileLink = json['profile'];
+        name = json['name'];
+        callOneTime = false;
+      });
+    }
+  }
 
   final elevatedStyle = const RoundedRectangleBorder(
     borderRadius: BorderRadius.only(
@@ -31,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   );
   @override
   Widget build(BuildContext context) {
+    if (callOneTime) getdata();
     return Scaffold(
       appBar: AppBar(
         title: title,
@@ -88,15 +111,21 @@ class _HomePageState extends State<HomePage> {
                               color: const Color.fromARGB(255, 34, 156, 255),
                               borderRadius: BorderRadius.circular(100),
                             ),
-                            child: const Center(
-                              child: Text(
-                                'TPI',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 15, 79, 132),
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
+                            child: profileLink != null
+                                ? CachedNetworkImage(
+                                    imageUrl: profileLink!,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Center(
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.image_outlined),
+                                  )
+                                : const Icon(Icons.person),
                           ),
                           const Text(
                             'TPI Programming Club',
@@ -115,6 +144,20 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(
               color: Colors.black,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const Home();
+                  title = const Text('Home');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('Home'),
             ),
             const SizedBox(
               height: 10,
@@ -142,7 +185,21 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Learn Python'),
+              child: const Text('Python'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const Java();
+                  title = const Text('Java');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('Java'),
             ),
             const SizedBox(
               height: 10,
@@ -156,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Learn C++'),
+              child: const Text('C++'),
             ),
             const SizedBox(
               height: 10,
@@ -170,7 +227,35 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Learn C#'),
+              child: const Text('C#'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const HTML();
+                  title = const Text('HTML');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('HTML'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const CSS();
+                  title = const Text('CSS');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('CSS'),
             ),
             const SizedBox(
               height: 10,
