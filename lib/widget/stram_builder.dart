@@ -43,7 +43,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
               DocumentSnapshot currentDoc = document[index];
               if (currentDoc.id == '0') {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     onPressed: () {
                       if (FirebaseAuth.instance.currentUser != null) {
@@ -89,15 +89,17 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                       selection: const TextSelection.collapsed(offset: 0),
                     );
                     Widget myWiget = QuillEditor.basic(
-                        controller: singleContentWidget, readOnly: true);
+                      controller: singleContentWidget,
+                      readOnly: true,
+                    );
                     listOfContent.add(myWiget);
                   }
                   if (type == "image") {
                     listOfContent.add(
                       Padding(
-                        padding: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: SizedBox(
-                          height: 500,
+                          height: 300,
                           width: MediaQuery.of(context).size.width -
                               MediaQuery.of(context).size.width / 10,
                           child: CachedNetworkImage(
@@ -118,46 +120,39 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                   }
                   if (type == 'code') {
                     listOfContent.add(
-                      Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {
-                                  Clipboard.setData(
-                                    ClipboardData(text: singleDoc['doc']),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Text('Copy '),
-                                    Icon(Icons.copy)
-                                  ],
-                                ),
-                              ),
-                              SyntaxView(
-                                code: singleDoc['doc'], // Code text
-                                syntax: Syntax.DART, // Language
-                                syntaxTheme: isDark
-                                    ? SyntaxTheme.monokaiSublime()
-                                    : SyntaxTheme.ayuLight(), // Theme
-                                fontSize: 18.0, // Font size
-                                withZoom:
-                                    true, // Enable/Disable zoom icon controls
-                                withLinesCount:
-                                    true, // Enable/Disable line number
-                                expanded:
-                                    false, // Enable/Disable container expansion
-                              ),
-                            ],
-                          )),
+                      Column(
+                        children: [
+                          OutlinedButton(
+                            onPressed: () {
+                              Clipboard.setData(
+                                ClipboardData(text: singleDoc['doc']),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [Text('Copy '), Icon(Icons.copy)],
+                            ),
+                          ),
+                          SyntaxView(
+                            code: singleDoc['doc'], // Code text
+                            syntax: Syntax.DART, // Language
+                            syntaxTheme: isDark
+                                ? SyntaxTheme.monokaiSublime()
+                                : SyntaxTheme.ayuLight(), // Theme
+                            fontSize: 16.0, // Font size
+                            withZoom: true, // Enable/Disable zoom icon controls
+                            withLinesCount: true, // Enable/Disable line number
+                            expanded:
+                                false, // Enable/Disable container expansion
+                          ),
+                        ],
+                      ),
                     );
                   }
                 }
                 Widget profile = Padding(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.only(top: 8, bottom: 10),
                   child: Column(
                     children: [
                       SizedBox(
@@ -174,17 +169,21 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 color: Colors.greenAccent,
                                 borderRadius: BorderRadius.circular(100),
                               ),
-                              child: CachedNetworkImage(
-                                imageUrl: profilePhoto,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) => Center(
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                        value: downloadProgress.progress),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: CachedNetworkImage(
+                                  imageUrl: profilePhoto,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Center(
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                                    ),
                                   ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.image_outlined),
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.image_outlined),
                               ),
                             ),
                             const SizedBox(
@@ -219,6 +218,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
                             'Descrption :',
@@ -235,19 +235,26 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(82, 120, 120, 120),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(9),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: listOfContent,
+                      Padding(
+                        padding: const EdgeInsets.all(1.5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(82, 150, 150, 150),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 10, top: 10, left: 1, right: 1),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: listOfContent,
+                            ),
                           ),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 15,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,

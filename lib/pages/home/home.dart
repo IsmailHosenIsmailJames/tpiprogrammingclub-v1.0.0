@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../theme/change_button_theme.dart';
 import '../../authentication/login.dart';
@@ -87,23 +88,45 @@ class _HomeState extends State<Home> {
                   }
                   if (type == "image") {
                     listOfContent.add(
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: SizedBox(
-                          height: 500,
-                          width: MediaQuery.of(context).size.width -
-                              MediaQuery.of(context).size.width / 10,
-                          child: CachedNetworkImage(
-                            imageUrl: singleDoc['doc'],
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress),
+                      GestureDetector(
+                        onTap: () async {
+                          if (!await launchUrl(
+                            Uri.parse(
+                              singleDoc['doc'],
+                            ),
+                          )) {
+                            throw Exception(
+                              'Could not launch ${singleDoc['doc']}',
+                            );
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: SizedBox(
+                            height: 300,
+                            width: MediaQuery.of(context).size.width -
+                                MediaQuery.of(context).size.width / 10,
+                            child: CachedNetworkImage(
+                              imageUrl: singleDoc['doc'],
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Text(
+                                  'To see Image Click Here...',
+                                  style: TextStyle(
+                                      fontSize: 26,
+                                      color: Colors.blue,
+                                      backgroundColor: Colors.amberAccent),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
                           ),
                         ),
                       ),

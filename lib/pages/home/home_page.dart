@@ -63,12 +63,9 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
               ChangeThemeButtonWidget(),
-              Text(' Dark'),
             ],
           ),
-          const SizedBox(
-            width: 10,
-          ),
+          const Icon(Icons.dark_mode),
           IconButton(
             onPressed: () {},
             icon: const Icon(
@@ -76,7 +73,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(
-            width: 10,
+            width: 5,
           ),
           IconButton(
               onPressed: () {},
@@ -84,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                 Icons.help_outline,
               )),
           const SizedBox(
-            width: 10,
+            width: 5,
           ),
         ],
       ),
@@ -108,22 +105,26 @@ class _HomePageState extends State<HomePage> {
                             height: 80,
                             width: 80,
                             decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 34, 156, 255),
+                              color: Colors.greenAccent,
                               borderRadius: BorderRadius.circular(100),
                             ),
                             child: profileLink != null
-                                ? CachedNetworkImage(
-                                    imageUrl: profileLink!,
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            Center(
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                            value: downloadProgress.progress),
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: CachedNetworkImage(
+                                      imageUrl: profileLink!,
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Center(
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                        ),
                                       ),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.image_outlined),
+                                      fit: BoxFit.contain,
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.image_outlined),
                                   )
                                 : const Icon(Icons.person),
                           ),
@@ -146,7 +147,7 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black,
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -160,7 +161,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Home'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -174,7 +175,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Blogs'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -188,7 +189,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Python'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -202,7 +203,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Java'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -216,7 +217,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('C++'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -230,7 +231,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('C#'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -244,7 +245,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('HTML'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -258,7 +259,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('CSS'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -272,7 +273,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Docs'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -286,7 +287,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Community'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -300,7 +301,7 @@ class _HomePageState extends State<HomePage> {
               child: const Text('Contributors'),
             ),
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
           ],
         ),

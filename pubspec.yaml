@@ -45,6 +45,9 @@ dependencies:
   cloud_firestore: ^4.4.2
   file_picker: ^5.2.5
   firebase_storage: ^11.0.13
+  url_launcher: ^6.1.9
+  youtube: ^1.0.1
+  flutter_html: ^2.2.1
 
 dev_dependencies:
   flutter_test:
