@@ -48,6 +48,7 @@ dependencies:
   url_launcher: ^6.1.9
   youtube: ^1.0.1
   flutter_html: ^2.2.1
+  flutter_highlight: ^0.7.0
 
 dev_dependencies:
   flutter_test:

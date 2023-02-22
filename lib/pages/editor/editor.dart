@@ -151,8 +151,8 @@ class _EditorState extends State<Editor> {
                                         },
                                         decoration: InputDecoration(
                                           hintText:
-                                              "type the Tutorial number...",
-                                          labelText: "Tutorial Number",
+                                              "Give a Rank of this tutorial.",
+                                          labelText: "Tutorial Rank",
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(5),

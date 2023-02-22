@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../authentication/login.dart';
 import '../pages/editor/editor.dart';
@@ -15,7 +16,9 @@ import '../theme/change_button_theme.dart';
 
 class MyStramBuilder extends StatefulWidget {
   final String language;
-  const MyStramBuilder({super.key, required this.language});
+  final Syntax syntax;
+  const MyStramBuilder(
+      {super.key, required this.language, required this.syntax});
 
   @override
   State<MyStramBuilder> createState() => _MyStramBuilderState();
@@ -26,8 +29,9 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder(
-        stream:
-            FirebaseFirestore.instance.collection(widget.language).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection(widget.language)
+            .snapshots(includeMetadataChanges: false),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -38,6 +42,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
           }
           final document = snapshot.data!.docs;
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: document.length,
             itemBuilder: (context, index) {
               DocumentSnapshot currentDoc = document[index];
@@ -98,21 +103,39 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                     listOfContent.add(
                       Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: SizedBox(
-                          height: 300,
-                          width: MediaQuery.of(context).size.width -
-                              MediaQuery.of(context).size.width / 10,
-                          child: CachedNetworkImage(
-                            imageUrl: singleDoc['doc'],
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress),
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (!await launchUrl(
+                              Uri.parse(
+                                singleDoc['doc'],
+                              ),
+                            )) {
+                              throw Exception(
+                                'Could not launch ${singleDoc['doc']}',
+                              );
+                            }
+                          },
+                          child: SizedBox(
+                            height: 300,
+                            width: MediaQuery.of(context).size.width -
+                                MediaQuery.of(context).size.width / 10,
+                            child: CachedNetworkImage(
+                              imageUrl: singleDoc['doc'],
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => const Text(
+                                'To See The Image Click Here',
+                                style: TextStyle(
+                                    fontSize: 26,
+                                    backgroundColor: Colors.amber),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.image_outlined),
                           ),
                         ),
                       ),
@@ -136,7 +159,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                           ),
                           SyntaxView(
                             code: singleDoc['doc'], // Code text
-                            syntax: Syntax.DART, // Language
+                            syntax: widget.syntax, // Language
                             syntaxTheme: isDark
                                 ? SyntaxTheme.monokaiSublime()
                                 : SyntaxTheme.ayuLight(), // Theme
@@ -152,10 +175,25 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                   }
                 }
                 Widget profile = Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 10),
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Column(
                     children: [
-                      SizedBox(
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromARGB(83, 98, 98, 98),
+                              blurRadius: 10,
+                              spreadRadius: 10,
+                              offset: Offset(
+                                10,
+                                10,
+                              ),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(100),
+                          color: const Color.fromARGB(84, 153, 153, 153),
+                        ),
                         height: 50,
                         width: double.infinity,
                         child: Row(
@@ -199,12 +237,16 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 ),
                                 Text(email),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 5,
+                      ),
+                      Text(
+                        'Tutorial Rank : ${int.parse(currentDoc.id) / 10000000000}',
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Center(
                         child: Text(
@@ -213,12 +255,9 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Text(
                             'Descrption :',
@@ -227,7 +266,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                           ),
                           Text(
                             shortDes,
-                            textAlign: TextAlign.left,
+                            textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 18),
                           ),
                         ],

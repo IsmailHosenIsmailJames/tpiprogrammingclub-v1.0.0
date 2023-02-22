@@ -26,7 +26,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("home").snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection("home")
+            .snapshots(includeMetadataChanges: false),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -135,45 +137,47 @@ class _HomeState extends State<Home> {
                   if (type == 'code') {
                     listOfContent.add(
                       Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {
-                                  Clipboard.setData(
-                                    ClipboardData(text: singleDoc['doc']),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Text('Copy '),
-                                    Icon(Icons.copy)
-                                  ],
-                                ),
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                Clipboard.setData(
+                                  ClipboardData(text: singleDoc['doc']),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: const [
+                                  Text('Copy '),
+                                  Icon(Icons.copy)
+                                ],
                               ),
-                              SyntaxView(
-                                code: singleDoc['doc'], // Code text
-                                syntax: Syntax.DART, // Language
-                                syntaxTheme: isDark
-                                    ? SyntaxTheme.monokaiSublime()
-                                    : SyntaxTheme.ayuLight(), // Theme
-                                fontSize: 18.0, // Font size
-                                withZoom:
-                                    true, // Enable/Disable zoom icon controls
-                                withLinesCount:
-                                    true, // Enable/Disable line number
-                                expanded:
-                                    false, // Enable/Disable container expansion
-                              ),
-                            ],
-                          )),
+                            ),
+                            SyntaxView(
+                              code: singleDoc['doc'], // Code text
+                              syntax: Syntax.DART, // Language
+                              syntaxTheme: isDark
+                                  ? SyntaxTheme.monokaiSublime()
+                                  : SyntaxTheme.ayuLight(), // Theme
+                              fontSize: 18.0, // Font size
+                              withZoom:
+                                  true, // Enable/Disable zoom icon controls
+                              withLinesCount:
+                                  true, // Enable/Disable line number
+                              expanded:
+                                  false, // Enable/Disable container expansion
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   }
                 }
                 Widget profile = Padding(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.only(
+                      top: 8, bottom: 8, left: 2, right: 2),
                   child: Column(
                     children: [
                       const SizedBox(
