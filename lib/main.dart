@@ -14,7 +14,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static const String title = 'Light & Dark Theme';
+  static const String title = 'TPI Programming Club';
 
   const MyApp({super.key});
   @override

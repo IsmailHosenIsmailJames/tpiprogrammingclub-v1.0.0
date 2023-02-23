@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:tpiprogrammingclub/pages/search/search.dart';
 import 'package:tpiprogrammingclub/widget/stram_builder.dart';
 import '../../theme/change_button_theme.dart';
 import '../community/community.dart';
@@ -61,7 +62,14 @@ class _HomePageState extends State<HomePage> {
           ),
           const Icon(Icons.dark_mode),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Search(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.search,
             ),

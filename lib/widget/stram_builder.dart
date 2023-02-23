@@ -52,16 +52,18 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (FirebaseAuth.instance.currentUser != null) {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) => Scaffold(
-                            appBar: AppBar(
-                              toolbarHeight: 35,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                              appBar: AppBar(
+                                toolbarHeight: 35,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
                               ),
+                              body: Editor(contributionArea: widget.language),
                             ),
-                            body: Editor(contributionArea: widget.language),
                           ),
                         );
                       } else {
@@ -180,17 +182,6 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(83, 98, 98, 98),
-                              blurRadius: 10,
-                              spreadRadius: 10,
-                              offset: Offset(
-                                10,
-                                10,
-                              ),
-                            )
-                          ],
                           borderRadius: BorderRadius.circular(100),
                           color: const Color.fromARGB(84, 153, 153, 153),
                         ),
