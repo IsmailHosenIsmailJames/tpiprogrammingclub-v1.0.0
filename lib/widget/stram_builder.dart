@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,10 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../authentication/login.dart';
 import '../pages/editor/editor.dart';
 import '../theme/change_button_theme.dart';
+import 'comment.dart';
 
 class MyStramBuilder extends StatefulWidget {
   final String language;
@@ -77,6 +76,15 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                 );
               } else {
                 final allDoc = jsonDecode(currentDoc['doc']);
+                List like = currentDoc['like'];
+                final user = FirebaseAuth.instance.currentUser;
+                bool liked = false;
+                if (user != null) {
+                  if (like.contains(user.email)) {
+                    liked = true;
+                  }
+                }
+                List comment = currentDoc['comment'];
                 final info = allDoc['info'];
                 String title = info['title'];
                 String shortDes = info['des'];
@@ -191,17 +199,14 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.greenAccent,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: SizedBox(
+                                height: 50,
+                                width: 50,
                                 child: CachedNetworkImage(
                                   imageUrl: profilePhoto,
+                                  fit: BoxFit.cover,
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
                                           Center(
@@ -243,7 +248,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                         child: Text(
                           title,
                           style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
+                              fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Column(
@@ -288,16 +293,72 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Icon(
-                            Icons.thumb_up_alt,
-                            size: 24,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              final user = FirebaseAuth.instance.currentUser;
+                              if (user != null) {
+                                if (liked) {
+                                  like.remove(user.email);
+                                } else {
+                                  like.add(user.email);
+                                }
+                                final temRef = FirebaseFirestore.instance
+                                    .collection(widget.language)
+                                    .doc(currentDoc.id);
+                                temRef.update({"like": like});
+                                await FirebaseFirestore.instance
+                                    .collection('user')
+                                    .doc(email)
+                                    .update({"like": like.length});
+                              } else {
+                                showCupertinoModalPopup(
+                                  context: context,
+                                  builder: (context) => const Login(),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              Icons.thumb_up_alt,
+                              size: 24,
+                              color: liked == true ? Colors.blue : Colors.black,
+                            ),
                           ),
-                          SizedBox(
-                            width: 20,
+                          const SizedBox(
+                            width: 10,
                           ),
-                          Icon(Icons.comment),
+                          Text("${like.length}"),
+                          const SizedBox(
+                            width: 40,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              final user = FirebaseAuth.instance.currentUser;
+                              if (user != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AllComment(
+                                      comment: comment,
+                                      id: currentDoc.id,
+                                      path: widget.language,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                showCupertinoModalPopup(
+                                  context: context,
+                                  builder: (context) => const Login(),
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.comment),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text("${comment.length}"),
                         ],
                       )
                     ],

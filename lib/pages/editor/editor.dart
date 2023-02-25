@@ -226,7 +226,7 @@ class _EditorState extends State<Editor> {
                                                   "email": FirebaseAuth.instance
                                                       .currentUser!.email!,
                                                   "name": name,
-                                                  "profile": profile
+                                                  "profile": profile,
                                                 }
                                               });
 
@@ -260,8 +260,11 @@ class _EditorState extends State<Editor> {
                                                     .doc(sId);
                                                 final myEncodedJson =
                                                     jsonEncode(json);
-                                                await ref.set(
-                                                    {'doc': myEncodedJson});
+                                                await ref.set({
+                                                  'doc': myEncodedJson,
+                                                  'like': [],
+                                                  'comment': []
+                                                });
                                                 final searchRef =
                                                     FirebaseFirestore.instance
                                                         .collection('search')

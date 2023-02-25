@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-import 'package:tpiprogrammingclub/pages/search/search.dart';
+import 'package:tpiprogrammingclub/authentication/login.dart';
+import 'package:tpiprogrammingclub/pages/admin/admin.dart';
+import 'package:tpiprogrammingclub/widget/search.dart';
 import 'package:tpiprogrammingclub/widget/stram_builder.dart';
 import '../../theme/change_button_theme.dart';
 import '../community/community.dart';
@@ -22,8 +25,8 @@ Widget currentPage = const Home();
 class _HomePageState extends State<HomePage> {
   Widget title = const Text("Home");
   bool callOneTime = true;
-  String? profileLink;
   String? name;
+  String? profileLink;
 
   void getdata() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -113,19 +116,24 @@ class _HomePageState extends State<HomePage> {
                             child: profileLink != null
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child: CachedNetworkImage(
-                                      imageUrl: profileLink!,
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              Center(
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                              value: downloadProgress.progress),
+                                    child: SizedBox(
+                                      height: 70,
+                                      width: 70,
+                                      child: CachedNetworkImage(
+                                        imageUrl: profileLink!,
+                                        fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Center(
+                                          child: Center(
+                                            child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                          ),
                                         ),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.image_outlined),
                                       ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.image_outlined),
-                                      fit: BoxFit.contain,
                                     ),
                                   )
                                 : const Icon(Icons.person),
@@ -314,6 +322,74 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 5,
             ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  title = const Text('Linux System');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('Linux System'),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () async {
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  final addminDoc = await FirebaseFirestore.instance
+                      .collection('admin')
+                      .doc('admin')
+                      .get();
+                  List adminList = addminDoc['admin'];
+                  if (adminList.contains(user.email)) {
+                    setState(() {
+                      currentPage = const AdminPage();
+                      title = const Text('Admin Page');
+                    });
+                  } else {
+                    // ignore: use_build_context_synchronously
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const Center(
+                        child: Text("You are not certify as an admin\n"),
+                      ),
+                    );
+                  }
+                } else {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => const Login(),
+                  );
+                }
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+              },
+              child: const Text('Admin Page'),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                if (FirebaseAuth.instance.currentUser != null) {
+                  FirebaseAuth.instance.signOut();
+                  setState(() {});
+                } else {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (logcontext) => const Login(),
+                  );
+                }
+              },
+              child: Text(FirebaseAuth.instance.currentUser != null
+                  ? "Log Out"
+                  : "Sign In"),
+            )
           ],
         ),
       ),

@@ -208,12 +208,22 @@ class _LoginState extends State<Login> {
                                           password: pass.text);
                                   final json = {
                                     "profile": url,
-                                    "name": name.text.trim()
+                                    "name": name.text.trim(),
+                                    "like": 0
                                   };
                                   final firebaseref = FirebaseFirestore.instance
                                       .collection('user')
                                       .doc(email.text.trim());
                                   firebaseref.set(json);
+
+                                  final temRef = FirebaseFirestore.instance
+                                      .collection('user')
+                                      .doc('allUser');
+                                  final allUser = await temRef.get();
+                                  List allUserList = allUser['email'];
+                                  allUserList.add(email.text.trim());
+                                  temRef.set({'email': allUserList});
+
                                   Navigator.pop(context);
                                   showModalBottomSheet(
                                     context: context,
@@ -315,6 +325,30 @@ class _LoginState extends State<Login> {
                           }
                         },
                         child: const Text("Sign Up"),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Text('Or'),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text("continue with"),
+                            SizedBox(
+                              height: 30,
+                              child: Image.asset(
+                                'img/googleLogo.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

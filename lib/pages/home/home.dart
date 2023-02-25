@@ -197,20 +197,6 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Icon(
-                            Icons.thumb_up_alt,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Icon(Icons.comment),
-                        ],
-                      )
                     ],
                   ),
                 );
