@@ -187,6 +187,12 @@ class _LoginState extends State<Login> {
                                   allowedExtensions: ['jpg', 'png'],
                                 );
                                 if (result != null) {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
                                   final tem = result.files.first;
                                   String? extension = tem.extension;
                                   File imageFile = File(tem.path!);
@@ -209,7 +215,9 @@ class _LoginState extends State<Login> {
                                   final json = {
                                     "profile": url,
                                     "name": name.text.trim(),
-                                    "like": 0
+                                    "like": 0,
+                                    'post': [],
+                                    'pendingPost': []
                                   };
                                   final firebaseref = FirebaseFirestore.instance
                                       .collection('user')
@@ -225,11 +233,12 @@ class _LoginState extends State<Login> {
                                   temRef.set({'email': allUserList});
 
                                   Navigator.pop(context);
+                                  Navigator.pop(context);
                                   showModalBottomSheet(
                                     context: context,
                                     builder: (context) => const Center(
                                       child: Text(
-                                        "SignUp Successfull\n We have send you a Email for verification.\nPlease confirm your email.",
+                                        "SignUp Successfull",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 24),
                                       ),
@@ -256,6 +265,12 @@ class _LoginState extends State<Login> {
                                         allowedExtensions: ['jpg', 'png']);
 
                                 if (result != null) {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
                                   final tem = result.files.first;
                                   Uint8List? selectedImage = tem.bytes;
                                   String? extension = tem.extension;
@@ -280,20 +295,32 @@ class _LoginState extends State<Login> {
 
                                   final json = {
                                     "profile": url,
-                                    "name": name.text.trim()
+                                    "name": name.text.trim(),
+                                    'like': 0,
+                                    'post': [],
+                                    'pendingPost': []
                                   };
                                   final firebaseref = FirebaseFirestore.instance
                                       .collection('user')
                                       .doc(email.text.trim());
-                                  await FirebaseAuth.instance.currentUser!
-                                      .sendEmailVerification();
+
                                   firebaseref.set(json);
+
+                                  final temRef = FirebaseFirestore.instance
+                                      .collection('user')
+                                      .doc('allUser');
+                                  final allUser = await temRef.get();
+                                  List allUserList = allUser['email'];
+                                  allUserList.add(email.text.trim());
+                                  temRef.set({'email': allUserList});
+
+                                  Navigator.pop(context);
                                   Navigator.pop(context);
                                   showModalBottomSheet(
                                     context: context,
                                     builder: (context) => const Center(
                                       child: Text(
-                                        "SignUp Successfull\n We have send you a Email for Verification.\nPlease confirm your email.",
+                                        "SignUp Successfull",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 24),
                                       ),
@@ -333,23 +360,32 @@ class _LoginState extends State<Login> {
                       const SizedBox(
                         height: 5,
                       ),
-                      OutlinedButton(
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Text("continue with"),
-                            SizedBox(
-                              height: 30,
-                              child: Image.asset(
-                                'img/googleLogo.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // OutlinedButton(
+                      //   onPressed: () {
+                      //     GoogleAuthProvider googleProvider =
+                      //         GoogleAuthProvider();
+
+                      //     googleProvider.addScope(
+                      //         'https://www.googleapis.com/auth/contacts.readonly');
+                      //     googleProvider.setCustomParameters(
+                      //         {'login_hint': 'user@example.com'});
+                      //     FirebaseAuth.instance.signInWithPopup(googleProvider);
+                      //   },
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       const Text("continue with"),
+                      //       SizedBox(
+                      //         height: 30,
+                      //         child: Image.asset(
+                      //           'img/googleLogo.jpg',
+                      //           fit: BoxFit.cover,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +8,8 @@ import 'package:tpiprogrammingclub/pages/admin/admin.dart';
 import 'package:tpiprogrammingclub/widget/search.dart';
 import 'package:tpiprogrammingclub/widget/stram_builder.dart';
 import '../../theme/change_button_theme.dart';
-import '../community/community.dart';
 import '../contributors/contributors.dart';
+import '../profile/profile.dart';
 import 'home.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,6 +34,7 @@ class _HomePageState extends State<HomePage> {
           .collection('user')
           .doc(user.email!)
           .get();
+
       setState(() {
         profileLink = json['profile'];
         name = json['name'];
@@ -107,37 +107,15 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 80,
-                            width: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.greenAccent,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: profileLink != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: SizedBox(
-                                      height: 70,
-                                      width: 70,
-                                      child: CachedNetworkImage(
-                                        imageUrl: profileLink!,
-                                        fit: BoxFit.cover,
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                Center(
-                                          child: Center(
-                                            child: CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.image_outlined),
-                                      ),
-                                    ),
-                                  )
-                                : const Icon(Icons.person),
-                          ),
+                              width: 280,
+                              decoration: BoxDecoration(
+                                color: Colors.greenAccent,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Image.asset(
+                                'img/logotpi.jpg',
+                                fit: BoxFit.cover,
+                              )),
                           const Text(
                             'TPI Programming Club',
                             style: TextStyle(
@@ -152,6 +130,35 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+            ),
+            const Divider(
+              color: Colors.black,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                if (FirebaseAuth.instance.currentUser != null) {
+                  setState(() {
+                    currentPage = Profile(
+                      email: FirebaseAuth.instance.currentUser!.email!,
+                    );
+                    title = const Text('My Profile');
+                    Navigator.pop(context);
+                  });
+                } else {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => const Login(),
+                  );
+                }
+              },
+              child: const Text('My Profile'),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             const Divider(
               color: Colors.black,
@@ -254,6 +261,21 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 setState(() {
                   currentPage = const MyStramBuilder(
+                      language: 'linux', syntax: Syntax.JAVASCRIPT);
+                  title = const Text('Linux System');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text('Linux System'),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const MyStramBuilder(
                       language: 'html', syntax: Syntax.JAVASCRIPT);
                   title = const Text('HTML');
                   Navigator.pop(context);
@@ -298,12 +320,13 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const Community();
-                  title = const Text('Community');
+                  currentPage = const MyStramBuilder(
+                      language: 'problemsolved', syntax: Syntax.DART);
+                  title = const Text('Problem Solved');
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Community'),
+              child: const Text('Problem Solved'),
             ),
             const SizedBox(
               height: 5,
@@ -324,19 +347,6 @@ class _HomePageState extends State<HomePage> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
-              onPressed: () {
-                setState(() {
-                  title = const Text('Linux System');
-                  Navigator.pop(context);
-                });
-              },
-              child: const Text('Linux System'),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () async {
                 final user = FirebaseAuth.instance.currentUser;
                 if (user != null) {
@@ -347,6 +357,7 @@ class _HomePageState extends State<HomePage> {
                   List adminList = addminDoc['admin'];
                   if (adminList.contains(user.email)) {
                     setState(() {
+                      Navigator.pop(context);
                       currentPage = const AdminPage();
                       title = const Text('Admin Page');
                     });
@@ -360,13 +371,12 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 } else {
+                  Navigator.pop(context);
                   showCupertinoModalPopup(
                     context: context,
                     builder: (context) => const Login(),
                   );
                 }
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context);
               },
               child: const Text('Admin Page'),
             ),

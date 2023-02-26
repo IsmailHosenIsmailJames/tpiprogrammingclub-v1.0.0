@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -46,20 +48,35 @@ class _HomeState extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      final addminDoc = await FirebaseFirestore.instance
+                          .collection('admin')
+                          .doc('admin')
+                          .get();
+                      List adminList = addminDoc['admin'];
                       if (FirebaseAuth.instance.currentUser != null) {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) => Scaffold(
-                            appBar: AppBar(
-                              toolbarHeight: 35,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
+                        if (adminList.contains(
+                            FirebaseAuth.instance.currentUser!.email)) {
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) => Scaffold(
+                              appBar: AppBar(
+                                toolbarHeight: 35,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
                               ),
+                              body: const Editor(contributionArea: 'home'),
                             ),
-                            body: const Editor(contributionArea: 'home'),
-                          ),
-                        );
+                          );
+                        } else {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => const Center(
+                              child: Text('Only admin can Edit this page'),
+                            ),
+                          );
+                        }
                       } else {
                         showCupertinoModalPopup(
                             context: context,

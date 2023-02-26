@@ -302,6 +302,17 @@ class _EditorState extends State<Editor> {
                                                   });
                                                 }
                                               }
+                                              final ref = FirebaseFirestore
+                                                  .instance
+                                                  .collection('user')
+                                                  .doc(FirebaseAuth.instance
+                                                      .currentUser!.email);
+                                              final file = await ref.get();
+                                              List post = file['post'];
+                                              post.add(
+                                                  "${widget.contributionArea}/$sId");
+                                              await ref.update({"post": post});
+
                                               Navigator.pop(context);
                                               Navigator.pop(context);
                                               showModalBottomSheet(

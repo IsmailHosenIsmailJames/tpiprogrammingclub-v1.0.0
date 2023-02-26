@@ -96,10 +96,9 @@ class _SearchState extends State<Search> {
       child: Padding(
         padding: const EdgeInsets.all(2),
         child: Container(
-          height: 80,
-          width: MediaQuery.of(context).size.width * 0.95,
+          width: MediaQuery.of(context).size.width * 0.98,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(10),
             color: const Color.fromARGB(89, 132, 132, 132),
           ),
           child: Row(
@@ -110,7 +109,7 @@ class _SearchState extends State<Search> {
                 height: 80,
                 width: 80,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
+                  borderRadius: BorderRadius.circular(20),
                   color: const Color.fromARGB(102, 255, 255, 255),
                 ),
                 child: Center(
@@ -137,8 +136,32 @@ class _SearchState extends State<Search> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Title:${title[i]}"),
-                  Text("Des: ${des[i]}"),
+                  SizedBox(
+                    height: 30,
+                    child: Text(
+                      "Title: ${title[i]}",
+                      maxLines: 10,
+                      softWrap: true,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Text(
+                      "Description: ${des[i]}",
+                      maxLines: 15,
+                      softWrap: true,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
                 ],
               )
             ],

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -49,22 +51,74 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (FirebaseAuth.instance.currentUser != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Scaffold(
-                              appBar: AppBar(
-                                toolbarHeight: 35,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
+                    onPressed: () async {
+                      // cheak if the user are loged in or not
+                      final ref = FirebaseAuth.instance.currentUser;
+                      if (ref != null) {
+                        final contributorsFile = await FirebaseFirestore
+                            .instance
+                            .collection('user')
+                            .doc('contributor')
+                            .get();
+                        List contrbutorList = contributorsFile['list'];
+                        if (contrbutorList.contains(ref.email) ||
+                            widget.language == 'blog' ||
+                            widget.language == 'problemsolved') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Scaffold(
+                                appBar: AppBar(
+                                  toolbarHeight: 35,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
                                 ),
+                                body: Editor(contributionArea: widget.language),
                               ),
-                              body: Editor(contributionArea: widget.language),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "You are not the part of Contributor.\nApply to became a contributor.",
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      // aply for make you Contributor.
+                                      final temref = FirebaseFirestore.instance
+                                          .collection('admin')
+                                          .doc('application');
+                                      final applicationFile =
+                                          await temref.get();
+                                      List applicationList =
+                                          applicationFile['list'];
+                                      applicationList.add(FirebaseAuth
+                                          .instance.currentUser!.email);
+                                      temref.set({"list": applicationList});
+                                      Navigator.pop(context);
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => const Center(
+                                          child: Text(
+                                              "Application Submit Successfull"),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('Apply now'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
                       } else {
                         showCupertinoModalPopup(
                             context: context,
