@@ -21,6 +21,9 @@ class HomePage extends StatefulWidget {
 
 Widget currentPage = const Home();
 
+final elevatedStyle =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
+
 class _HomePageState extends State<HomePage> {
   Widget title = const Text("Home");
   bool callOneTime = true;
@@ -43,12 +46,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  final elevatedStyle = const RoundedRectangleBorder(
-    borderRadius: BorderRadius.only(
-      bottomLeft: Radius.circular(100),
-      topRight: Radius.circular(100),
-    ),
-  );
   @override
   Widget build(BuildContext context) {
     if (callOneTime) getdata();
@@ -91,8 +88,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Drawer(
+        shape: elevatedStyle,
         width: 300,
         child: ListView(
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(10),
           children: [
             SizedBox(
@@ -170,8 +169,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'home', syntax: Syntax.DART);
+                  currentPage = const Home();
                   title = const Text('Home');
                   Navigator.pop(context);
                 });

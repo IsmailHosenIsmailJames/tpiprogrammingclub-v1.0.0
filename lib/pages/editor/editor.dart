@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -13,7 +12,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-
 import '../../theme/change_button_theme.dart';
 
 class Editor extends StatefulWidget {
@@ -230,9 +228,11 @@ class _EditorState extends State<Editor> {
                                                 }
                                               });
 
-                                              double id =
+                                              double doubleId =
                                                   double.parse(docNumber.text);
-                                              id = id * 10000000000;
+
+                                              int id = (doubleId * 10000000000)
+                                                  .toInt();
                                               String sId = "$id";
                                               int lenth = sId.length;
                                               int needToFill = 20 - lenth;
@@ -618,56 +618,6 @@ class _EditorState extends State<Editor> {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.lightGreen),
-                        height: 50,
-                        width: 50,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
-                            imageUrl: profile,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.image_outlined),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          Text(FirebaseAuth.instance.currentUser!.email!)
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
                 Container(
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(82, 120, 120, 120),

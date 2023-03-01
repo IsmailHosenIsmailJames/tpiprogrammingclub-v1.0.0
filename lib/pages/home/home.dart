@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../theme/change_button_theme.dart';
@@ -48,6 +49,7 @@ class _HomeState extends State<Home> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(shape: elevatedStyle),
                     onPressed: () async {
                       final addminDoc = await FirebaseFirestore.instance
                           .collection('admin')

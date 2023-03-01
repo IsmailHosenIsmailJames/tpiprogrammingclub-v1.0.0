@@ -12,6 +12,8 @@ import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../authentication/login.dart';
 import '../pages/editor/editor.dart';
+import '../pages/home/home_page.dart';
+import '../pages/profile/profile.dart';
 import '../theme/change_button_theme.dart';
 import 'comment.dart';
 
@@ -51,6 +53,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(shape: elevatedStyle),
                     onPressed: () async {
                       // cheak if the user are loged in or not
                       final ref = FirebaseAuth.instance.currentUser;
@@ -242,84 +245,125 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: const Color.fromARGB(84, 153, 153, 153),
-                        ),
-                        height: 50,
-                        width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: CachedNetworkImage(
-                                  imageUrl: profilePhoto,
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Center(
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                          value: downloadProgress.progress),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Profile(email: email),
+                            )),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: const Color.fromARGB(84, 153, 153, 153),
+                          ),
+                          height: 50,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CachedNetworkImage(
+                                    imageUrl: profilePhoto,
+                                    fit: BoxFit.cover,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Center(
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                      ),
                                     ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.image_outlined),
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.image_outlined),
                                 ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  name,
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                Text(email),
-                              ],
-                            ),
-                          ],
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    name,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  Text(email),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        'Tutorial Rank : ${int.parse(currentDoc.id) / 10000000000}',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      Center(
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 98,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: const Color.fromARGB(81, 168, 168, 168),
                         ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Descrption :',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Rank : ${double.parse(currentDoc.id) ~/ 10000000000}",
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Title : ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
+                                    child: Text(title),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Description : ",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 120,
+                                    child: Text(shortDes),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
-                          Text(
-                            shortDes,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ],
+                        ),
                       ),
                       const SizedBox(
                         height: 10,

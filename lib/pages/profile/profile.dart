@@ -3,8 +3,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../widget/single_document_vewer.dart';
 
 class Profile extends StatefulWidget {
@@ -28,7 +26,7 @@ class _ProfileState extends State<Profile> {
     String name = file['name'];
     String profile = file['profile'];
     List post = file['post'];
-    double like = file['like'];
+    int like = file['like'];
     List<Widget> postwidget = [];
 
     for (int i = 0; i < post.length; i++) {
@@ -48,21 +46,18 @@ class _ProfileState extends State<Profile> {
               ),
             );
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(89, 155, 155, 155),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  post[i],
-                  style: const TextStyle(
-                      fontSize: 26, fontWeight: FontWeight.bold),
-                ),
+          child: Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(86, 145, 145, 145),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(
+                "${post[i].toString().split('/')[0]} / ${double.parse(post[i].toString().split('/')[1]) ~/ 10000000000}",
+                style:
+                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -75,43 +70,28 @@ class _ProfileState extends State<Profile> {
       );
     }
     Widget lastWidget = ListView(
+      physics: const BouncingScrollPhysics(),
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(100),
-          child: Container(
-            color: const Color.fromARGB(83, 150, 150, 150),
-            height: 100,
-            width: 100,
-            child: GestureDetector(
-              onTap: () async {
-                if (!await launchUrl(
-                  Uri.parse(
-                    profile,
-                  ),
-                )) {
-                  throw Exception(
-                    'Could not launch $profile',
-                  );
-                }
-              },
-              child: CachedNetworkImage(
-                imageUrl: profile,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
-                  ),
-                ),
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) => const Center(
-                  child: Text(
-                    'To See The Image Click Here',
-                    style:
-                        TextStyle(fontSize: 26, backgroundColor: Colors.amber),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+          child: CachedNetworkImage(
+            imageUrl: profile,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(
+              child: Center(
+                child:
+                    CircularProgressIndicator(value: downloadProgress.progress),
+              ),
+            ),
+            fit: BoxFit.contain,
+            errorWidget: (context, url, error) => const Center(
+              child: Text(
+                'To See The Image Click Here',
+                style: TextStyle(fontSize: 26, backgroundColor: Colors.amber),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
@@ -121,27 +101,52 @@ class _ProfileState extends State<Profile> {
         ),
         Text(
           "Total Like : $like",
-          style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Divider(
+          color: Colors.black,
         ),
         const SizedBox(
           height: 10,
         ),
         Text(
           "Name : $name",
-          style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
         ),
         Text(
           'Eamil : ${widget.email}',
-          style: const TextStyle(fontSize: 30),
+          style: const TextStyle(fontSize: 16),
         ),
         const SizedBox(
-          height: 10,
+          height: 15,
         ),
-        Column(
-          children: postwidget,
+        const Divider(
+          color: Colors.black,
+        ),
+        const Text(
+          "All the Contribution:",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(88, 194, 194, 194),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: postwidget,
+            ),
+          ),
         )
       ],
     );
