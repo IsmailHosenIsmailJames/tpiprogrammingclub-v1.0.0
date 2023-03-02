@@ -46,11 +46,9 @@ dependencies:
   file_picker: ^5.2.5
   firebase_storage: ^11.0.13
   url_launcher: ^6.1.9
-  youtube: ^1.0.1
-  flutter_html: ^2.2.1
-  flutter_highlight: ^0.7.0
   firebase_database: ^10.0.14
   font_awesome_flutter: ^10.4.0
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
@@ -78,8 +76,14 @@ flutter:
   assets:
     - img/googleLogo.jpg
     - img/logotpi.jpg
-  #   - images/a_dot_ham.jpeg
-
+  
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "img/logo.png"
+  web:
+    generate: true
+    image_path: "img/logo.png"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
