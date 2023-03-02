@@ -71,8 +71,10 @@ class _ContributorsState extends State<Contributors> {
                   },
                   child: const Text(
                     'For Image Click Here',
-                    style:
-                        TextStyle(fontSize: 26, backgroundColor: Colors.amber),
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: Colors.blue,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -209,7 +211,9 @@ class _ContributorsState extends State<Contributors> {
                     child: const Text(
                       'For Image Click Here',
                       style: TextStyle(
-                          fontSize: 26, backgroundColor: Colors.amber),
+                        fontSize: 22,
+                        color: Colors.blue,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -104,7 +104,10 @@ class _ProfileState extends State<Profile> {
                 },
                 child: const Text(
                   'For Image Click Here',
-                  style: TextStyle(fontSize: 26, backgroundColor: Colors.amber),
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.blue,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),

@@ -117,7 +117,9 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                           errorWidget: (context, url, error) => const Text(
                             'For Image Click Here',
                             style: TextStyle(
-                                fontSize: 26, backgroundColor: Colors.amber),
+                              fontSize: 22,
+                              color: Colors.blue,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),

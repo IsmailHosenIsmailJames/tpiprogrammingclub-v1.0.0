@@ -140,9 +140,9 @@ class _HomeState extends State<Home> {
                                 child: const Text(
                                   'For Image Click Here',
                                   style: TextStyle(
-                                      fontSize: 26,
-                                      color: Colors.blue,
-                                      backgroundColor: Colors.amberAccent),
+                                    fontSize: 22,
+                                    color: Colors.blue,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),

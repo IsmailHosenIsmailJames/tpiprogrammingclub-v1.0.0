@@ -211,8 +211,9 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 child: const Text(
                                   'For Image Click Here',
                                   style: TextStyle(
-                                      fontSize: 26,
-                                      backgroundColor: Colors.amber),
+                                    color: Colors.blue,
+                                    fontSize: 22,
+                                  ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
