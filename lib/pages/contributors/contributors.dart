@@ -56,78 +56,104 @@ class _ContributorsState extends State<Contributors> {
                 ),
               ),
               fit: BoxFit.cover,
-              errorWidget: (context, url, error) => const Center(
-                child: Text(
-                  'To See The Image Click Here',
-                  style: TextStyle(fontSize: 26, backgroundColor: Colors.amber),
-                  textAlign: TextAlign.center,
+              errorWidget: (context, url, error) => Center(
+                child: OutlinedButton(
+                  onPressed: () async {
+                    if (!await launchUrl(
+                      Uri.parse(
+                        profile,
+                      ),
+                    )) {
+                      throw Exception(
+                        'Could not launch',
+                      );
+                    }
+                  },
+                  child: const Text(
+                    'For Image Click Here',
+                    style:
+                        TextStyle(fontSize: 26, backgroundColor: Colors.amber),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
             ),
           ),
         );
         widgetList.add(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              avatar,
-              const SizedBox(
-                height: 10,
-              ),
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Total Point : $points',
-                    style: const TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Total Like : $like',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Total Post : ${allPost.length}',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              const Divider(),
-              Text(
-                'Name : $name',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const Divider(),
-              Text(
-                'Email : $email',
-                style: const TextStyle(fontSize: 14),
-              ),
-              const Divider(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: elevatedStyle,
-                    maximumSize: Size(MediaQuery.of(context).size.width * 95,
-                        MediaQuery.of(context).size.height * 95)),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Profile(email: email),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: const Color.fromARGB(81, 153, 153, 153),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                avatar,
+                const SizedBox(
+                  height: 10,
+                ),
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Total Point : $points',
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
-                child: const Text('Visit Profile'),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+                    Text(
+                      'Total Like : $like',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Total Post : ${allPost.length}',
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                Text(
+                  'Name : $name',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Divider(),
+                Text(
+                  'Email : $email',
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const Divider(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: elevatedStyle,
+                    minimumSize:
+                        Size(MediaQuery.of(context).size.width * 0.95, 35),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Profile(email: email),
+                      ),
+                    );
+                  },
+                  child: const Text('Visit Profile'),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        );
+        widgetList.add(
+          const Divider(
+            color: Colors.black,
           ),
         );
       }
@@ -167,12 +193,25 @@ class _ContributorsState extends State<Contributors> {
                   ),
                 ),
                 fit: BoxFit.cover,
-                errorWidget: (context, url, error) => const Center(
-                  child: Text(
-                    'To See The Image Click Here',
-                    style:
-                        TextStyle(fontSize: 26, backgroundColor: Colors.amber),
-                    textAlign: TextAlign.center,
+                errorWidget: (context, url, error) => Center(
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      if (!await launchUrl(
+                        Uri.parse(
+                          "https://scontent.fdac24-1.fna.fbcdn.net/v/t39.30808-6/257764352_421357696128525_3923772872302578932_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeEk28nnx2EaxvIbYoua520YhnIBAGJbQyuGcgEAYltDK9FpyaWJ5ZLcILRiIH6wL5ooDCvdIxrRLRuEzpR2PL-l&_nc_ohc=9wIUOX1ivlAAX-U0kh8&_nc_ht=scontent.fdac24-1.fna&oh=00_AfB7bn7M9bVakeVGWqT6lhJzZK0FUSMONFAQuvXYJhaZtQ&oe=64064D87",
+                        ),
+                      )) {
+                        throw Exception(
+                          'Could not launch',
+                        );
+                      }
+                    },
+                    child: const Text(
+                      'For Image Click Here',
+                      style: TextStyle(
+                          fontSize: 26, backgroundColor: Colors.amber),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ),
@@ -276,13 +315,7 @@ class _ContributorsState extends State<Contributors> {
           height: 10,
         ),
         Center(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: const Color.fromARGB(81, 153, 153, 153),
-            ),
-            child: mywidget,
-          ),
+          child: mywidget,
         ),
       ],
     );

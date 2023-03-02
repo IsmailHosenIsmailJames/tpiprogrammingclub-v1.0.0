@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
                                   }
                                 },
                                 child: const Text(
-                                  'To see Image Click Here...',
+                                  'For Image Click Here',
                                   style: TextStyle(
                                       fontSize: 26,
                                       color: Colors.blue,
