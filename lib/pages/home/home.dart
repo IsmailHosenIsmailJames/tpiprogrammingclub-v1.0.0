@@ -109,36 +109,35 @@ class _HomeState extends State<Home> {
                   }
                   if (type == "image") {
                     listOfContent.add(
-                      GestureDetector(
-                        onTap: () async {
-                          if (!await launchUrl(
-                            Uri.parse(
-                              singleDoc['doc'],
-                            ),
-                          )) {
-                            throw Exception(
-                              'Could not launch ${singleDoc['doc']}',
-                            );
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: SizedBox(
-                            height: 300,
-                            width: MediaQuery.of(context).size.width -
-                                MediaQuery.of(context).size.width / 10,
-                            child: CachedNetworkImage(
-                              imageUrl: singleDoc['doc'],
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                                ),
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: SizedBox(
+                          height: 300,
+                          width: MediaQuery.of(context).size.width -
+                              MediaQuery.of(context).size.width / 10,
+                          child: CachedNetworkImage(
+                            imageUrl: singleDoc['doc'],
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
                               ),
-                              errorWidget: (context, url, error) =>
-                                  const Center(
-                                child: Text(
+                            ),
+                            errorWidget: (context, url, error) => Center(
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  if (!await launchUrl(
+                                    Uri.parse(
+                                      singleDoc['doc'],
+                                    ),
+                                  )) {
+                                    throw Exception(
+                                      'Could not launch ${singleDoc['doc']}',
+                                    );
+                                  }
+                                },
+                                child: const Text(
                                   'To see Image Click Here...',
                                   style: TextStyle(
                                       fontSize: 26,

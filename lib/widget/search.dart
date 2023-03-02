@@ -30,6 +30,7 @@ class _SearchState extends State<Search> {
           final document = snapshot.data!.docs;
 
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: document.length,
             itemBuilder: (context, index) {
               List<Widget> searchResult = [];

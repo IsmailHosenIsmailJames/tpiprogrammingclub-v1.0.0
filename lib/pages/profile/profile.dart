@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../widget/single_document_vewer.dart';
 
 class Profile extends StatefulWidget {
@@ -15,15 +16,22 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool getOneTime = true;
+  String appTitle = "";
   Widget myWidget = const Center(
     child: CircularProgressIndicator(),
   );
   void get() async {
+    setState(() {
+      getOneTime = false;
+    });
     final file = await FirebaseFirestore.instance
         .collection('user')
         .doc(widget.email)
         .get();
     String name = file['name'];
+    setState(() {
+      appTitle = name;
+    });
     String profile = file['profile'];
     List post = file['post'];
     int like = file['like'];
@@ -87,11 +95,18 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             fit: BoxFit.contain,
-            errorWidget: (context, url, error) => const Center(
-              child: Text(
-                'To See The Image Click Here',
-                style: TextStyle(fontSize: 26, backgroundColor: Colors.amber),
-                textAlign: TextAlign.center,
+            errorWidget: (context, url, error) => Center(
+              child: OutlinedButton(
+                onPressed: () async {
+                  if (!await launchUrl(Uri.parse(profile))) {
+                    throw Exception('Could not launch $profile');
+                  }
+                },
+                child: const Text(
+                  'To See The Image Click Here',
+                  style: TextStyle(fontSize: 26, backgroundColor: Colors.amber),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -152,7 +167,6 @@ class _ProfileState extends State<Profile> {
     );
 
     setState(() {
-      getOneTime = false;
       myWidget = lastWidget;
     });
   }
@@ -161,6 +175,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     if (getOneTime) get();
     return Scaffold(
+      appBar: AppBar(
+        title: Text(appTitle),
+      ),
       body: Center(child: myWidget),
     );
   }

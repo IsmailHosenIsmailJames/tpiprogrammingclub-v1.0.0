@@ -195,12 +195,26 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                       value: downloadProgress.progress),
                                 ),
                               ),
-                              errorWidget: (context, url, error) => const Text(
-                                'To See The Image Click Here',
-                                style: TextStyle(
-                                    fontSize: 26,
-                                    backgroundColor: Colors.amber),
-                                textAlign: TextAlign.center,
+                              errorWidget: (context, url, error) =>
+                                  OutlinedButton(
+                                onPressed: () async {
+                                  if (!await launchUrl(
+                                    Uri.parse(
+                                      singleDoc['doc'],
+                                    ),
+                                  )) {
+                                    throw Exception(
+                                      'Could not launch ${singleDoc['doc']}',
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  'To See The Image Click Here',
+                                  style: TextStyle(
+                                      fontSize: 26,
+                                      backgroundColor: Colors.amber),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ),

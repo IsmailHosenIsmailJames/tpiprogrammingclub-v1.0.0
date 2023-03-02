@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tpiprogrammingclub/pages/admin/application.dart';
+import 'package:tpiprogrammingclub/pages/admin/update_rank.dart';
+import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -18,6 +20,8 @@ class _AdminPageState extends State<AdminPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(270, 40), shape: elevatedStyle),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -26,14 +30,25 @@ class _AdminPageState extends State<AdminPage> {
                   ),
                 );
               },
-              child: const Text('Application To Became Contributor'),
+              child: const Text('All Application To Became Contributor'),
             ),
             const SizedBox(
               height: 10,
             ),
             ElevatedButton(
-              onPressed: () {},
-              child: const Text('Update Rank'),
+              style: ElevatedButton.styleFrom(
+                shape: elevatedStyle,
+                minimumSize: const Size(270, 40),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpdateRank(),
+                  ),
+                );
+              },
+              child: const Text('Update All The Rank'),
             ),
           ],
         ),
