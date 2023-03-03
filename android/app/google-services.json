@@ -1,13 +1,14 @@
 {
   "project_info": {
     "project_number": "979979882370",
+    "firebase_url": "https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "tpiprogrammingclub",
     "storage_bucket": "tpiprogrammingclub.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979979882370:android:de230289aaf8ed1dbf899b",
+        "mobilesdk_app_id": "1:979979882370:android:a36654e21bcdd4b5bf899b",
         "android_client_info": {
           "package_name": "com.example.tpiprogrammingclub"
         }

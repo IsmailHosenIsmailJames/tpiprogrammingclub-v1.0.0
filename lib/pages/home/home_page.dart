@@ -77,14 +77,6 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             width: 5,
           ),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.help_outline,
-              )),
-          const SizedBox(
-            width: 5,
-          ),
         ],
       ),
       drawer: Drawer(

@@ -104,17 +104,17 @@ class _ContributorsState extends State<Contributors> {
                     Text(
                       'Total Point : $points',
                       style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold),
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Total Like : $like',
+                      'Like : $like',
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Total Post : ${allPost.length}',
+                      'Post : ${allPost.length}',
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
