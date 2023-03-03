@@ -168,54 +168,50 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                   }
                   if (type == "image") {
                     listOfContent.add(
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (!await launchUrl(
-                              Uri.parse(
-                                singleDoc['doc'],
+                      GestureDetector(
+                        onTap: () async {
+                          if (!await launchUrl(
+                            Uri.parse(
+                              singleDoc['doc'],
+                            ),
+                          )) {
+                            throw Exception(
+                              'Could not launch ${singleDoc['doc']}',
+                            );
+                          }
+                        },
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.60,
+                          width: MediaQuery.of(context).size.width,
+                          child: CachedNetworkImage(
+                            imageUrl: singleDoc['doc'],
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress),
                               ),
-                            )) {
-                              throw Exception(
-                                'Could not launch ${singleDoc['doc']}',
-                              );
-                            }
-                          },
-                          child: SizedBox(
-                            height: 300,
-                            width: MediaQuery.of(context).size.width -
-                                MediaQuery.of(context).size.width / 10,
-                            child: CachedNetworkImage(
-                              imageUrl: singleDoc['doc'],
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  OutlinedButton(
-                                onPressed: () async {
-                                  if (!await launchUrl(
-                                    Uri.parse(
-                                      singleDoc['doc'],
-                                    ),
-                                  )) {
-                                    throw Exception(
-                                      'Could not launch ${singleDoc['doc']}',
-                                    );
-                                  }
-                                },
-                                child: const Text(
-                                  'For Image Click Here',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 22,
+                            ),
+                            errorWidget: (context, url, error) =>
+                                OutlinedButton(
+                              onPressed: () async {
+                                if (!await launchUrl(
+                                  Uri.parse(
+                                    singleDoc['doc'],
                                   ),
-                                  textAlign: TextAlign.center,
+                                )) {
+                                  throw Exception(
+                                    'Could not launch ${singleDoc['doc']}',
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                'For Image Click Here',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 22,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),

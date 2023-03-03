@@ -109,12 +109,21 @@ class _HomeState extends State<Home> {
                   }
                   if (type == "image") {
                     listOfContent.add(
-                      Padding(
-                        padding: const EdgeInsets.all(5),
+                      GestureDetector(
+                        onTap: () async {
+                          if (!await launchUrl(
+                            Uri.parse(
+                              singleDoc['doc'],
+                            ),
+                          )) {
+                            throw Exception(
+                              'Could not launch ${singleDoc['doc']}',
+                            );
+                          }
+                        },
                         child: SizedBox(
-                          height: 300,
-                          width: MediaQuery.of(context).size.width -
-                              MediaQuery.of(context).size.width / 10,
+                          height: MediaQuery.of(context).size.width * 0.60,
+                          width: MediaQuery.of(context).size.width,
                           child: CachedNetworkImage(
                             imageUrl: singleDoc['doc'],
                             progressIndicatorBuilder:
