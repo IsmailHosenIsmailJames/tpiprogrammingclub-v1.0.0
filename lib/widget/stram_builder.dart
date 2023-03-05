@@ -135,12 +135,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                 final allDoc = jsonDecode(currentDoc['doc']);
                 List like = currentDoc['like'];
                 final user = FirebaseAuth.instance.currentUser;
-                bool liked = false;
-                if (user != null) {
-                  if (like.contains(user.email)) {
-                    liked = true;
-                  }
-                }
+
                 List comment = currentDoc['comment'];
                 final info = allDoc['info'];
                 String title = info['title'];
@@ -407,22 +402,31 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                           IconButton(
                             onPressed: () async {
                               final user = FirebaseAuth.instance.currentUser;
+
                               if (user != null) {
-                                if (liked) {
-                                  like.remove(user.email);
-                                } else {
-                                  like.add(user.email);
-                                }
-                                final temRef = FirebaseFirestore.instance
+                                final temDocRef = FirebaseFirestore.instance
                                     .collection(widget.language)
                                     .doc(currentDoc.id);
-                                temRef.update({"like": like});
-                                await FirebaseFirestore.instance
+                                final temUserRef = FirebaseFirestore.instance
                                     .collection('user')
-                                    .doc(email)
-                                    .update({"like": like.length});
+                                    .doc(email);
+
+                                final likkeNumberFile = await temUserRef.get();
+                                int likeNumber = likkeNumberFile['like'];
+
+                                if (like.contains(user.email)) {
+                                  likeNumber--;
+                                  await temUserRef.update({"like": likeNumber});
+                                  like.remove(user.email);
+                                } else {
+                                  likeNumber++;
+                                  await temUserRef.update({"like": likeNumber});
+                                  like.add(user.email);
+                                }
+
+                                temDocRef.update({"like": like});
                               } else {
-                                showCupertinoModalPopup(
+                                await showCupertinoModalPopup(
                                   context: context,
                                   builder: (context) => const Login(),
                                 );
@@ -431,7 +435,9 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                             icon: Icon(
                               Icons.thumb_up_alt,
                               size: 24,
-                              color: liked == true ? Colors.blue : Colors.black,
+                              color: (user != null && like.contains(user.email))
+                                  ? Colors.blue
+                                  : Colors.black,
                             ),
                           ),
                           const SizedBox(
