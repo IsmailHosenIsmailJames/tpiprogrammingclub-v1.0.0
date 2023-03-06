@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "979979882370-5j41lglqi81m9oilg0kqdh4aea8gjflp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tpiprogrammingclub",
+            "certificate_hash": "9d67d22943503bb4c688789e6840ea8f41e91cfc"
+          }
+        },
+        {
           "client_id": "979979882370-mlchdgqr4mq0g9s8v8r4pl3616437sq9.apps.googleusercontent.com",
           "client_type": 3
         }

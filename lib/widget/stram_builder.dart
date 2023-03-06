@@ -28,6 +28,7 @@ class MyStramBuilder extends StatefulWidget {
 }
 
 class _MyStramBuilderState extends State<MyStramBuilder> {
+  bool isButtonenable = true;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,68 +57,77 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                     style: ElevatedButton.styleFrom(shape: elevatedStyle),
                     onPressed: () async {
                       // cheak if the user are loged in or not
-                      final ref = FirebaseAuth.instance.currentUser;
-                      if (ref != null) {
-                        final contributorsFile = await FirebaseFirestore
-                            .instance
-                            .collection('user')
-                            .doc('contributor')
-                            .get();
-                        List contrbutorList = contributorsFile['list'];
-                        if (contrbutorList.contains(ref.email) ||
-                            widget.language == 'blog' ||
-                            widget.language == 'problemsolved') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(
-                                  toolbarHeight: 35,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(100),
+                      final user = FirebaseAuth.instance.currentUser;
+                      if (user != null) {
+                        if (user.emailVerified) {
+                          final contributorsFile = await FirebaseFirestore
+                              .instance
+                              .collection('user')
+                              .doc('contributor')
+                              .get();
+                          List contrbutorList = contributorsFile['list'];
+                          if (contrbutorList.contains(user.email) ||
+                              widget.language == 'blog' ||
+                              widget.language == 'problemsolved') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Scaffold(
+                                  appBar: AppBar(
+                                    toolbarHeight: 35,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
                                   ),
+                                  body:
+                                      Editor(contributionArea: widget.language),
                                 ),
-                                body: Editor(contributionArea: widget.language),
                               ),
-                            ),
-                          );
+                            );
+                          }
                         } else {
                           showModalBottomSheet(
                             context: context,
                             builder: (context) => Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    "You are not the part of Contributor.\nApply to became a contributor.",
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      // aply for make you Contributor.
-                                      final temref = FirebaseFirestore.instance
-                                          .collection('admin')
-                                          .doc('application');
-                                      final applicationFile =
-                                          await temref.get();
-                                      List applicationList =
-                                          applicationFile['list'];
-                                      applicationList.add(FirebaseAuth
-                                          .instance.currentUser!.email);
-                                      temref.set({"list": applicationList});
-                                      Navigator.pop(context);
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) => const Center(
-                                          child: Text(
-                                              "Application Submit Successfull"),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('Apply now'),
-                                  ),
-                                ],
+                              child: ElevatedButton(
+                                onPressed: !isButtonenable
+                                    ? null
+                                    : () async {
+                                        try {
+                                          await FirebaseAuth
+                                              .instance.currentUser!
+                                              .sendEmailVerification(
+                                            ActionCodeSettings(
+                                                url:
+                                                    "https://tpiprogrammingclub.firebaseapp.com/__/auth/action?mode=action&oobCode=code"),
+                                          );
+                                          setState(() {
+                                            isButtonenable = false;
+                                          });
+                                          Future.delayed(
+                                              const Duration(seconds: 60), () {
+                                            setState(() {
+                                              isButtonenable = true;
+                                            });
+                                          });
+                                          Navigator.pop(context);
+                                          showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) => const Center(
+                                              child: Text(
+                                                  'Verification eamil have send successfully\nGo back and cheack your mail'),
+                                            ),
+                                          );
+                                        } on FirebaseAuthException catch (e) {
+                                          showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) =>
+                                                Text(e.message!),
+                                          );
+                                        }
+                                      },
+                                child: const Text(
+                                    'You are not verified.\nSend verification email'),
                               ),
                             ),
                           );

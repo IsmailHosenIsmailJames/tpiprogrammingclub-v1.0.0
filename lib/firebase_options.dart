@@ -23,15 +23,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -51,19 +45,45 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyC4ouu9utc9-W32wRiIh-3bL8IBRUI1Q4U',
-    appId: '1:979979882370:web:9f66f034daa69f5dbf899b',
+    appId: '1:979979882370:web:b2850a95023ea91abf899b',
     messagingSenderId: '979979882370',
     projectId: 'tpiprogrammingclub',
     authDomain: 'tpiprogrammingclub.firebaseapp.com',
+    databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'tpiprogrammingclub.appspot.com',
-    measurementId: 'G-T8GB2HKHPG',
+    measurementId: 'G-FL7Q0D2TNG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAr5KcJK_k89HC-FbV-RxByBX1z1uIsolA',
-    appId: '1:979979882370:android:de230289aaf8ed1dbf899b',
+    appId: '1:979979882370:android:a36654e21bcdd4b5bf899b',
     messagingSenderId: '979979882370',
     projectId: 'tpiprogrammingclub',
+    databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'tpiprogrammingclub.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAXICGCiS9PMQv8wAY9PvEIwDZD6FlU268',
+    appId: '1:979979882370:ios:70727b42ab7e2b78bf899b',
+    messagingSenderId: '979979882370',
+    projectId: 'tpiprogrammingclub',
+    databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'tpiprogrammingclub.appspot.com',
+    androidClientId: '979979882370-5j41lglqi81m9oilg0kqdh4aea8gjflp.apps.googleusercontent.com',
+    iosClientId: '979979882370-r3nb57kk1cu0brd1gasofetpl2ka6g3o.apps.googleusercontent.com',
+    iosBundleId: 'com.example.tpiprogrammingclub',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAXICGCiS9PMQv8wAY9PvEIwDZD6FlU268',
+    appId: '1:979979882370:ios:70727b42ab7e2b78bf899b',
+    messagingSenderId: '979979882370',
+    projectId: 'tpiprogrammingclub',
+    databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'tpiprogrammingclub.appspot.com',
+    androidClientId: '979979882370-5j41lglqi81m9oilg0kqdh4aea8gjflp.apps.googleusercontent.com',
+    iosClientId: '979979882370-r3nb57kk1cu0brd1gasofetpl2ka6g3o.apps.googleusercontent.com',
+    iosBundleId: 'com.example.tpiprogrammingclub',
   );
 }

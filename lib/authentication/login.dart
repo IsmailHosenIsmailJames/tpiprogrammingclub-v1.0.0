@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
   final email = TextEditingController();
   final name = TextEditingController();
   final pass = TextEditingController();
+  final conpass = TextEditingController();
   final key = GlobalKey<FormState>();
   final key2 = GlobalKey<FormState>();
 
@@ -46,7 +47,7 @@ class _LoginState extends State<Login> {
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Column(
+                    child: ListView(
                       children: [
                         Form(
                           key: key,
@@ -106,6 +107,7 @@ class _LoginState extends State<Login> {
                                           .signInWithEmailAndPassword(
                                               email: email.text,
                                               password: pass.text);
+
                                       Navigator.pop(context);
                                       showModalBottomSheet(
                                         context: context,
@@ -154,23 +156,50 @@ class _LoginState extends State<Login> {
                         ),
                         Form(
                           key: key2,
-                          child: TextFormField(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: name,
-                            validator: (value) {
-                              if (value!.length < 3) {
-                                return "Name is too short";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              hintText: "type your name...",
-                              labelText: "Name",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                controller: conpass,
+                                validator: (value) {
+                                  if (pass.text != value) {
+                                    return "Did't massed";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Type your password again",
+                                  labelText: "Confirm password",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(
+                                height: 05,
+                              ),
+                              TextFormField(
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                controller: name,
+                                validator: (value) {
+                                  if (value!.length < 3) {
+                                    return "Name is too short";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "type your name...",
+                                  labelText: "Name",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(
@@ -197,14 +226,6 @@ class _LoginState extends State<Login> {
                                       ),
                                     );
 
-                                    final temRef = FirebaseFirestore.instance
-                                        .collection('user')
-                                        .doc('allUser');
-                                    final allUser = await temRef.get();
-                                    List allUserList = allUser['email'];
-                                    allUserList.add(email.text.trim());
-                                    await temRef.update({'email': allUserList});
-
                                     final tem = result.files.first;
                                     String? extension = tem.extension;
                                     File imageFile = File(tem.path!);
@@ -220,6 +241,14 @@ class _LoginState extends State<Login> {
                                         await uploadTask.whenComplete(() {});
                                     String url =
                                         await snapshot.ref.getDownloadURL();
+                                    final temRef = FirebaseFirestore.instance
+                                        .collection('user')
+                                        .doc('allUser');
+                                    final allUser = await temRef.get();
+                                    List allUserList = allUser['email'];
+                                    allUserList.add(email.text.trim());
+                                    await temRef.set({'email': allUserList});
+
                                     await FirebaseAuth.instance
                                         .createUserWithEmailAndPassword(
                                             email: email.text,
@@ -276,13 +305,6 @@ class _LoginState extends State<Login> {
                                         child: CircularProgressIndicator(),
                                       ),
                                     );
-                                    final temRef = FirebaseFirestore.instance
-                                        .collection('user')
-                                        .doc('allUser');
-                                    final allUser = await temRef.get();
-                                    List allUserList = allUser['email'];
-                                    allUserList.add(email.text.trim());
-                                    await temRef.update({'email': allUserList});
 
                                     final tem = result.files.first;
                                     Uint8List? selectedImage = tem.bytes;
@@ -301,6 +323,15 @@ class _LoginState extends State<Login> {
                                         await uploadTask.whenComplete(() {});
                                     String url =
                                         await snapshot.ref.getDownloadURL();
+
+                                    final temRef = FirebaseFirestore.instance
+                                        .collection('user')
+                                        .doc('allUser');
+                                    final allUser = await temRef.get();
+                                    List allUserList = allUser['email'];
+                                    allUserList.add(email.text.trim());
+                                    await temRef.set({'email': allUserList});
+
                                     await FirebaseAuth.instance
                                         .createUserWithEmailAndPassword(
                                             email: email.text,
@@ -319,6 +350,16 @@ class _LoginState extends State<Login> {
                                         .doc(email.text.trim());
 
                                     await firebaseref.set(json);
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
+                                    if (user != null) {
+                                      await FirebaseAuth.instance.currentUser!
+                                          .sendEmailVerification(
+                                        ActionCodeSettings(
+                                            url:
+                                                "https://tpiprogrammingclub.firebaseapp.com/__/auth/action?mode=action&oobCode=code"),
+                                      );
+                                    }
 
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -326,7 +367,7 @@ class _LoginState extends State<Login> {
                                       context: context,
                                       builder: (context) => const Center(
                                         child: Text(
-                                          "SignUp Successfull",
+                                          "SignUp Successfull\nWe have sent a mail to you.\nPlease verify your email address.",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(fontSize: 24),
                                         ),
@@ -359,33 +400,6 @@ class _LoginState extends State<Login> {
                           },
                           child: const Text("Sign Up"),
                         ),
-
-                        // OutlinedButton(
-                        //   onPressed: () {
-                        //     GoogleAuthProvider googleProvider =
-                        //         GoogleAuthProvider();
-
-                        //     googleProvider.addScope(
-                        //         'https://www.googleapis.com/auth/contacts.readonly');
-                        //     googleProvider.setCustomParameters(
-                        //         {'login_hint': 'user@example.com'});
-                        //     FirebaseAuth.instance.signInWithPopup(googleProvider);
-                        //   },
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     crossAxisAlignment: CrossAxisAlignment.center,
-                        //     children: [
-                        //       const Text("continue with"),
-                        //       SizedBox(
-                        //         height: 30,
-                        //         child: Image.asset(
-                        //           'img/googleLogo.jpg',
-                        //           fit: BoxFit.cover,
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
