@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/authentication/login.dart';
 import 'package:tpiprogrammingclub/pages/admin/admin.dart';
 import 'package:tpiprogrammingclub/widget/search.dart';
@@ -126,7 +127,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const Divider(
-              color: Colors.black,
+              thickness: 2,
+              color: Colors.blueGrey,
             ),
             const SizedBox(
               height: 5,
@@ -184,7 +186,8 @@ class _HomePageState extends State<HomePage> {
               height: 5,
             ),
             const Divider(
-              color: Colors.black,
+              thickness: 2,
+              color: Colors.blueGrey,
             ),
             const SizedBox(
               height: 5,
@@ -198,25 +201,20 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Home'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.houseUser),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Home'),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: elevatedStyle),
-              onPressed: () {
-                setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'blog', syntax: Syntax.DART);
-                  title = const Text('Blogs');
-                  Navigator.pop(context);
-                });
-              },
-              child: const Text('Blogs'),
-            ),
-            const SizedBox(
-              height: 5,
+            const Divider(
+              thickness: 2,
+              color: Colors.blueGrey,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -228,7 +226,16 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Python'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.python),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Python'),
+                ],
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -243,7 +250,16 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Java'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.java),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Java'),
+                ],
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -252,13 +268,18 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage =
-                      const MyStramBuilder(language: 'c++', syntax: Syntax.CPP);
-                  title = const Text('C++');
+                  currentPage = const MyStramBuilder(
+                      language: 'dart', syntax: Syntax.DART);
+                  title = const Text(
+                    'Dart',
+                  );
                   Navigator.pop(context);
                 });
               },
-              child: const Text('C++'),
+              child: const Text(
+                'Dart',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -273,7 +294,10 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('C#'),
+              child: const Text(
+                'C#',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -282,16 +306,38 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'linux', syntax: Syntax.JAVASCRIPT);
-                  title = const Text('Linux System');
+                  currentPage =
+                      const MyStramBuilder(language: 'c++', syntax: Syntax.CPP);
+                  title = const Text('C++');
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Linux System'),
+              child: const Text(
+                'C++',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(
               height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage =
+                      const MyStramBuilder(language: 'c', syntax: Syntax.C);
+                  title = const Text('C');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text(
+                'C',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const Divider(
+              thickness: 2,
+              color: Colors.blueGrey,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -303,7 +349,16 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('HTML'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.html5),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('HTML'),
+                ],
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -318,7 +373,126 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('CSS'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.css3),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('CSS'),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const MyStramBuilder(
+                      language: 'flutter', syntax: Syntax.DART);
+                  title = const Text('Flutter');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text(
+                'Flutter',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const Divider(
+              thickness: 2,
+              color: Colors.blueGrey,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const MyStramBuilder(
+                      language: 'linux', syntax: Syntax.JAVASCRIPT);
+                  title = const Text('Linux Operating System');
+                  Navigator.pop(context);
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.linux),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Linux Operating System'),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const MyStramBuilder(
+                      language: 'windows', syntax: Syntax.JAVASCRIPT);
+                  title = const Text('Windows Operating System');
+                  Navigator.pop(context);
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.windows),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Windows Operating System'),
+                ],
+              ),
+            ),
+            const Divider(
+              thickness: 2,
+              color: Colors.blueGrey,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const MyStramBuilder(
+                      language: 'problemsolved', syntax: Syntax.DART);
+                  title = const Text('Problem Solved');
+                  Navigator.pop(context);
+                });
+              },
+              child: const Text(
+                'Problem Solved',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(shape: elevatedStyle),
+              onPressed: () {
+                setState(() {
+                  currentPage = const MyStramBuilder(
+                      language: 'blog', syntax: Syntax.DART);
+                  title = const Text('Blogs');
+                  Navigator.pop(context);
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(FontAwesomeIcons.blog),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Blogs'),
+                ],
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -333,25 +507,20 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Docs'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.document_scanner),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Docs'),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: elevatedStyle),
-              onPressed: () {
-                setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'problemsolved', syntax: Syntax.DART);
-                  title = const Text('Problem Solved');
-                  Navigator.pop(context);
-                });
-              },
-              child: const Text('Problem Solved'),
-            ),
-            const SizedBox(
-              height: 5,
+            const Divider(
+              thickness: 2,
+              color: Colors.blueGrey,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -362,7 +531,16 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                 });
               },
-              child: const Text('Contributors'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.code),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Contributors'),
+                ],
+              ),
             ),
             const SizedBox(
               height: 5,
@@ -400,10 +578,20 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: const Text('Admin Page'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.admin_panel_settings),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text('Admin Page'),
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 5,
+            const Divider(
+              thickness: 2,
+              color: Colors.blueGrey,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
@@ -418,8 +606,17 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: Text(loginText),
-            )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.logout),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(loginText),
+                ],
+              ),
+            ),
           ],
         ),
       ),
