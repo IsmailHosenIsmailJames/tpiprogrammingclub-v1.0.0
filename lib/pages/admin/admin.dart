@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tpiprogrammingclub/pages/admin/application.dart';
 import 'package:tpiprogrammingclub/pages/admin/update_rank.dart';
 import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 
@@ -19,22 +18,6 @@ class _AdminPageState extends State<AdminPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(270, 40), shape: elevatedStyle),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Aplication(),
-                  ),
-                );
-              },
-              child: const Text('All Application To Became Contributor'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: elevatedStyle,

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:tpiprogrammingclub/pages/profile/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../authentication/login.dart';
 import '../pages/editor/editor.dart';
@@ -28,7 +29,6 @@ class MyStramBuilder extends StatefulWidget {
 }
 
 class _MyStramBuilderState extends State<MyStramBuilder> {
-  bool isButtonenable = true;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,7 +90,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                             context: context,
                             builder: (context) => Center(
                               child: ElevatedButton(
-                                onPressed: !isButtonenable
+                                onPressed: !buttonClickable
                                     ? null
                                     : () async {
                                         try {
@@ -102,12 +102,12 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                                     "https://tpiprogrammingclub.firebaseapp.com/__/auth/action?mode=action&oobCode=code"),
                                           );
                                           setState(() {
-                                            isButtonenable = false;
+                                            buttonClickable = false;
                                           });
                                           Future.delayed(
                                               const Duration(seconds: 60), () {
                                             setState(() {
-                                              isButtonenable = true;
+                                              buttonClickable = true;
                                             });
                                           });
                                           Navigator.pop(context);

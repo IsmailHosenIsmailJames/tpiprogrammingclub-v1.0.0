@@ -165,7 +165,7 @@ class _ProfileState extends State<Profile> {
               children: postwidget,
             ),
           ),
-        )
+        ),
       ],
     );
 

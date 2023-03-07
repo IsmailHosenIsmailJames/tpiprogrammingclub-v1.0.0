@@ -11,6 +11,7 @@ import '../../theme/change_button_theme.dart';
 import '../contributors/contributors.dart';
 import '../profile/profile.dart';
 import 'home.dart';
+import '../profile/settings.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -49,6 +50,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (callOneTime) getdata();
+    String loginText =
+        FirebaseAuth.instance.currentUser != null ? "Log Out" : "Sign In";
     return Scaffold(
       appBar: AppBar(
         title: title,
@@ -128,25 +131,54 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 5,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(shape: elevatedStyle),
-              onPressed: () {
-                if (FirebaseAuth.instance.currentUser != null) {
-                  setState(() {
-                    currentPage = Profile(
-                      email: FirebaseAuth.instance.currentUser!.email!,
-                    );
-                    title = const Text('My Profile');
-                    Navigator.pop(context);
-                  });
-                } else {
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => const Login(),
-                  );
-                }
-              },
-              child: const Text('My Profile'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(shape: elevatedStyle),
+                  onPressed: () {
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      setState(() {
+                        currentPage = Profile(
+                          email: FirebaseAuth.instance.currentUser!.email!,
+                        );
+                        title = const Text('My Profile');
+                        Navigator.pop(context);
+                      });
+                    } else {
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (context) => const Login(),
+                      );
+                    }
+                  },
+                  child: const Text('Profile'),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                IconButton(
+                  onPressed: () {
+                    if (FirebaseAuth.instance.currentUser != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MySettings(),
+                        ),
+                      );
+                    } else {
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (context) => const Login(),
+                      );
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.settings,
+                    size: 28,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(
               height: 5,
@@ -386,9 +418,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: Text(FirebaseAuth.instance.currentUser != null
-                  ? "Log Out"
-                  : "Sign In"),
+              child: Text(loginText),
             )
           ],
         ),

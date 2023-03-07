@@ -22,7 +22,7 @@ class ThemeProvider extends ChangeNotifier {
 class MyThemes {
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: Colors.amber,
+    primaryColor: Colors.blueGrey,
   );
 
   static final lightTheme = ThemeData(
