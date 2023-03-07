@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../theme/change_button_theme.dart';
 import '../../authentication/login.dart';
-import '../editor/editor.dart';
+import '../../widget/editor.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

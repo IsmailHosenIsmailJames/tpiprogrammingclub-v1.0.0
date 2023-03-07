@@ -12,7 +12,7 @@ import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:tpiprogrammingclub/pages/profile/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../authentication/login.dart';
-import '../pages/editor/editor.dart';
+import 'editor.dart';
 import '../pages/home/home_page.dart';
 import '../pages/profile/profile.dart';
 import '../theme/change_button_theme.dart';
@@ -60,31 +60,13 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                       final user = FirebaseAuth.instance.currentUser;
                       if (user != null) {
                         if (user.emailVerified) {
-                          final contributorsFile = await FirebaseFirestore
-                              .instance
-                              .collection('user')
-                              .doc('contributor')
-                              .get();
-                          List contrbutorList = contributorsFile['list'];
-                          if (contrbutorList.contains(user.email) ||
-                              widget.language == 'blog' ||
-                              widget.language == 'problemsolved') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Scaffold(
-                                  appBar: AppBar(
-                                    toolbarHeight: 35,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                  ),
-                                  body:
-                                      Editor(contributionArea: widget.language),
-                                ),
-                              ),
-                            );
-                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Editor(contributionArea: widget.language),
+                            ),
+                          );
                         } else {
                           showModalBottomSheet(
                             context: context,
