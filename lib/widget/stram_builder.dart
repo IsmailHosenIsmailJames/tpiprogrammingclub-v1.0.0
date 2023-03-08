@@ -1,14 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/pages/profile/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../authentication/login.dart';
@@ -93,18 +93,21 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                             });
                                           });
                                           Navigator.pop(context);
-                                          showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) => const Center(
-                                              child: Text(
-                                                  'Verification eamil have send successfully\nGo back and cheack your mail'),
-                                            ),
+                                          Fluttertoast.showToast(
+                                            msg:
+                                                "Verification Email sent Successfull\nCheak mail",
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.grey[700],
+                                            textColor: Colors.white,
                                           );
                                         } on FirebaseAuthException catch (e) {
-                                          showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) =>
-                                                Text(e.message!),
+                                          Fluttertoast.showToast(
+                                            msg: e.message!,
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.grey[700],
+                                            textColor: Colors.white,
                                           );
                                         }
                                       },
@@ -115,9 +118,12 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                           );
                         }
                       } else {
-                        showCupertinoModalPopup(
-                            context: context,
-                            builder: (context) => const Login());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Login(),
+                          ),
+                        );
                       }
                     },
                     child: Text(currentDoc['message']),
@@ -210,17 +216,183 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                     listOfContent.add(
                       Column(
                         children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              Clipboard.setData(
-                                ClipboardData(text: singleDoc['doc']),
-                              );
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [Text('Copy '), Icon(Icons.copy)],
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              OutlinedButton(
+                                onPressed: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: singleDoc['doc']),
+                                  );
+                                  Fluttertoast.showToast(
+                                    msg: "Copied Successfull!",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.grey[700],
+                                    textColor: Colors.white,
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Text('Copy '),
+                                    Icon(FontAwesomeIcons.copy)
+                                  ],
+                                ),
+                              ),
+                              OutlinedButton(
+                                onPressed: () async {
+                                  Clipboard.setData(
+                                    ClipboardData(text: singleDoc['doc']),
+                                  );
+                                  Fluttertoast.showToast(
+                                    msg: "Copied Successfull!",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.grey[700],
+                                    textColor: Colors.white,
+                                  );
+
+                                  if (widget.language == "python") {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/python3',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == "java") {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/java10',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == 'javascript') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/nodejs',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == 'c++') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/cpp',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == 'c#') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/csharp',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == 'c') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/c',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == 'dart') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://dartpad.dev/?',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.language == 'html' ||
+                                      widget.language == 'css') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://www.programiz.com/html/online-compiler/',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                      msg: "We still working on it!",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey[700],
+                                      textColor: Colors.white,
+                                    );
+                                  }
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Text('Run on web '),
+                                    Icon(
+                                      Icons.play_arrow,
+                                      size: 28,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
                           ),
                           SyntaxView(
                             code: singleDoc['doc'], // Code text
@@ -418,9 +590,11 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
 
                                 temDocRef.update({"like": like});
                               } else {
-                                await showCupertinoModalPopup(
-                                  context: context,
-                                  builder: (context) => const Login(),
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Login(),
+                                  ),
                                 );
                               }
                             },
@@ -454,9 +628,11 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                   ),
                                 );
                               } else {
-                                showCupertinoModalPopup(
-                                  context: context,
-                                  builder: (context) => const Login(),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Login(),
+                                  ),
                                 );
                               }
                             },

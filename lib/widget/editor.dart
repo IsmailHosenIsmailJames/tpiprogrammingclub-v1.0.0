@@ -12,6 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../theme/change_button_theme.dart';
 
 class Editor extends StatefulWidget {
@@ -250,10 +252,15 @@ class _EditorState extends State<Editor> {
                                               final temdoc =
                                                   await cheakRef.get();
                                               if (temdoc.exists) {
-                                                showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (context) => const Text(
-                                                      'This Document Number already exists. Try to change it'),
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      "This Document Rank is allready exits. Try to change the Rank",
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor:
+                                                      Colors.grey[700],
+                                                  textColor: Colors.white,
                                                 );
                                               } else {
                                                 final ref = FirebaseFirestore
@@ -318,16 +325,13 @@ class _EditorState extends State<Editor> {
 
                                               Navigator.pop(context);
                                               Navigator.pop(context);
-                                              showModalBottomSheet(
-                                                context: context,
-                                                builder: (context) =>
-                                                    const Center(
-                                                  child: Text(
-                                                    'Published Successfull',
-                                                    style:
-                                                        TextStyle(fontSize: 24),
-                                                  ),
-                                                ),
+                                              Fluttertoast.showToast(
+                                                msg: "Published Successfully",
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor:
+                                                    Colors.grey[700],
+                                                textColor: Colors.white,
                                               );
                                             },
                                             child: const Text("Publish"),
@@ -437,7 +441,78 @@ class _EditorState extends State<Editor> {
                 },
               ),
               QuillCustomButton(
-                icon: Icons.code_rounded,
+                icon: FontAwesomeIcons.link,
+                onTap: () {
+                  final temController = TextEditingController();
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              autofocus: true,
+                              controller: temController,
+                              decoration: InputDecoration(
+                                hintText: "Link of image",
+                                labelText: "Link",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    listOfContent.add(
+                                      Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child:
+                                            Image.network(temController.text),
+                                      ),
+                                    );
+                                    json.addAll({
+                                      "$count": {
+                                        "doc": temController.text,
+                                        "type": "image"
+                                      }
+                                    });
+                                    count++;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Done"),
+                              ),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              QuillCustomButton(
+                icon: FontAwesomeIcons.code,
                 onTap: () {
                   final controller = TextEditingController();
                   showCupertinoModalPopup(
@@ -522,77 +597,6 @@ class _EditorState extends State<Editor> {
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              QuillCustomButton(
-                icon: Icons.dataset_linked_outlined,
-                onTap: () {
-                  final temController = TextEditingController();
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              autofocus: true,
-                              controller: temController,
-                              decoration: InputDecoration(
-                                hintText: "Link of image",
-                                labelText: "Link",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    listOfContent.add(
-                                      Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child:
-                                            Image.network(temController.text),
-                                      ),
-                                    );
-                                    json.addAll({
-                                      "$count": {
-                                        "doc": temController.text,
-                                        "type": "image"
-                                      }
-                                    });
-                                    count++;
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Done"),
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          )
-                        ],
                       ),
                     ),
                   );

@@ -5,11 +5,12 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,30 +60,29 @@ class _HomeState extends State<Home> {
                       if (FirebaseAuth.instance.currentUser != null) {
                         if (adminList.contains(
                             FirebaseAuth.instance.currentUser!.email)) {
-                          showCupertinoModalPopup(
-                            context: context,
-                            builder: (context) => Scaffold(
-                              appBar: AppBar(
-                                toolbarHeight: 35,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                              ),
-                              body: const Editor(contributionArea: 'home'),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Editor(contributionArea: 'home'),
                             ),
                           );
                         } else {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => const Center(
-                              child: Text('Only admin can Edit this page'),
-                            ),
+                          Fluttertoast.showToast(
+                            msg: "Only admin can Edit this page",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[700],
+                            textColor: Colors.white,
                           );
                         }
                       } else {
-                        showCupertinoModalPopup(
-                            context: context,
-                            builder: (context) => const Login());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Login(),
+                          ),
+                        );
                       }
                     },
                     child: const Text('Edit This Page'),
@@ -167,20 +167,76 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                Clipboard.setData(
-                                  ClipboardData(text: singleDoc['doc']),
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Text('Copy '),
-                                  Icon(Icons.copy)
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                OutlinedButton(
+                                  onPressed: () {
+                                    Clipboard.setData(
+                                      ClipboardData(text: singleDoc['doc']),
+                                    );
+                                    Fluttertoast.showToast(
+                                      msg: "Copied Successfull!",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey[700],
+                                      textColor: Colors.white,
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: const [
+                                      Text('Copy '),
+                                      Icon(FontAwesomeIcons.copy)
+                                    ],
+                                  ),
+                                ),
+                                OutlinedButton(
+                                  onPressed: () async {
+                                    Clipboard.setData(
+                                      ClipboardData(text: singleDoc['doc']),
+                                    );
+                                    Fluttertoast.showToast(
+                                      msg: "Copied Successfull!",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey[700],
+                                      textColor: Colors.white,
+                                    );
+
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/python3',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: const [
+                                      Text('Run on web '),
+                                      Icon(
+                                        Icons.play_arrow,
+                                        size: 28,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
                             ),
                             SyntaxView(
                               code: singleDoc['doc'], // Code text

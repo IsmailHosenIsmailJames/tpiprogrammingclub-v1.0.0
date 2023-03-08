@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -148,9 +147,11 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pop(context);
                       });
                     } else {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (context) => const Login(),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
                       );
                     }
                   },
@@ -169,9 +170,11 @@ class _HomePageState extends State<HomePage> {
                         ),
                       );
                     } else {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (context) => const Login(),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
                       );
                     }
                   },
@@ -572,9 +575,11 @@ class _HomePageState extends State<HomePage> {
                   }
                 } else {
                   Navigator.pop(context);
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => const Login(),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Login(),
+                    ),
                   );
                 }
               },
@@ -600,9 +605,11 @@ class _HomePageState extends State<HomePage> {
                   FirebaseAuth.instance.signOut();
                   setState(() {});
                 } else {
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (logcontext) => const Login(),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Login(),
+                    ),
                   );
                 }
               },

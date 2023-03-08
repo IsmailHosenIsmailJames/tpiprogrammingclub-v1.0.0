@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UpdateRank extends StatefulWidget {
   const UpdateRank({super.key});
@@ -59,9 +60,15 @@ class _UpdateRankState extends State<UpdateRank> {
         .doc('rank')
         .set({"rank": info});
 
-    setState(() {
-      text = "Finished All the task\nYou can go Back";
-    });
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
+    Fluttertoast.showToast(
+      msg: "Rank Update Successfull",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.grey[700],
+      textColor: Colors.white,
+    );
   }
 
   @override

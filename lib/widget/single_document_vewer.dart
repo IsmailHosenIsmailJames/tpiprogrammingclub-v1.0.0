@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -318,9 +317,11 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                       temDocRef.update({"like": like});
                       getFile();
                     } else {
-                      await showCupertinoModalPopup(
-                        context: context,
-                        builder: (context) => const Login(),
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
                       );
                       getFile();
                     }
@@ -355,9 +356,11 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                         ),
                       );
                     } else {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (context) => const Login(),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
                       );
                     }
                   },

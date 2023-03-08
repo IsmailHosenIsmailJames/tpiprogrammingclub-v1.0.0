@@ -45,18 +45,15 @@ class _SearchState extends State<Search> {
                     newGestorSearchResult(
                         context, id, i, currentDoc, title, des),
                   );
+                  continue;
                 }
-              }
-
-              for (var i = 0; i < title.length; i++) {
                 if ("${title[i]}".contains(toSearch)) {
                   searchResult.add(
                     newGestorSearchResult(
                         context, id, i, currentDoc, title, des),
                   );
+                  continue;
                 }
-              }
-              for (var i = 0; i < des.length; i++) {
                 if ("${des[i]}".contains(toSearch)) {
                   searchResult.add(
                     newGestorSearchResult(
@@ -64,6 +61,7 @@ class _SearchState extends State<Search> {
                   );
                 }
               }
+
               return Column(
                 children: searchResult,
               );

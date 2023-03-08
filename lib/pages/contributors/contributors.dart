@@ -189,7 +189,7 @@ class _ContributorsState extends State<Contributors> {
               color: const Color.fromARGB(80, 170, 170, 170),
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://scontent.fdac24-1.fna.fbcdn.net/v/t39.30808-6/257764352_421357696128525_3923772872302578932_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeEk28nnx2EaxvIbYoua520YhnIBAGJbQyuGcgEAYltDK9FpyaWJ5ZLcILRiIH6wL5ooDCvdIxrRLRuEzpR2PL-l&_nc_ohc=9wIUOX1ivlAAX-U0kh8&_nc_ht=scontent.fdac24-1.fna&oh=00_AfB7bn7M9bVakeVGWqT6lhJzZK0FUSMONFAQuvXYJhaZtQ&oe=64064D87",
+                    "https://firebasestorage.googleapis.com/v0/b/tpiprogrammingclub.appspot.com/o/user%2FmyProfile.jpg?alt=media&token=0853f603-379d-4246-a74c-684655ff5036",
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     Center(
                   child: Center(

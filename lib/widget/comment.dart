@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tpiprogrammingclub/pages/profile/profile.dart';
 
 class AllComment extends StatefulWidget {
@@ -83,11 +84,12 @@ class _AllCommentState extends State<AllComment> {
                             });
                             Navigator.pop(context);
                             Navigator.pop(context);
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) => const Center(
-                                child: Text('Comment sent successful.'),
-                              ),
+                            Fluttertoast.showToast(
+                              msg: "Comment Sent Successfull",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[700],
+                              textColor: Colors.white,
                             );
                           },
                           child: const Icon(Icons.send_outlined),
