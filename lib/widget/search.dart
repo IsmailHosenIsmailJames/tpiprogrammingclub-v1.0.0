@@ -105,8 +105,8 @@ class _SearchState extends State<Search> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: 80,
-                width: 80,
+                height: 100,
+                width: 100,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: const Color.fromARGB(102, 255, 255, 255),
@@ -135,27 +135,30 @@ class _SearchState extends State<Search> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  Container(
+                    color: const Color.fromARGB(104, 255, 255, 255),
                     height: 30,
+                    width: MediaQuery.of(context).size.width - 120,
                     child: Text(
                       "Title: ${title[i]}",
-                      maxLines: 10,
                       softWrap: true,
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 14,
                         overflow: TextOverflow.ellipsis,
                       ),
                       textAlign: TextAlign.start,
                     ),
                   ),
-                  SizedBox(
-                    height: 50,
+                  Container(
+                    color: const Color.fromARGB(104, 255, 255, 255),
+                    height: 70,
+                    width: MediaQuery.of(context).size.width - 120,
                     child: Text(
                       "Description: ${des[i]}",
-                      maxLines: 15,
                       softWrap: true,
+                      maxLines: 10,
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         overflow: TextOverflow.ellipsis,
                       ),
                       textAlign: TextAlign.start,

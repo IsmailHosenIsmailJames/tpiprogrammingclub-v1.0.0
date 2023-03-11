@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:tpiprogrammingclub/pages/profile/profile.dart';
+import 'package:tpiprogrammingclub/widget/modify_post.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../authentication/login.dart';
@@ -286,75 +287,137 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
               height: 15,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        final user = FirebaseAuth.instance.currentUser;
+
+                        if (user != null) {
+                          final temDocRef = FirebaseFirestore.instance
+                              .collection(widget.path)
+                              .doc(document.id);
+                          final temUserRef = FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(email);
+
+                          final likkeNumberFile = await temUserRef.get();
+                          int likeNumber = likkeNumberFile['like'];
+
+                          if (like.contains(user.email)) {
+                            likeNumber--;
+                            await temUserRef.update({"like": likeNumber});
+                            like.remove(user.email);
+                          } else {
+                            likeNumber++;
+                            await temUserRef.update({"like": likeNumber});
+                            like.add(user.email);
+                          }
+
+                          temDocRef.update({"like": like});
+                          getFile();
+                        } else {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Login(),
+                            ),
+                          );
+                          getFile();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.thumb_up_alt,
+                        size: 24,
+                        color: (user != null && like.contains(user.email))
+                            ? Colors.blue
+                            : Colors.black,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text("${like.length}"),
+                    const SizedBox(
+                      width: 40,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        final user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AllComment(
+                                comment: comment,
+                                id: document.id,
+                                path: widget.path,
+                              ),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Login(),
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.comment),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "${comment.length}",
+                    ),
+                  ],
+                ),
+                ElevatedButton(
                   onPressed: () async {
                     final user = FirebaseAuth.instance.currentUser;
-
                     if (user != null) {
-                      final temDocRef = FirebaseFirestore.instance
-                          .collection(widget.path)
-                          .doc(document.id);
-                      final temUserRef = FirebaseFirestore.instance
-                          .collection('user')
-                          .doc(email);
-
-                      final likkeNumberFile = await temUserRef.get();
-                      int likeNumber = likkeNumberFile['like'];
-
-                      if (like.contains(user.email)) {
-                        likeNumber--;
-                        await temUserRef.update({"like": likeNumber});
-                        like.remove(user.email);
-                      } else {
-                        likeNumber++;
-                        await temUserRef.update({"like": likeNumber});
-                        like.add(user.email);
-                      }
-
-                      temDocRef.update({"like": like});
-                      getFile();
-                    } else {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                      );
-                      getFile();
-                    }
-                  },
-                  icon: Icon(
-                    Icons.thumb_up_alt,
-                    size: 24,
-                    color: (user != null && like.contains(user.email))
-                        ? Colors.blue
-                        : Colors.black,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text("${like.length}"),
-                const SizedBox(
-                  width: 40,
-                ),
-                IconButton(
-                  onPressed: () {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AllComment(
-                            comment: comment,
-                            id: document.id,
-                            path: widget.path,
+                      String useremail = user.email!;
+                      if (useremail == email) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ModifyPost(path: widget.path, id: widget.id),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        final adminRef = await FirebaseFirestore.instance
+                            .collection('admin')
+                            .doc('admin')
+                            .get();
+                        List adminList = adminRef['admin'];
+                        if (adminList.contains(useremail)) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ModifyPost(path: widget.path, id: widget.id),
+                            ),
+                          );
+                        } else {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => const Center(
+                              child: Text(
+                                'You are not an Admin\nYou are not the owner/creator of this post.',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        }
+                      }
                     } else {
                       Navigator.push(
                         context,
@@ -364,14 +427,10 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                       );
                     }
                   },
-                  icon: const Icon(Icons.comment),
+                  child: const Text('Modify'),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text("${comment.length}"),
               ],
-            )
+            ),
           ],
         ),
       );
@@ -393,6 +452,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
         title: Text(widget.path),
       ),
       body: ListView(
+        physics: const BouncingScrollPhysics(),
         children: [
           documentView,
         ],

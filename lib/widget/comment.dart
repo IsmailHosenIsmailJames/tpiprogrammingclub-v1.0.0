@@ -108,6 +108,7 @@ class _AllCommentState extends State<AllComment> {
         title: const Text('Comment'),
       ),
       body: ListView.builder(
+        physics: const BouncingScrollPhysics(),
         itemCount: widget.comment.length,
         itemBuilder: (context, index) {
           String currentComment = widget.comment[index];

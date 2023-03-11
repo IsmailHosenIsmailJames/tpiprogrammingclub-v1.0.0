@@ -17,6 +17,7 @@ import '../pages/home/home_page.dart';
 import '../pages/profile/profile.dart';
 import '../theme/change_button_theme.dart';
 import 'comment.dart';
+import 'modify_post.dart';
 
 class MyStramBuilder extends StatefulWidget {
   final String language;
@@ -145,270 +146,277 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                 List<Widget> listOfContent = [];
                 for (int i = 0; i < len - 1; i++) {
                   final singleDoc = allDoc['$i'];
-                  String type = singleDoc['type'];
-                  if (type == "quill") {
-                    QuillController singleContentWidget = QuillController(
-                      document: Document.fromJson(
-                        jsonDecode(singleDoc['doc']),
-                      ),
-                      selection: const TextSelection.collapsed(offset: 0),
-                    );
-                    Widget myWiget = QuillEditor.basic(
-                      controller: singleContentWidget,
-                      readOnly: true,
-                    );
-                    listOfContent.add(myWiget);
-                  }
-                  if (type == "image") {
-                    listOfContent.add(
-                      GestureDetector(
-                        onTap: () async {
-                          if (!await launchUrl(
-                            Uri.parse(
-                              singleDoc['doc'],
-                            ),
-                          )) {
-                            throw Exception(
-                              'Could not launch ${singleDoc['doc']}',
-                            );
-                          }
-                        },
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.60,
-                          width: MediaQuery.of(context).size.width,
-                          child: CachedNetworkImage(
-                            imageUrl: singleDoc['doc'],
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                    value: downloadProgress.progress),
+                  if (singleDoc != null) {
+                    String type = singleDoc['type'];
+                    if (type == "quill") {
+                      QuillController singleContentWidget = QuillController(
+                        document: Document.fromJson(
+                          jsonDecode(singleDoc['doc']),
+                        ),
+                        selection: const TextSelection.collapsed(offset: 0),
+                      );
+                      Widget myWiget = QuillEditor.basic(
+                        controller: singleContentWidget,
+                        readOnly: true,
+                      );
+                      listOfContent.add(myWiget);
+                    }
+                    if (type == "image") {
+                      listOfContent.add(
+                        GestureDetector(
+                          onTap: () async {
+                            if (!await launchUrl(
+                              Uri.parse(
+                                singleDoc['doc'],
                               ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                OutlinedButton(
-                              onPressed: () async {
-                                if (!await launchUrl(
-                                  Uri.parse(
-                                    singleDoc['doc'],
-                                  ),
-                                )) {
-                                  throw Exception(
-                                    'Could not launch ${singleDoc['doc']}',
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'For Image Click Here',
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 22,
+                            )) {
+                              throw Exception(
+                                'Could not launch ${singleDoc['doc']}',
+                              );
+                            }
+                          },
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.60,
+                            width: MediaQuery.of(context).size.width,
+                            child: CachedNetworkImage(
+                              imageUrl: singleDoc['doc'],
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress),
                                 ),
-                                textAlign: TextAlign.center,
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  OutlinedButton(
+                                onPressed: () async {
+                                  if (!await launchUrl(
+                                    Uri.parse(
+                                      singleDoc['doc'],
+                                    ),
+                                  )) {
+                                    throw Exception(
+                                      'Could not launch ${singleDoc['doc']}',
+                                    );
+                                  }
+                                },
+                                child: const Text(
+                                  'For Image Click Here',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 22,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                  if (type == 'code') {
-                    listOfContent.add(
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              OutlinedButton(
-                                onPressed: () {
-                                  Clipboard.setData(
-                                    ClipboardData(text: singleDoc['doc']),
-                                  );
-                                  Fluttertoast.showToast(
-                                    msg: "Copied Successfull!",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: Colors.grey[700],
-                                    textColor: Colors.white,
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Text('Copy '),
-                                    Icon(FontAwesomeIcons.copy)
-                                  ],
-                                ),
-                              ),
-                              OutlinedButton(
-                                onPressed: () async {
-                                  Clipboard.setData(
-                                    ClipboardData(text: singleDoc['doc']),
-                                  );
-                                  Fluttertoast.showToast(
-                                    msg: "Copied Successfull!",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: Colors.grey[700],
-                                    textColor: Colors.white,
-                                  );
-
-                                  if (widget.language == "python") {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/python3',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == "java") {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/java10',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == 'javascript') {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/nodejs',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == 'c++') {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/cpp',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == 'c#') {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/csharp',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == 'c') {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/c',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == 'dart') {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://dartpad.dev/?',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else if (widget.language == 'html' ||
-                                      widget.language == 'css') {
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://www.programiz.com/html/online-compiler/',
-                                      ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  } else {
+                      );
+                    }
+                    if (type == 'code') {
+                      listOfContent.add(
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                OutlinedButton(
+                                  onPressed: () {
+                                    Clipboard.setData(
+                                      ClipboardData(text: singleDoc['doc']),
+                                    );
                                     Fluttertoast.showToast(
-                                      msg: "We still working on it!",
+                                      msg: "Copied Successfull!",
                                       toastLength: Toast.LENGTH_LONG,
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: Colors.grey[700],
                                       textColor: Colors.white,
                                     );
-                                  }
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Text('Run on web '),
-                                    Icon(
-                                      Icons.play_arrow,
-                                      size: 28,
-                                    )
-                                  ],
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: const [
+                                      Text('Copy '),
+                                      Icon(FontAwesomeIcons.copy)
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          SyntaxView(
-                            code: singleDoc['doc'], // Code text
-                            syntax: widget.syntax, // Language
-                            syntaxTheme: isDark
-                                ? SyntaxTheme.monokaiSublime()
-                                : SyntaxTheme.ayuLight(), // Theme
-                            fontSize: 16.0, // Font size
-                            withZoom: true, // Enable/Disable zoom icon controls
-                            withLinesCount: true, // Enable/Disable line number
-                            expanded:
-                                false, // Enable/Disable container expansion
-                          ),
-                        ],
-                      ),
-                    );
+                                OutlinedButton(
+                                  onPressed: () async {
+                                    Clipboard.setData(
+                                      ClipboardData(text: singleDoc['doc']),
+                                    );
+                                    Fluttertoast.showToast(
+                                      msg: "Copied Successfull!",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey[700],
+                                      textColor: Colors.white,
+                                    );
+
+                                    if (widget.language == "python") {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://replit.com/languages/python3',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language == "java") {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://replit.com/languages/java10',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language ==
+                                        'javascript') {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://replit.com/languages/nodejs',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language == 'c++') {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://replit.com/languages/cpp',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language == 'c#') {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://replit.com/languages/csharp',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language == 'c') {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://replit.com/languages/c',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language == 'dart') {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://dartpad.dev/?',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else if (widget.language == 'html' ||
+                                        widget.language == 'css') {
+                                      if (!await launchUrl(
+                                        Uri.parse(
+                                          'https://www.programiz.com/html/online-compiler/',
+                                        ),
+                                      )) {
+                                        Fluttertoast.showToast(
+                                          msg: "Couldn't launch url!",
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.grey[700],
+                                          textColor: Colors.white,
+                                        );
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "We still working on it!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: const [
+                                      Text('Run on web '),
+                                      Icon(
+                                        Icons.play_arrow,
+                                        size: 28,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SyntaxView(
+                              code: singleDoc['doc'], // Code text
+                              syntax: widget.syntax, // Language
+                              syntaxTheme: isDark
+                                  ? SyntaxTheme.monokaiSublime()
+                                  : SyntaxTheme.ayuLight(), // Theme
+                              fontSize: 16.0, // Font size
+                              withZoom:
+                                  true, // Enable/Disable zoom icon controls
+                              withLinesCount:
+                                  true, // Enable/Disable line number
+                              expanded:
+                                  false, // Enable/Disable container expansion
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   }
                 }
                 Widget profile = Padding(
@@ -560,73 +568,146 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                         height: 15,
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser;
+
+                                  if (user != null) {
+                                    final temDocRef = FirebaseFirestore.instance
+                                        .collection(widget.language)
+                                        .doc(currentDoc.id);
+                                    final temUserRef = FirebaseFirestore
+                                        .instance
+                                        .collection('user')
+                                        .doc(email);
+
+                                    final likkeNumberFile =
+                                        await temUserRef.get();
+                                    int likeNumber = likkeNumberFile['like'];
+
+                                    if (like.contains(user.email)) {
+                                      likeNumber--;
+                                      await temUserRef
+                                          .update({"like": likeNumber});
+                                      like.remove(user.email);
+                                    } else {
+                                      likeNumber++;
+                                      await temUserRef
+                                          .update({"like": likeNumber});
+                                      like.add(user.email);
+                                    }
+
+                                    temDocRef.update({"like": like});
+                                  } else {
+                                    await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const Login(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.thumb_up_alt,
+                                  size: 24,
+                                  color: (user != null &&
+                                          like.contains(user.email))
+                                      ? Colors.blue
+                                      : Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text("${like.length}"),
+                              const SizedBox(
+                                width: 40,
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser;
+                                  if (user != null) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AllComment(
+                                          comment: comment,
+                                          id: currentDoc.id,
+                                          path: widget.language,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const Login(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.comment),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text("${comment.length}"),
+                            ],
+                          ),
+                          ElevatedButton(
                             onPressed: () async {
                               final user = FirebaseAuth.instance.currentUser;
-
                               if (user != null) {
-                                final temDocRef = FirebaseFirestore.instance
-                                    .collection(widget.language)
-                                    .doc(currentDoc.id);
-                                final temUserRef = FirebaseFirestore.instance
-                                    .collection('user')
-                                    .doc(email);
-
-                                final likkeNumberFile = await temUserRef.get();
-                                int likeNumber = likkeNumberFile['like'];
-
-                                if (like.contains(user.email)) {
-                                  likeNumber--;
-                                  await temUserRef.update({"like": likeNumber});
-                                  like.remove(user.email);
-                                } else {
-                                  likeNumber++;
-                                  await temUserRef.update({"like": likeNumber});
-                                  like.add(user.email);
-                                }
-
-                                temDocRef.update({"like": like});
-                              } else {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Login(),
-                                  ),
-                                );
-                              }
-                            },
-                            icon: Icon(
-                              Icons.thumb_up_alt,
-                              size: 24,
-                              color: (user != null && like.contains(user.email))
-                                  ? Colors.blue
-                                  : Colors.black,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text("${like.length}"),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              final user = FirebaseAuth.instance.currentUser;
-                              if (user != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AllComment(
-                                      comment: comment,
-                                      id: currentDoc.id,
-                                      path: widget.language,
+                                String useremail = user.email!;
+                                if (useremail == email) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ModifyPost(
+                                          path: widget.language,
+                                          id: currentDoc.id),
                                     ),
-                                  ),
-                                );
+                                  );
+                                } else {
+                                  final adminRef = await FirebaseFirestore
+                                      .instance
+                                      .collection('admin')
+                                      .doc('admin')
+                                      .get();
+                                  List adminList = adminRef['admin'];
+                                  if (adminList.contains(useremail)) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ModifyPost(
+                                            path: widget.language,
+                                            id: currentDoc.id),
+                                      ),
+                                    );
+                                  } else {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => const Center(
+                                        child: Text(
+                                          'You are not an Admin\nYou are not the owner/creator of this post.',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
                               } else {
                                 Navigator.push(
                                   context,
@@ -636,12 +717,8 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 );
                               }
                             },
-                            icon: const Icon(Icons.comment),
+                            child: const Text('Modify'),
                           ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text("${comment.length}"),
                         ],
                       )
                     ],

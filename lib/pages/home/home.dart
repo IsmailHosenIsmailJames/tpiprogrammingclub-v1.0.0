@@ -43,6 +43,7 @@ class _HomeState extends State<Home> {
           }
           final document = snapshot.data!.docs;
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: document.length,
             itemBuilder: (context, index) {
               DocumentSnapshot currentDoc = document[index];

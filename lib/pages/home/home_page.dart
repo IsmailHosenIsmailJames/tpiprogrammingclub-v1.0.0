@@ -50,8 +50,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (callOneTime) getdata();
-    String loginText =
-        FirebaseAuth.instance.currentUser != null ? "Log Out" : "Sign In";
+    Widget loginSignIn = FirebaseAuth.instance.currentUser != null
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.logout),
+              SizedBox(
+                width: 15,
+              ),
+              Text('Log Out')
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.login),
+              SizedBox(
+                width: 15,
+              ),
+              Text('LogIn/SignUp')
+            ],
+          );
+
     return Scaffold(
       appBar: AppBar(
         title: title,
@@ -613,16 +633,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.logout),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Text(loginText),
-                ],
-              ),
+              child: loginSignIn,
             ),
           ],
         ),
