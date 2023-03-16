@@ -8,13 +8,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../theme/change_button_theme.dart';
 import '../../authentication/login.dart';
 import '../../widget/editor.dart';
 
@@ -165,95 +162,142 @@ class _HomeState extends State<Home> {
                   if (type == 'code') {
                     listOfContent.add(
                       Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(text: singleDoc['doc']),
-                                    );
-                                    Fluttertoast.showToast(
-                                      msg: "Copied Successfull!",
-                                      toastLength: Toast.LENGTH_LONG,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.grey[700],
-                                      textColor: Colors.white,
-                                    );
-                                  },
-                                  child: Row(
+                        padding: const EdgeInsets.all(3),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.black,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
                                     children: const [
-                                      Text('Copy '),
-                                      Icon(FontAwesomeIcons.copy)
-                                    ],
-                                  ),
-                                ),
-                                OutlinedButton(
-                                  onPressed: () async {
-                                    Clipboard.setData(
-                                      ClipboardData(text: singleDoc['doc']),
-                                    );
-                                    Fluttertoast.showToast(
-                                      msg: "Copied Successfull!",
-                                      toastLength: Toast.LENGTH_LONG,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.grey[700],
-                                      textColor: Colors.white,
-                                    );
-
-                                    if (!await launchUrl(
-                                      Uri.parse(
-                                        'https://replit.com/languages/python3',
+                                      SizedBox(
+                                        width: 10,
                                       ),
-                                    )) {
-                                      Fluttertoast.showToast(
-                                        msg: "Couldn't launch url!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Text('Run on web '),
-                                      Icon(
-                                        Icons.play_arrow,
-                                        size: 28,
+                                      CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: Colors.red,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: Colors.yellow,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 4,
+                                        backgroundColor: Colors.green,
                                       )
                                     ],
                                   ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 7),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            shape: elevatedStyle,
+                                            backgroundColor: Colors.blueGrey,
+                                          ),
+                                          onPressed: () {
+                                            Clipboard.setData(
+                                              ClipboardData(
+                                                text: singleDoc['doc'],
+                                              ),
+                                            );
+                                            Fluttertoast.showToast(
+                                              msg: "Copied Successfull!",
+                                              toastLength: Toast.LENGTH_LONG,
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.grey[700],
+                                              textColor: Colors.white,
+                                            );
+                                          },
+                                          child: Row(
+                                            children: const [
+                                              Text('Copy'),
+                                              Icon(Icons.copy),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 7),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            shape: elevatedStyle,
+                                            backgroundColor: Colors.blueGrey,
+                                          ),
+                                          onPressed: () async {
+                                            Clipboard.setData(
+                                              ClipboardData(
+                                                text: singleDoc['doc'],
+                                              ),
+                                            );
+                                            Fluttertoast.showToast(
+                                              msg: "Copied Successfull!",
+                                              toastLength: Toast.LENGTH_LONG,
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.grey[700],
+                                              textColor: Colors.white,
+                                            );
+
+                                            if (!await launchUrl(
+                                              Uri.parse(
+                                                'https://replit.com/languages/python',
+                                              ),
+                                            )) {
+                                              Fluttertoast.showToast(
+                                                msg: "Couldn't launch url!",
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor:
+                                                    Colors.grey[700],
+                                                textColor: Colors.white,
+                                              );
+                                            }
+                                          },
+                                          child: const Icon(Icons.play_arrow),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: SelectableText(
+                                    singleDoc['doc'],
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                      fontFamily: 'monospace',
+                                      fontSize: 16.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SyntaxView(
-                              code: singleDoc['doc'], // Code text
-                              syntax: Syntax.DART, // Language
-                              syntaxTheme: isDark
-                                  ? SyntaxTheme.monokaiSublime()
-                                  : SyntaxTheme.ayuLight(), // Theme
-                              fontSize: 18.0, // Font size
-                              withZoom:
-                                  true, // Enable/Disable zoom icon controls
-                              withLinesCount:
-                                  true, // Enable/Disable line number
-                              expanded:
-                                  false, // Enable/Disable container expansion
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );

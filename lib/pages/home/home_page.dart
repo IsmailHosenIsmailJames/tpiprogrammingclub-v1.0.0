@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/authentication/login.dart';
 import 'package:tpiprogrammingclub/pages/admin/admin.dart';
@@ -9,6 +8,7 @@ import 'package:tpiprogrammingclub/widget/search.dart';
 import 'package:tpiprogrammingclub/widget/stram_builder.dart';
 import '../../theme/change_button_theme.dart';
 import '../contributors/contributors.dart';
+import '../openai/chatgpt.dart';
 import '../profile/profile.dart';
 import 'home.dart';
 import '../profile/settings.dart';
@@ -24,6 +24,7 @@ Widget currentPage = const Home();
 
 final elevatedStyle =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
+String? chatID;
 
 class _HomePageState extends State<HomePage> {
   Widget title = const Text("Home");
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         profileLink = json['profile'];
         name = json['name'];
+        chatID = json['chatID'];
         callOneTime = false;
       });
     }
@@ -71,8 +73,36 @@ class _HomePageState extends State<HomePage> {
               Text('LogIn/SignUp')
             ],
           );
+    setState(() {
+      loginSignIn;
+    });
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (FirebaseAuth.instance.currentUser != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChatGPT(),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Login(),
+              ),
+            );
+          }
+        },
+        child: const Center(
+          child: Text(
+            'Chat GPT',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ),
       appBar: AppBar(
         title: title,
         actions: [
@@ -181,8 +211,10 @@ class _HomePageState extends State<HomePage> {
                   width: 10,
                 ),
                 IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (FirebaseAuth.instance.currentUser != null) {
+                      await FirebaseAuth.instance.currentUser!.reload();
+                      // ignore: use_build_context_synchronously
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -243,8 +275,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'python', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'python');
                   title = const Text('Python');
                   Navigator.pop(context);
                 });
@@ -267,8 +298,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'java', syntax: Syntax.JAVA);
+                  currentPage = const MyStramBuilder(language: 'java');
                   title = const Text('Java');
                   Navigator.pop(context);
                 });
@@ -291,8 +321,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'dart', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'dart');
                   title = const Text(
                     'Dart',
                   );
@@ -311,8 +340,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage =
-                      const MyStramBuilder(language: 'c#', syntax: Syntax.JAVA);
+                  currentPage = const MyStramBuilder(language: 'c#');
                   title = const Text('C#');
                   Navigator.pop(context);
                 });
@@ -329,8 +357,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage =
-                      const MyStramBuilder(language: 'c++', syntax: Syntax.CPP);
+                  currentPage = const MyStramBuilder(language: 'c++');
                   title = const Text('C++');
                   Navigator.pop(context);
                 });
@@ -347,8 +374,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage =
-                      const MyStramBuilder(language: 'c', syntax: Syntax.C);
+                  currentPage = const MyStramBuilder(language: 'c');
                   title = const Text('C');
                   Navigator.pop(context);
                 });
@@ -366,8 +392,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'html', syntax: Syntax.JAVASCRIPT);
+                  currentPage = const MyStramBuilder(language: 'html');
                   title = const Text('HTML');
                   Navigator.pop(context);
                 });
@@ -390,8 +415,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'css', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'css');
                   title = const Text('CSS');
                   Navigator.pop(context);
                 });
@@ -414,8 +438,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'flutter', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'flutter');
                   title = const Text('Flutter');
                   Navigator.pop(context);
                 });
@@ -433,8 +456,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'linux', syntax: Syntax.JAVASCRIPT);
+                  currentPage = const MyStramBuilder(language: 'linux');
                   title = const Text('Linux Operating System');
                   Navigator.pop(context);
                 });
@@ -457,8 +479,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'windows', syntax: Syntax.JAVASCRIPT);
+                  currentPage = const MyStramBuilder(language: 'windows');
                   title = const Text('Windows Operating System');
                   Navigator.pop(context);
                 });
@@ -482,8 +503,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'problemsolved', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'problemsolved');
                   title = const Text('Problem Solved');
                   Navigator.pop(context);
                 });
@@ -500,8 +520,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'blog', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'blog');
                   title = const Text('Blogs');
                   Navigator.pop(context);
                 });
@@ -524,8 +543,7 @@ class _HomePageState extends State<HomePage> {
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
                 setState(() {
-                  currentPage = const MyStramBuilder(
-                      language: 'doc', syntax: Syntax.DART);
+                  currentPage = const MyStramBuilder(language: 'doc');
                   title = const Text('Docs');
                   Navigator.pop(context);
                 });

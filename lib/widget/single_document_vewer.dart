@@ -8,13 +8,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tpiprogrammingclub/pages/profile/profile.dart';
 import 'package:tpiprogrammingclub/widget/modify_post.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../authentication/login.dart';
-import '../theme/change_button_theme.dart';
+import '../pages/home/home_page.dart';
 import 'comment.dart';
 
 class SingleDocumentViewer extends StatefulWidget {
@@ -97,7 +97,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                             value: downloadProgress.progress),
                       ),
                     ),
-                    errorWidget: (context, url, error) => const Text(
+                    errorWidget: (context, url, error) => const SelectableText(
                       'For Image Click Here',
                       style: TextStyle(
                         fontSize: 22,
@@ -113,32 +113,247 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
         }
         if (type == 'code') {
           listOfContent.add(
-            Column(
-              children: [
-                OutlinedButton(
-                  onPressed: () {
-                    Clipboard.setData(
-                      ClipboardData(text: singleDoc['doc']),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [Text('Copy '), Icon(Icons.copy)],
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.black,
                 ),
-                SyntaxView(
-                  code: singleDoc['doc'], // Code text
-                  syntax: Syntax.JAVASCRIPT,
-                  syntaxTheme: isDark
-                      ? SyntaxTheme.monokaiSublime()
-                      : SyntaxTheme.ayuLight(), // Theme
-                  fontSize: 16.0, // Font size
-                  withZoom: true, // Enable/Disable zoom icon controls
-                  withLinesCount: true, // Enable/Disable line number
-                  expanded: false, // Enable/Disable container expansion
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: Colors.red,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: Colors.yellow,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            CircleAvatar(
+                              radius: 4,
+                              backgroundColor: Colors.green,
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: elevatedStyle,
+                                  backgroundColor: Colors.blueGrey,
+                                ),
+                                onPressed: () {
+                                  Clipboard.setData(
+                                    ClipboardData(
+                                      text: singleDoc['doc'],
+                                    ),
+                                  );
+                                  Fluttertoast.showToast(
+                                    msg: "Copied Successfull!",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.grey[700],
+                                    textColor: Colors.white,
+                                  );
+                                },
+                                child: Row(
+                                  children: const [
+                                    Text('Copy'),
+                                    Icon(Icons.copy),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 7),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: elevatedStyle,
+                                  backgroundColor: Colors.blueGrey,
+                                ),
+                                onPressed: () async {
+                                  Clipboard.setData(
+                                    ClipboardData(text: singleDoc['doc']),
+                                  );
+                                  Fluttertoast.showToast(
+                                    msg: "Copied Successfull!",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: Colors.grey[700],
+                                    textColor: Colors.white,
+                                  );
+
+                                  if (widget.path == "python") {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/python3',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == "java") {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/java10',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == 'javascript') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/nodejs',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == 'c++') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/cpp',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == 'c#') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/csharp',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == 'c') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://replit.com/languages/c',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == 'dart') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://dartpad.dev/?',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else if (widget.path == 'html' ||
+                                      widget.path == 'css') {
+                                    if (!await launchUrl(
+                                      Uri.parse(
+                                        'https://www.programiz.com/html/online-compiler/',
+                                      ),
+                                    )) {
+                                      Fluttertoast.showToast(
+                                        msg: "Couldn't launch url!",
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.grey[700],
+                                        textColor: Colors.white,
+                                      );
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                      msg: "We still working on it!",
+                                      toastLength: Toast.LENGTH_LONG,
+                                      gravity: ToastGravity.BOTTOM,
+                                      backgroundColor: Colors.grey[700],
+                                      textColor: Colors.white,
+                                    );
+                                  }
+                                },
+                                child: const Icon(Icons.play_arrow),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: SelectableText(
+                          singleDoc['doc'],
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
         }
@@ -191,11 +406,11 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        SelectableText(
                           name,
                           style: const TextStyle(fontSize: 20),
                         ),
-                        Text(email),
+                        SelectableText(email),
                       ],
                     ),
                   ],
@@ -217,7 +432,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    SelectableText(
                       "Rank : ${double.parse(document.id) ~/ 10000000000}",
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.bold),
@@ -229,14 +444,14 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        const SelectableText(
                           "Title : ",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width - 70,
-                          child: Text(title),
+                          child: SelectableText(title),
                         ),
                       ],
                     ),
@@ -247,14 +462,14 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        const SelectableText(
                           "Description : ",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width - 120,
-                          child: Text(shortDes),
+                          child: SelectableText(shortDes),
                         ),
                       ],
                     )
@@ -342,7 +557,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text("${like.length}"),
+                    SelectableText("${like.length}"),
                     const SizedBox(
                       width: 40,
                     ),
@@ -379,55 +594,64 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      String useremail = user.email!;
-                      if (useremail == email) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ModifyPost(path: widget.path, id: widget.id),
-                          ),
-                        );
-                      } else {
-                        final adminRef = await FirebaseFirestore.instance
-                            .collection('admin')
-                            .doc('admin')
-                            .get();
-                        List adminList = adminRef['admin'];
-                        if (adminList.contains(useremail)) {
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        final user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          String useremail = user.email!;
+                          if (useremail == email) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ModifyPost(
+                                    path: widget.path, id: widget.id),
+                              ),
+                            );
+                          } else {
+                            final adminRef = await FirebaseFirestore.instance
+                                .collection('admin')
+                                .doc('admin')
+                                .get();
+                            List adminList = adminRef['admin'];
+                            if (adminList.contains(useremail)) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ModifyPost(
+                                      path: widget.path, id: widget.id),
+                                ),
+                              );
+                            } else {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => const Center(
+                                  child: Text(
+                                    'You are not an Admin\nYou are not the owner/creator of this post.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        } else {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ModifyPost(path: widget.path, id: widget.id),
-                            ),
-                          );
-                        } else {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => const Center(
-                              child: Text(
-                                'You are not an Admin\nYou are not the owner/creator of this post.',
-                                textAlign: TextAlign.center,
-                              ),
+                              builder: (context) => const Login(),
                             ),
                           );
                         }
-                      }
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                      );
-                    }
-                  },
-                  child: const Text('Modify'),
+                      },
+                      child: const Text('Modify'),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -449,7 +673,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
     if (callOneTime) getFile();
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.path),
+        title: SelectableText(widget.path),
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),

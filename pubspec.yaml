@@ -41,7 +41,6 @@ dependencies:
   provider: ^6.0.5
   cached_network_image: ^3.2.3
   flutter_quill: ^6.4.2
-  flutter_syntax_view: ^4.0.0
   cloud_firestore: ^4.4.2
   file_picker: ^5.2.5
   firebase_storage: ^11.0.13
@@ -53,6 +52,7 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   flutter_launcher_icons: ^0.11.0
   fluttertoast: ^8.2.1
+  openai_client: ^0.0.7
 
 dev_dependencies:
   flutter_test:

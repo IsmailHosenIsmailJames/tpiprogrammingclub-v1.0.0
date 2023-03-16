@@ -320,6 +320,7 @@ class _LoginState extends State<Login> {
 
                         final json = {
                           "profile": url,
+                          "chatID": "${allUserList.length}",
                           "name": name.text.trim(),
                           'like': 0,
                           'post': [],

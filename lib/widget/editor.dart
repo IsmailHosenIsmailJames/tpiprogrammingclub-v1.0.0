@@ -10,10 +10,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:flutter_syntax_view/flutter_syntax_view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../theme/change_button_theme.dart';
+import '../pages/home/home_page.dart';
 import 'publish_post.dart';
 
 class Editor extends StatefulWidget {
@@ -269,27 +270,120 @@ class _EditorState extends State<Editor> {
                                   onPressed: () {
                                     String code = controller.text;
                                     setState(() {
-                                      listOfContent.add(
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10, bottom: 10),
-                                          child: SyntaxView(
-                                            code: code, // Code text
-                                            syntax: Syntax.DART, // Language
-                                            syntaxTheme: isDark
-                                                ? SyntaxTheme.monokaiSublime()
-                                                : SyntaxTheme
-                                                    .ayuLight(), // Theme
-                                            fontSize: 18.0, // Font size
-                                            withZoom:
-                                                true, // Enable/Disable zoom icon controls
-                                            withLinesCount:
-                                                true, // Enable/Disable line number
-                                            expanded:
-                                                false, // Enable/Disable container expansion
+                                      listOfContent.add(Padding(
+                                        padding: const EdgeInsets.all(3),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: Colors.black,
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: const [
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      CircleAvatar(
+                                                        radius: 4,
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      CircleAvatar(
+                                                        radius: 4,
+                                                        backgroundColor:
+                                                            Colors.yellow,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      CircleAvatar(
+                                                        radius: 4,
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 7),
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        shape: elevatedStyle,
+                                                        backgroundColor:
+                                                            Colors.blueGrey,
+                                                      ),
+                                                      onPressed: () {
+                                                        Clipboard.setData(
+                                                          ClipboardData(
+                                                            text: code,
+                                                          ),
+                                                        );
+                                                        Fluttertoast.showToast(
+                                                          msg:
+                                                              "Copied Successfull!",
+                                                          toastLength:
+                                                              Toast.LENGTH_LONG,
+                                                          gravity: ToastGravity
+                                                              .BOTTOM,
+                                                          backgroundColor:
+                                                              Colors.grey[700],
+                                                          textColor:
+                                                              Colors.white,
+                                                        );
+                                                      },
+                                                      child: Row(
+                                                        children: const [
+                                                          Text('Copy'),
+                                                          Icon(Icons.copy),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 2,
+                                              ),
+                                              SingleChildScrollView(
+                                                physics:
+                                                    const BouncingScrollPhysics(),
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  child: SelectableText(
+                                                    code,
+                                                    textAlign: TextAlign.start,
+                                                    style: const TextStyle(
+                                                      fontFamily: 'monospace',
+                                                      fontSize: 16.0,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      );
+                                      ));
                                       json.addAll({
                                         "$count": {"doc": code, "type": "code"}
                                       });

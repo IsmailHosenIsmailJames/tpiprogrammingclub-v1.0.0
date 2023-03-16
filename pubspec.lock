@@ -510,14 +510,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.23.0+1"
-  flutter_syntax_view:
-    dependency: "direct main"
-    description:
-      name: flutter_syntax_view
-      sha256: bed469c548993f2f9158514c4b5526dcd6de19e008c5321bb55216cb1afc675b
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -688,6 +680,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  openai_client:
+    dependency: "direct main"
+    description:
+      name: openai_client
+      sha256: "92e88ab1e0748e60b27461f67f5fa0d3c9fda1fb2d9fb259c7935dd06296fe2a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   package_config:
     dependency: transitive
     description:

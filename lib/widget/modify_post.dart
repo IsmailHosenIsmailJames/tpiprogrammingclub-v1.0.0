@@ -305,9 +305,11 @@ class _ModifyPostState extends State<ModifyPost> {
                       uploadTask = ref.putFile(imageFile);
                       final snapshot = await uploadTask.whenComplete(() {});
                       String url = await snapshot.ref.getDownloadURL();
-                      jsonDataList.insert(indexForEditing + 1,
-                          {"doc": url, "type": "image", "loc": "fire"});
-                      editingWidgetMaker(indexForEditing + 1);
+                      setState(() {
+                        jsonDataList.insert(indexForEditing + 1,
+                            {"doc": url, "type": "image", "loc": "fire"});
+                        editingWidgetMaker(indexForEditing + 1);
+                      });
                     }
                   }
                   if (kIsWeb) {
@@ -333,9 +335,11 @@ class _ModifyPostState extends State<ModifyPost> {
                       uploadTask = ref.putData(selectedImage!, metadata);
                       final snapshot = await uploadTask.whenComplete(() {});
                       String url = await snapshot.ref.getDownloadURL();
-                      jsonDataList.insert(indexForEditing + 1,
-                          {"doc": url, "type": "image", "loc": "fire"});
-                      editingWidgetMaker(indexForEditing + 1);
+                      setState(() {
+                        jsonDataList.insert(indexForEditing + 1,
+                            {"doc": url, "type": "image", "loc": "fire"});
+                        editingWidgetMaker(indexForEditing + 1);
+                      });
                     }
                   }
                 },

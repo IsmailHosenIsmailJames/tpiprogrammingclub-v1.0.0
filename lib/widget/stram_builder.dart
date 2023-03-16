@@ -7,23 +7,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:flutter_syntax_view/flutter_syntax_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/pages/profile/settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../authentication/login.dart';
 import 'editor.dart';
 import '../pages/home/home_page.dart';
 import '../pages/profile/profile.dart';
-import '../theme/change_button_theme.dart';
 import 'comment.dart';
 import 'modify_post.dart';
 
 class MyStramBuilder extends StatefulWidget {
   final String language;
-  final Syntax syntax;
-  const MyStramBuilder(
-      {super.key, required this.language, required this.syntax});
+  const MyStramBuilder({super.key, required this.language});
 
   @override
   State<MyStramBuilder> createState() => _MyStramBuilderState();
@@ -127,7 +122,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                         );
                       }
                     },
-                    child: Text(currentDoc['message']),
+                    child: SelectableText(currentDoc['message']),
                   ),
                 );
               } else {
@@ -216,204 +211,288 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                     }
                     if (type == 'code') {
                       listOfContent.add(
-                        Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.black,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Clipboard.setData(
-                                      ClipboardData(text: singleDoc['doc']),
-                                    );
-                                    Fluttertoast.showToast(
-                                      msg: "Copied Successfull!",
-                                      toastLength: Toast.LENGTH_LONG,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.grey[700],
-                                      textColor: Colors.white,
-                                    );
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Text('Copy '),
-                                      Icon(FontAwesomeIcons.copy)
-                                    ],
-                                  ),
-                                ),
-                                OutlinedButton(
-                                  onPressed: () async {
-                                    Clipboard.setData(
-                                      ClipboardData(text: singleDoc['doc']),
-                                    );
-                                    Fluttertoast.showToast(
-                                      msg: "Copied Successfull!",
-                                      toastLength: Toast.LENGTH_LONG,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.grey[700],
-                                      textColor: Colors.white,
-                                    );
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 4,
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 4,
+                                          backgroundColor: Colors.yellow,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 4,
+                                          backgroundColor: Colors.green,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 7),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: elevatedStyle,
+                                              backgroundColor: Colors.blueGrey,
+                                            ),
+                                            onPressed: () {
+                                              Clipboard.setData(
+                                                ClipboardData(
+                                                  text: singleDoc['doc'],
+                                                ),
+                                              );
+                                              Fluttertoast.showToast(
+                                                msg: "Copied Successfull!",
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor:
+                                                    Colors.grey[700],
+                                                textColor: Colors.white,
+                                              );
+                                            },
+                                            child: Row(
+                                              children: const [
+                                                Text('Copy'),
+                                                Icon(Icons.copy),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 7),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: elevatedStyle,
+                                              backgroundColor: Colors.blueGrey,
+                                            ),
+                                            onPressed: () async {
+                                              Clipboard.setData(
+                                                ClipboardData(
+                                                    text: singleDoc['doc']),
+                                              );
+                                              Fluttertoast.showToast(
+                                                msg: "Copied Successfull!",
+                                                toastLength: Toast.LENGTH_LONG,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor:
+                                                    Colors.grey[700],
+                                                textColor: Colors.white,
+                                              );
 
-                                    if (widget.language == "python") {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://replit.com/languages/python3',
+                                              if (widget.language == "python") {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://replit.com/languages/python3',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                  "java") {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://replit.com/languages/java10',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                  'javascript') {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://replit.com/languages/nodejs',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                  'c++') {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://replit.com/languages/cpp',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                  'c#') {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://replit.com/languages/csharp',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                  'c') {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://replit.com/languages/c',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                  'dart') {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://dartpad.dev/?',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else if (widget.language ==
+                                                      'html' ||
+                                                  widget.language == 'css') {
+                                                if (!await launchUrl(
+                                                  Uri.parse(
+                                                    'https://www.programiz.com/html/online-compiler/',
+                                                  ),
+                                                )) {
+                                                  Fluttertoast.showToast(
+                                                    msg: "Couldn't launch url!",
+                                                    toastLength:
+                                                        Toast.LENGTH_LONG,
+                                                    gravity:
+                                                        ToastGravity.BOTTOM,
+                                                    backgroundColor:
+                                                        Colors.grey[700],
+                                                    textColor: Colors.white,
+                                                  );
+                                                }
+                                              } else {
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      "We still working on it!",
+                                                  toastLength:
+                                                      Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor:
+                                                      Colors.grey[700],
+                                                  textColor: Colors.white,
+                                                );
+                                              }
+                                            },
+                                            child: const Icon(Icons.play_arrow),
+                                          ),
                                         ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language == "java") {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://replit.com/languages/java10',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language ==
-                                        'javascript') {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://replit.com/languages/nodejs',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language == 'c++') {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://replit.com/languages/cpp',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language == 'c#') {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://replit.com/languages/csharp',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language == 'c') {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://replit.com/languages/c',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language == 'dart') {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://dartpad.dev/?',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else if (widget.language == 'html' ||
-                                        widget.language == 'css') {
-                                      if (!await launchUrl(
-                                        Uri.parse(
-                                          'https://www.programiz.com/html/online-compiler/',
-                                        ),
-                                      )) {
-                                        Fluttertoast.showToast(
-                                          msg: "Couldn't launch url!",
-                                          toastLength: Toast.LENGTH_LONG,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: Colors.grey[700],
-                                          textColor: Colors.white,
-                                        );
-                                      }
-                                    } else {
-                                      Fluttertoast.showToast(
-                                        msg: "We still working on it!",
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.grey[700],
-                                        textColor: Colors.white,
-                                      );
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Text('Run on web '),
-                                      Icon(
-                                        Icons.play_arrow,
-                                        size: 28,
-                                      )
-                                    ],
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                SingleChildScrollView(
+                                  physics: const BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: SelectableText(
+                                      singleDoc['doc'],
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                        fontFamily: 'monospace',
+                                        fontSize: 16.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SyntaxView(
-                              code: singleDoc['doc'], // Code text
-                              syntax: widget.syntax, // Language
-                              syntaxTheme: isDark
-                                  ? SyntaxTheme.monokaiSublime()
-                                  : SyntaxTheme.ayuLight(), // Theme
-                              fontSize: 16.0, // Font size
-                              withZoom:
-                                  true, // Enable/Disable zoom icon controls
-                              withLinesCount:
-                                  true, // Enable/Disable line number
-                              expanded:
-                                  false, // Enable/Disable container expansion
-                            ),
-                          ],
+                          ),
                         ),
                       );
                     }
@@ -468,11 +547,11 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  SelectableText(
                                     name,
                                     style: const TextStyle(fontSize: 20),
                                   ),
-                                  Text(email),
+                                  SelectableText(email),
                                 ],
                               ),
                             ],
@@ -494,7 +573,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              SelectableText(
                                 "Rank : ${double.parse(currentDoc.id) ~/ 10000000000}",
                                 style: const TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.bold),
@@ -506,7 +585,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  const SelectableText(
                                     "Title : ",
                                     style: TextStyle(
                                         fontSize: 16,
@@ -515,7 +594,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                   SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width - 70,
-                                    child: Text(title),
+                                    child: SelectableText(title),
                                   ),
                                 ],
                               ),
@@ -526,7 +605,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  const SelectableText(
                                     "Description : ",
                                     style: TextStyle(
                                         fontSize: 16,
@@ -630,7 +709,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text("${like.length}"),
+                              SelectableText("${like.length}"),
                               const SizedBox(
                                 width: 40,
                               ),
@@ -663,61 +742,71 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Text("${comment.length}"),
+                              SelectableText("${comment.length}"),
                             ],
                           ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              final user = FirebaseAuth.instance.currentUser;
-                              if (user != null) {
-                                String useremail = user.email!;
-                                if (useremail == email) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ModifyPost(
-                                          path: widget.language,
-                                          id: currentDoc.id),
-                                    ),
-                                  );
-                                } else {
-                                  final adminRef = await FirebaseFirestore
-                                      .instance
-                                      .collection('admin')
-                                      .doc('admin')
-                                      .get();
-                                  List adminList = adminRef['admin'];
-                                  if (adminList.contains(useremail)) {
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () async {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser;
+                                  if (user != null) {
+                                    String useremail = user.email!;
+                                    if (useremail == email) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ModifyPost(
+                                              path: widget.language,
+                                              id: currentDoc.id),
+                                        ),
+                                      );
+                                    } else {
+                                      final adminRef = await FirebaseFirestore
+                                          .instance
+                                          .collection('admin')
+                                          .doc('admin')
+                                          .get();
+                                      List adminList = adminRef['admin'];
+                                      if (adminList.contains(useremail)) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ModifyPost(
+                                                path: widget.language,
+                                                id: currentDoc.id),
+                                          ),
+                                        );
+                                      } else {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) => const Center(
+                                            child: Text(
+                                              'You are not an Admin\nYou are not the owner/creator of this post.',
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  } else {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ModifyPost(
-                                            path: widget.language,
-                                            id: currentDoc.id),
-                                      ),
-                                    );
-                                  } else {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => const Center(
-                                        child: Text(
-                                          'You are not an Admin\nYou are not the owner/creator of this post.',
-                                          textAlign: TextAlign.center,
-                                        ),
+                                        builder: (context) => const Login(),
                                       ),
                                     );
                                   }
-                                }
-                              } else {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Login(),
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Text('Modify'),
+                                },
+                                child: const Text('Modify'),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                            ],
                           ),
                         ],
                       )
