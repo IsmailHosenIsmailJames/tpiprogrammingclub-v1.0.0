@@ -64,6 +64,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                             ),
                           );
                         } else {
+                          await FirebaseAuth.instance.currentUser!.reload();
                           showModalBottomSheet(
                             context: context,
                             builder: (context) => Center(
@@ -122,7 +123,7 @@ class _MyStramBuilderState extends State<MyStramBuilder> {
                         );
                       }
                     },
-                    child: SelectableText(currentDoc['message']),
+                    child: Text(currentDoc['message']),
                   ),
                 );
               } else {

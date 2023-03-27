@@ -8,7 +8,6 @@ import 'package:tpiprogrammingclub/widget/search.dart';
 import 'package:tpiprogrammingclub/widget/stram_builder.dart';
 import '../../theme/change_button_theme.dart';
 import '../contributors/contributors.dart';
-import '../openai/chatgpt.dart';
 import '../profile/profile.dart';
 import 'home.dart';
 import '../profile/settings.dart';
@@ -78,31 +77,6 @@ class _HomePageState extends State<HomePage> {
     });
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (FirebaseAuth.instance.currentUser != null) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ChatGPT(),
-              ),
-            );
-          } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const Login(),
-              ),
-            );
-          }
-        },
-        child: const Center(
-          child: Text(
-            'Chat GPT',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
       appBar: AppBar(
         title: title,
         actions: [

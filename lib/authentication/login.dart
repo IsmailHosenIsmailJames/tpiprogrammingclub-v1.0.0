@@ -248,8 +248,9 @@ class _LoginState extends State<Login> {
                           "profile": url,
                           "name": name.text.trim(),
                           "like": 0,
-                          'post': [],
-                          'pendingPost': []
+                          'post': [""],
+                          'pendingPost': [""],
+                          "chatID": allUserList.length
                         };
                         final firebaseref = FirebaseFirestore.instance
                             .collection('user')

@@ -662,9 +662,11 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
         documentView = profile;
       });
     } else {
-      documentView = const Center(
-        child: Text('No data'),
-      );
+      setState(() {
+        documentView = const Center(
+          child: Text('No data'),
+        );
+      });
     }
   }
 

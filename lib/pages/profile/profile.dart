@@ -35,9 +35,11 @@ class _ProfileState extends State<Profile> {
     String profile = file['profile'];
     List post = file['post'];
     int like = file['like'];
+    List pendingPost = file['pendingPost'];
     List<Widget> postwidget = [];
 
     for (int i = 0; i < post.length; i++) {
+      if ("${post[i]}".length < 3) continue;
       postwidget.add(
         GestureDetector(
           behavior: HitTestBehavior.deferToChild,
@@ -77,6 +79,42 @@ class _ProfileState extends State<Profile> {
         ),
       );
     }
+    List<Widget> pendingWidget = [];
+    for (int i = 0; i < pendingPost.length; i++) {
+      if ('${pendingPost[i]}'.length < 2) continue;
+      pendingWidget.add(
+        GestureDetector(
+          behavior: HitTestBehavior.deferToChild,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SingleDocumentViewer(
+                  path: "pending",
+                  id: pendingPost[i],
+                ),
+              ),
+            );
+          },
+          child: Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(86, 145, 145, 145),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(
+                "${pendingPost[i]}",
+                style:
+                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget lastWidget = ListView(
       physics: const BouncingScrollPhysics(),
       children: [
@@ -165,6 +203,34 @@ class _ProfileState extends State<Profile> {
               children: postwidget,
             ),
           ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const Divider(
+          color: Colors.black,
+        ),
+        const Text(
+          "All Pending Post:",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(88, 194, 194, 194),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: pendingWidget,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 15,
         ),
       ],
     );

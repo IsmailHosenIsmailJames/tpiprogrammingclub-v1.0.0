@@ -8,20 +8,48 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979979882370:android:a36654e21bcdd4b5bf899b",
+        "mobilesdk_app_id": "1:979979882370:android:eff1038ddb8c9997bf899b",
         "android_client_info": {
           "package_name": "com.example.tpiprogrammingclub"
         }
       },
       "oauth_client": [
         {
-          "client_id": "979979882370-5j41lglqi81m9oilg0kqdh4aea8gjflp.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.tpiprogrammingclub",
-            "certificate_hash": "9d67d22943503bb4c688789e6840ea8f41e91cfc"
-          }
-        },
+          "client_id": "979979882370-mlchdgqr4mq0g9s8v8r4pl3616437sq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr5KcJK_k89HC-FbV-RxByBX1z1uIsolA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979979882370-mlchdgqr4mq0g9s8v8r4pl3616437sq9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "979979882370-15p8mhv649m550jj4iauejd4ga1lrl88.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tpiclub"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979979882370:android:7b9644d45f70eaf1bf899b",
+        "android_client_info": {
+          "package_name": "com.example.tpiprogrammingclubandroid"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "979979882370-mlchdgqr4mq0g9s8v8r4pl3616437sq9.apps.googleusercontent.com",
           "client_type": 3
