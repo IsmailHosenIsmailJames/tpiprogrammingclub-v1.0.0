@@ -16,23 +16,23 @@ import '../../widget/comment.dart';
 import '../home/home_page.dart';
 import '../profile/profile.dart';
 
-class PendingPost extends StatefulWidget {
-  const PendingPost({super.key});
+class Restore extends StatefulWidget {
+  const Restore({super.key});
 
   @override
-  State<PendingPost> createState() => _PendingPostState();
+  State<Restore> createState() => _RestoreState();
 }
 
-class _PendingPostState extends State<PendingPost> {
+class _RestoreState extends State<Restore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pending Post'),
+        title: const Text('Restore Post'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection("pending")
+            .collection("achieve")
             .snapshots(includeMetadataChanges: false),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -673,18 +673,18 @@ class _PendingPostState extends State<PendingPost> {
                                       .doc(currentDoc['id'])
                                       .set(json);
                                   Fluttertoast.showToast(
-                                    msg: "Successfully Approved and Published",
+                                    msg: "Successfully Restored and Published",
                                     toastLength: Toast.LENGTH_LONG,
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey[700],
                                     textColor: Colors.white,
                                   );
                                   await FirebaseFirestore.instance
-                                      .collection('pending')
+                                      .collection('achieve')
                                       .doc(currentDoc.id)
                                       .delete();
                                   Fluttertoast.showToast(
-                                    msg: "Successfully removed from pending",
+                                    msg: "Successfully removed from Achived",
                                     toastLength: Toast.LENGTH_LONG,
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey[700],
@@ -700,7 +700,7 @@ class _PendingPostState extends State<PendingPost> {
                                   );
                                 }
                               },
-                              child: const Text('Approve'),
+                              child: const Text('Restore'),
                             ),
                             const SizedBox(
                               width: 15,

@@ -4,6 +4,8 @@ import 'package:tpiprogrammingclub/pages/admin/pending_post.dart';
 import 'package:tpiprogrammingclub/pages/admin/update_rank.dart';
 import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 
+import 'restore.dart';
+
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
 
@@ -52,6 +54,24 @@ class _AdminPageState extends State<AdminPage> {
                 );
               },
               child: const Text('Delete a Post'),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: elevatedStyle,
+                minimumSize: const Size(270, 40),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Restore(),
+                  ),
+                );
+              },
+              child: const Text('Restore a Post'),
             ),
             const SizedBox(
               height: 15,
