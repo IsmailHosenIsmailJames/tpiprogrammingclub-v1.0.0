@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tpiprogrammingclub/widget/editor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -907,7 +908,7 @@ class _ContentsState extends State<Contents>
           children: [
             const SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -957,13 +958,7 @@ class _ContentsState extends State<Contents>
                         }
                       }
                     },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.arrow_back_ios),
-                        Text("Previous"),
-                      ],
-                    ),
+                    child: const Icon(Icons.arrow_back_ios),
                   ),
                   ElevatedButton(
                     onPressed: () async {
@@ -997,14 +992,44 @@ class _ContentsState extends State<Contents>
                     onPressed: () {
                       String contributeArea = widget.path.split("/")[1];
                       if (supportedContents.contains(contributeArea)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Editor(
-                              contributionArea: contributeArea,
+                        if (FirebaseAuth.instance.currentUser != null) {
+                          bool isVerifided =
+                              FirebaseAuth.instance.currentUser!.emailVerified;
+                          if (isVerifided) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Editor(
+                                  contributionArea: contributeArea,
+                                ),
+                              ),
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "First verify your account. Go to settings",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[700],
+                              textColor: Colors.white,
+                              timeInSecForIosWeb: 3,
+                            );
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "Log or create account first",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[700],
+                            textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Login(),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       } else {
                         Fluttertoast.showToast(
                           msg: "This not a Valid Area",
@@ -1016,55 +1041,51 @@ class _ContentsState extends State<Contents>
                         );
                       }
                     },
-                    child: const Text("Write a tutorial"),
+                    child: const Icon(FontAwesomeIcons.filePen),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      List splitedPath = widget.path.split("/");
-                      if (splitedPath.length < 2) return;
-                      if (currentDoc == null) {
-                        Fluttertoast.showToast(
-                          msg: "No tutorial avilable",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Colors.grey[700],
-                          textColor: Colors.white,
-                          timeInSecForIosWeb: 3,
-                        );
-                        return;
-                      } else {
-                        int len = listOfIDs.length;
-                        int index = listOfIDs.indexOf(currentDoc) + 1;
-                        if (len > index) {
-                          String id =
-                              ((double.parse(listOfIDs[index])) / 10000000000)
-                                  .toString();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Contents(path: "/${splitedPath[1]}/$id"),
-                              settings:
-                                  RouteSettings(name: "/${splitedPath[1]}/$id"),
-                            ),
-                          );
-                        } else {
+                      onPressed: () {
+                        List splitedPath = widget.path.split("/");
+                        if (splitedPath.length < 2) return;
+                        if (currentDoc == null) {
                           Fluttertoast.showToast(
-                            msg: "No more avilable",
+                            msg: "No tutorial avilable",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.BOTTOM,
                             backgroundColor: Colors.grey[700],
                             textColor: Colors.white,
                             timeInSecForIosWeb: 3,
                           );
+                          return;
+                        } else {
+                          int len = listOfIDs.length;
+                          int index = listOfIDs.indexOf(currentDoc) + 1;
+                          if (len > index) {
+                            String id =
+                                ((double.parse(listOfIDs[index])) / 10000000000)
+                                    .toString();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Contents(path: "/${splitedPath[1]}/$id"),
+                                settings: RouteSettings(
+                                    name: "/${splitedPath[1]}/$id"),
+                              ),
+                            );
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "No more avilable",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[700],
+                              textColor: Colors.white,
+                              timeInSecForIosWeb: 3,
+                            );
+                          }
                         }
-                      }
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Text("Next"), Icon(Icons.arrow_forward_ios)],
-                    ),
-                  ),
+                      },
+                      child: const Icon(Icons.arrow_forward_ios)),
                 ],
               ),
             ),
