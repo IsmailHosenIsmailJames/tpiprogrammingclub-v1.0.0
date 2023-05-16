@@ -121,6 +121,7 @@ class _LoginState extends State<Login> {
                             gravity: ToastGravity.BOTTOM,
                             backgroundColor: Colors.grey[700],
                             textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
                           );
                         } on FirebaseAuthException catch (e) {
                           Fluttertoast.showToast(
@@ -129,14 +130,15 @@ class _LoginState extends State<Login> {
                             gravity: ToastGravity.BOTTOM,
                             backgroundColor: Colors.grey[700],
                             textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
                           );
                         }
                       }
                     },
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Text('Login'),
                         SizedBox(
                           width: 10,
@@ -270,6 +272,7 @@ class _LoginState extends State<Login> {
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey[700],
                           textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
                         );
                       } else {
                         Fluttertoast.showToast(
@@ -278,6 +281,7 @@ class _LoginState extends State<Login> {
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey[700],
                           textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
                         );
                       }
                     }
@@ -365,6 +369,7 @@ class _LoginState extends State<Login> {
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey[700],
                           textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
                         );
                       }
                     }
@@ -375,6 +380,7 @@ class _LoginState extends State<Login> {
                       gravity: ToastGravity.BOTTOM,
                       backgroundColor: Colors.grey[700],
                       textColor: Colors.white,
+                      timeInSecForIosWeb: 3,
                     );
                   }
                 }

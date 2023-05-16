@@ -72,6 +72,7 @@ class _HomeState extends State<Home> {
                             gravity: ToastGravity.BOTTOM,
                             backgroundColor: Colors.grey[700],
                             textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
                           );
                         }
                       } else {
@@ -175,9 +176,9 @@ class _HomeState extends State<Home> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
+                                    children: [
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -223,10 +224,11 @@ class _HomeState extends State<Home> {
                                               gravity: ToastGravity.BOTTOM,
                                               backgroundColor: Colors.grey[700],
                                               textColor: Colors.white,
+                                              timeInSecForIosWeb: 3,
                                             );
                                           },
-                                          child: Row(
-                                            children: const [
+                                          child: const Row(
+                                            children: [
                                               Text('Copy'),
                                               Icon(Icons.copy),
                                             ],
@@ -253,6 +255,7 @@ class _HomeState extends State<Home> {
                                               gravity: ToastGravity.BOTTOM,
                                               backgroundColor: Colors.grey[700],
                                               textColor: Colors.white,
+                                              timeInSecForIosWeb: 3,
                                             );
 
                                             if (!await launchUrl(
@@ -267,6 +270,7 @@ class _HomeState extends State<Home> {
                                                 backgroundColor:
                                                     Colors.grey[700],
                                                 textColor: Colors.white,
+                                                timeInSecForIosWeb: 3,
                                               );
                                             }
                                           },

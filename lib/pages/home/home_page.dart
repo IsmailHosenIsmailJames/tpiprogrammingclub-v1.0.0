@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tpiprogrammingclub/authentication/login.dart';
-import 'package:tpiprogrammingclub/pages/admin/admin.dart';
-import 'package:tpiprogrammingclub/widget/search.dart';
-import 'package:tpiprogrammingclub/widget/stram_builder.dart';
+import '../../authentication/login.dart';
+import '../../pages/admin/admin.dart';
+import '../../pages/contents/contents.dart';
 import '../../theme/change_button_theme.dart';
-import '../contributors/contributors.dart';
 import '../profile/profile.dart';
 import 'home.dart';
 import '../profile/settings.dart';
@@ -36,14 +35,22 @@ class _HomePageState extends State<HomePage>
   late AnimationController animationController;
   late Animation<double> animator;
   bool menu1 = false, menu2 = false, menu3 = false, menu4 = false;
-  double perSubItemHight = 55;
+
+  double perSubItemHight = 35;
   int menuItemNumber1 = 6,
       menuItemNumber2 = 3,
       menuItemNumber3 = 2,
       menuItemNumber4 = 3;
-  double hight1 = 55 * 6, hight2 = 55 * 3, hight3 = 55 * 2, hight4 = 55 * 3;
+  double hight1 = 35 * 6, hight2 = 35 * 3, hight3 = 35 * 2, hight4 = 35 * 3;
   @override
   void initState() {
+    if (!kIsWeb) {
+      perSubItemHight = 55;
+      hight1 = 55 * 6;
+      hight2 = 55 * 3;
+      hight3 = 55 * 2;
+      hight4 = 55 * 3;
+    }
     super.initState();
     animationController = AnimationController(
       vsync: this,
@@ -82,9 +89,9 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     if (callOneTime) getdata();
     Widget loginSignIn = FirebaseAuth.instance.currentUser != null
-        ? Row(
+        ? const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(Icons.logout),
               SizedBox(
                 width: 15,
@@ -92,9 +99,9 @@ class _HomePageState extends State<HomePage>
               Text('Log Out')
             ],
           )
-        : Row(
+        : const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Icon(Icons.login),
               SizedBox(
                 width: 15,
@@ -110,22 +117,23 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         title: title,
         actions: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               ChangeThemeButtonWidget(),
             ],
           ),
           const Icon(Icons.dark_mode),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Search(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const Search(),
+              //   ),
+              // );
+              Navigator.pushNamed(context, "/search");
             },
             icon: const Icon(
               Icons.search,
@@ -254,15 +262,16 @@ class _HomePageState extends State<HomePage>
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
-                setState(() {
-                  currentPage = const Home();
-                  title = const Text('Home');
-                  Navigator.pop(context);
-                });
+                // setState(() {
+                //   currentPage = const Home();
+                //   title = const Text('Home');
+                //   Navigator.pop(context);
+                // });
+                Navigator.pushNamed(context, "/home");
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(FontAwesomeIcons.houseUser),
                   SizedBox(
                     width: 15,
@@ -276,6 +285,8 @@ class _HomePageState extends State<HomePage>
               color: Colors.blueGrey,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: elevatedStyle, backgroundColor: Colors.deepPurple),
               onPressed: () async {
                 final list = [menu1, menu2, menu3, menu4];
                 int countTrue = 0;
@@ -350,16 +361,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'python');
-                            title = const Text('Python');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/python",
+                          //   );
+                          //   title = const Text('Python');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/python"),
+                              settings: const RouteSettings(name: "/python"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.python),
                             SizedBox(
                               width: 15,
@@ -374,16 +394,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'java');
-                            title = const Text('Java');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/java",
+                          //   );
+                          //   title = const Text('Java');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/java"),
+                              settings: const RouteSettings(name: "/java"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.java),
                             SizedBox(
                               width: 15,
@@ -398,14 +427,23 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'dart');
-                            title = const Text(
-                              'Dart',
-                            );
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/dart",
+                          //   );
+                          //   title = const Text(
+                          //     'Dart',
+                          //   );
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/dart"),
+                              settings: const RouteSettings(name: "/dart"),
+                            ),
+                          );
                         },
                         child: const Text(
                           'Dart',
@@ -419,11 +457,20 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage = const MyStramBuilder(language: 'c#');
-                            title = const Text('C#');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/c#",
+                          //   );
+                          //   title = const Text('C#');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Contents(path: "/c#"),
+                              settings: const RouteSettings(name: "/c#"),
+                            ),
+                          );
                         },
                         child: const Text(
                           'C#',
@@ -437,11 +484,21 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage = const MyStramBuilder(language: 'c++');
-                            title = const Text('C++');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/c++",
+                          //   );
+                          //   title = const Text('C++');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/c++"),
+                              settings: const RouteSettings(name: "/c++"),
+                            ),
+                          );
                         },
                         child: const Text(
                           'C++',
@@ -455,11 +512,20 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage = const MyStramBuilder(language: 'c');
-                            title = const Text('C');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/c",
+                          //   );
+                          //   title = const Text('C');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Contents(path: "/c"),
+                              settings: const RouteSettings(name: "/c"),
+                            ),
+                          );
                         },
                         child: const Text(
                           'C',
@@ -479,6 +545,8 @@ class _HomePageState extends State<HomePage>
               color: Colors.blueGrey,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: elevatedStyle, backgroundColor: Colors.deepPurple),
               onPressed: () async {
                 final list = [menu1, menu2, menu3, menu4];
                 int countTrue = 0;
@@ -553,16 +621,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'html');
-                            title = const Text('HTML');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "html",
+                          //   );
+                          //   title = const Text('HTML');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/html"),
+                              settings: const RouteSettings(name: "/html"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.html5),
                             SizedBox(
                               width: 15,
@@ -577,15 +654,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage = const MyStramBuilder(language: 'css');
-                            title = const Text('CSS');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/css",
+                          //   );
+                          //   title = const Text('CSS');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/css"),
+                              settings: const RouteSettings(name: "/css"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.css3),
                             SizedBox(
                               width: 15,
@@ -600,12 +687,21 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'flutter');
-                            title = const Text('Flutter');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/flutter",
+                          //   );
+                          //   title = const Text('Flutter');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/flutter"),
+                              settings: const RouteSettings(name: "/flutter"),
+                            ),
+                          );
                         },
                         child: const Text(
                           'Flutter',
@@ -623,6 +719,8 @@ class _HomePageState extends State<HomePage>
               color: Colors.blueGrey,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: elevatedStyle, backgroundColor: Colors.deepPurple),
               onPressed: () async {
                 final list = [menu1, menu2, menu3, menu4];
                 int countTrue = 0;
@@ -697,16 +795,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'linux');
-                            title = const Text('Linux Operating System');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/linux",
+                          //   );
+                          //   title = const Text('Linux Operating System');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/linux"),
+                              settings: const RouteSettings(name: "/linux"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.linux),
                             SizedBox(
                               width: 15,
@@ -721,16 +828,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'windows');
-                            title = const Text('Windows Operating System');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/windows",
+                          //   );
+                          //   title = const Text('Windows Operating System');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/windows"),
+                              settings: const RouteSettings(name: "/windows"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.windows),
                             SizedBox(
                               width: 15,
@@ -749,6 +865,8 @@ class _HomePageState extends State<HomePage>
               color: Colors.blueGrey,
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  shape: elevatedStyle, backgroundColor: Colors.deepPurple),
               onPressed: () async {
                 final list = [menu1, menu2, menu3, menu4];
                 int countTrue = 0;
@@ -823,12 +941,21 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'problemsolved');
-                            title = const Text('Problem Solved');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "/java",
+                          //   );
+                          //   title = const Text('Problem Solved');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/problem"),
+                              settings: const RouteSettings(name: "/problem"),
+                            ),
+                          );
                         },
                         child: const Text(
                           'Problem Solved',
@@ -842,16 +969,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage =
-                                const MyStramBuilder(language: 'blog');
-                            title = const Text('Blogs');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "blogs",
+                          //   );
+                          //   title = const Text('Blogs');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/blogs"),
+                              settings: const RouteSettings(name: "/blogs"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(FontAwesomeIcons.blog),
                             SizedBox(
                               width: 15,
@@ -866,15 +1002,25 @@ class _HomePageState extends State<HomePage>
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(shape: elevatedStyle),
                         onPressed: () {
-                          setState(() {
-                            currentPage = const MyStramBuilder(language: 'doc');
-                            title = const Text('Docs');
-                            Navigator.pop(context);
-                          });
+                          // setState(() {
+                          //   currentPage = const Contents(
+                          //     path: "doc",
+                          //   );
+                          //   title = const Text('Docs');
+                          //   Navigator.pop(context);
+                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const Contents(path: "/docs"),
+                              settings: const RouteSettings(name: "/docs"),
+                            ),
+                          );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(Icons.document_scanner),
                             SizedBox(
                               width: 15,
@@ -895,15 +1041,16 @@ class _HomePageState extends State<HomePage>
             ElevatedButton(
               style: ElevatedButton.styleFrom(shape: elevatedStyle),
               onPressed: () {
-                setState(() {
-                  currentPage = const Contributors();
-                  title = const Text('Contributors');
-                  Navigator.pop(context);
-                });
+                // setState(() {
+                //   currentPage = const Contributors();
+                //   title = const Text('Contributors');
+                //   Navigator.pop(context);
+                // });
+                Navigator.pushNamed(context, "/contributors");
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(Icons.code),
                   SizedBox(
                     width: 15,
@@ -950,9 +1097,9 @@ class _HomePageState extends State<HomePage>
                   );
                 }
               },
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(Icons.admin_panel_settings),
                   SizedBox(
                     width: 15,
@@ -970,7 +1117,6 @@ class _HomePageState extends State<HomePage>
               onPressed: () {
                 if (FirebaseAuth.instance.currentUser != null) {
                   FirebaseAuth.instance.signOut();
-                  setState(() {});
                 } else {
                   Navigator.push(
                     context,

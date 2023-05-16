@@ -171,6 +171,7 @@ class _AllCommentState extends State<AllComment> {
                               gravity: ToastGravity.BOTTOM,
                               backgroundColor: Colors.grey[700],
                               textColor: Colors.white,
+                              timeInSecForIosWeb: 3,
                             );
                           }
                         }

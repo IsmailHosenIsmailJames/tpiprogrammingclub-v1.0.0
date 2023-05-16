@@ -31,9 +31,9 @@ class _PublishPostState extends State<PublishPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text('Publish Post'),
             SizedBox(
               width: 10,
@@ -158,6 +158,7 @@ class _PublishPostState extends State<PublishPost> {
                             gravity: ToastGravity.BOTTOM,
                             backgroundColor: Colors.grey[700],
                             textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
                           );
                         } else {
                           DateTime now = DateTime.now();
@@ -198,6 +199,7 @@ class _PublishPostState extends State<PublishPost> {
                           gravity: ToastGravity.BOTTOM,
                           backgroundColor: Colors.grey[700],
                           textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
                         );
                       },
                       child: const Text("Publish"),

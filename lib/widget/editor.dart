@@ -287,11 +287,11 @@ class _EditorState extends State<Editor> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Row(
+                                                  const Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .center,
-                                                    children: const [
+                                                    children: [
                                                       SizedBox(
                                                         width: 10,
                                                       ),
@@ -348,8 +348,8 @@ class _EditorState extends State<Editor> {
                                                               Colors.white,
                                                         );
                                                       },
-                                                      child: Row(
-                                                        children: const [
+                                                      child: const Row(
+                                                        children: [
                                                           Text('Copy'),
                                                           Icon(Icons.copy),
                                                         ],

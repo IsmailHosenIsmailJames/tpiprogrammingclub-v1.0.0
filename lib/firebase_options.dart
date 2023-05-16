@@ -45,18 +45,18 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyC4ouu9utc9-W32wRiIh-3bL8IBRUI1Q4U',
-    appId: '1:979979882370:web:b2850a95023ea91abf899b',
+    appId: '1:979979882370:web:d521fb305ba584cebf899b',
     messagingSenderId: '979979882370',
     projectId: 'tpiprogrammingclub',
     authDomain: 'tpiprogrammingclub.firebaseapp.com',
     databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'tpiprogrammingclub.appspot.com',
-    measurementId: 'G-FL7Q0D2TNG',
+    measurementId: 'G-1GHFSNRQQ6',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAr5KcJK_k89HC-FbV-RxByBX1z1uIsolA',
-    appId: '1:979979882370:android:eff1038ddb8c9997bf899b',
+    appId: '1:979979882370:android:f5cc23318df6f566bf899b',
     messagingSenderId: '979979882370',
     projectId: 'tpiprogrammingclub',
     databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -65,7 +65,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAXICGCiS9PMQv8wAY9PvEIwDZD6FlU268',
-    appId: '1:979979882370:ios:e2d788349d79f231bf899b',
+    appId: '1:979979882370:ios:d421523200717435bf899b',
     messagingSenderId: '979979882370',
     projectId: 'tpiprogrammingclub',
     databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -77,7 +77,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyAXICGCiS9PMQv8wAY9PvEIwDZD6FlU268',
-    appId: '1:979979882370:ios:e2d788349d79f231bf899b',
+    appId: '1:979979882370:ios:d421523200717435bf899b',
     messagingSenderId: '979979882370',
     projectId: 'tpiprogrammingclub',
     databaseURL: 'https://tpiprogrammingclub-default-rtdb.asia-southeast1.firebasedatabase.app',

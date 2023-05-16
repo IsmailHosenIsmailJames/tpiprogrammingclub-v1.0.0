@@ -76,6 +76,7 @@ class _ModifyPostState extends State<ModifyPost> {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.grey[700],
       textColor: Colors.white,
+      timeInSecForIosWeb: 3,
     );
   }
 
@@ -99,6 +100,7 @@ class _ModifyPostState extends State<ModifyPost> {
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.grey[700],
         textColor: Colors.white,
+        timeInSecForIosWeb: 3,
       );
     } else {
       final doc = jsonDataList[indexForEditing];

@@ -151,9 +151,9 @@ class _RestoreState extends State<Restore> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
+                                    children: [
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -199,10 +199,11 @@ class _RestoreState extends State<Restore> {
                                               gravity: ToastGravity.BOTTOM,
                                               backgroundColor: Colors.grey[700],
                                               textColor: Colors.white,
+                                              timeInSecForIosWeb: 3,
                                             );
                                           },
-                                          child: Row(
-                                            children: const [
+                                          child: const Row(
+                                            children: [
                                               Text('Copy'),
                                               Icon(Icons.copy),
                                             ],
@@ -228,6 +229,7 @@ class _RestoreState extends State<Restore> {
                                               gravity: ToastGravity.BOTTOM,
                                               backgroundColor: Colors.grey[700],
                                               textColor: Colors.white,
+                                              timeInSecForIosWeb: 3,
                                             );
 
                                             if (postlanguage == "python") {
@@ -244,6 +246,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage == "java") {
@@ -260,6 +263,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage ==
@@ -277,6 +281,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage == 'c++') {
@@ -293,6 +298,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage == 'c#') {
@@ -309,6 +315,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage == 'c') {
@@ -325,6 +332,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage == 'dart') {
@@ -341,6 +349,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else if (postlanguage == 'html' ||
@@ -358,6 +367,7 @@ class _RestoreState extends State<Restore> {
                                                   backgroundColor:
                                                       Colors.grey[700],
                                                   textColor: Colors.white,
+                                                  timeInSecForIosWeb: 3,
                                                 );
                                               }
                                             } else {
@@ -368,6 +378,7 @@ class _RestoreState extends State<Restore> {
                                                 backgroundColor:
                                                     Colors.grey[700],
                                                 textColor: Colors.white,
+                                                timeInSecForIosWeb: 3,
                                               );
                                             }
                                           },
@@ -678,6 +689,7 @@ class _RestoreState extends State<Restore> {
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey[700],
                                     textColor: Colors.white,
+                                    timeInSecForIosWeb: 3,
                                   );
                                   await FirebaseFirestore.instance
                                       .collection('achieve')
@@ -689,6 +701,7 @@ class _RestoreState extends State<Restore> {
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey[700],
                                     textColor: Colors.white,
+                                    timeInSecForIosWeb: 3,
                                   );
                                 } catch (e) {
                                   Fluttertoast.showToast(
@@ -697,6 +710,7 @@ class _RestoreState extends State<Restore> {
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.red,
                                     textColor: Colors.white,
+                                    timeInSecForIosWeb: 3,
                                   );
                                 }
                               },

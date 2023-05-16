@@ -9,33 +9,225 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:tpiprogrammingclub/pages/profile/profile.dart';
-import 'package:tpiprogrammingclub/widget/modify_post.dart';
+import 'package:tpiprogrammingclub/widget/editor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../authentication/login.dart';
-import '../pages/home/home_page.dart';
-import 'comment.dart';
+import '../../authentication/login.dart';
+import '../../widget/comment.dart';
+import '../../widget/modify_post.dart';
+import '../home/home_page.dart';
+import '../profile/profile.dart';
 
-class SingleDocumentViewer extends StatefulWidget {
+class Contents extends StatefulWidget {
   final String path;
-  final String id;
-  const SingleDocumentViewer({super.key, required this.path, required this.id});
+  const Contents({super.key, required this.path});
 
   @override
-  State<SingleDocumentViewer> createState() => _SingleDocumentViewerState();
+  State<Contents> createState() => _ContentsState();
 }
 
-class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
-  bool callOneTime = true;
-  Widget documentView = const Center(child: CircularProgressIndicator());
+List supportedContents = [
+  "python",
+  "java",
+  "c",
+  "c++",
+  "c#",
+  "javascript",
+  "dart",
+  "flutter",
+  "html",
+  "css",
+  "windows",
+  "linux",
+  "docs",
+  "blogs",
+];
+List listOfIDs = [];
+List listOfTitels = [];
 
-  void getFile() async {
+class _ContentsState extends State<Contents>
+    with SingleTickerProviderStateMixin {
+  List listOfIDs = [];
+  List listOfTitels = [];
+  String? currentDoc;
+
+  bool oneTimeCall = true;
+  bool getDocumentOneTime = true;
+  Widget documentVew = const Center(child: CircularProgressIndicator());
+  List<Widget> listOfTuorialWidget = [];
+  Widget allTutorialWidget = const Center(child: CircularProgressIndicator());
+
+  // for animation
+  late AnimationController animationController;
+  late Animation<double> animator;
+  bool isMenuOpen = false;
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    animator = CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  void getListOfTutorial() async {
     setState(() {
-      callOneTime = false;
+      oneTimeCall = false;
+    });
+    String path = widget.path;
+    List splitedPath = path.split("/");
+    if (splitedPath.length == 1) {
+      setState(() {
+        documentVew = const Center(
+          child: Text("No Data"),
+        );
+        allTutorialWidget = const Center(
+          child: Text("No Data"),
+        );
+      });
+      return;
+    }
+    String contentName = splitedPath[1];
+    if (!supportedContents.contains(contentName)) {
+      setState(() {
+        documentVew = const Center(
+          child: Text("No Data"),
+        );
+        allTutorialWidget = const Center(
+          child: Text("No Data"),
+        );
+      });
+      return;
+    }
+    final allTutorialJson = await FirebaseFirestore.instance
+        .collection("search")
+        .doc(contentName)
+        .get();
+    if (!allTutorialJson.exists) {
+      setState(() {
+        documentVew = const Center(
+          child:
+              Text("We Have No Tutrial Right Now. Tutorials are comming soon."),
+        );
+        allTutorialWidget = const Center(
+          child: Text("No Tutorial Avilable"),
+        );
+      });
+      return;
+    }
+    List ids = allTutorialJson["id"];
+    List title = allTutorialJson["title"];
+
+    if (splitedPath.length == 2) {
+      try {
+        String fullID = ids[0];
+        int lenth = fullID.length;
+        int needToFill = 20 - lenth;
+        String fillString = "0" * needToFill;
+        fullID = fillString + fullID;
+        makeTheListWidget(ids, title, contentName);
+        getSingleDocument(contentName, fullID);
+      } catch (e) {}
+    }
+
+    if (splitedPath.length == 3) {
+      String id = splitedPath[2];
+      try {
+        double doubleValueOfId = double.parse(id) * 10000000000;
+        String fullID = "$doubleValueOfId";
+        int lenth = fullID.length;
+        int needToFill = 20 - lenth;
+        String fillString = "0" * needToFill;
+        fullID = fillString + fullID;
+        makeTheListWidget(ids, title, contentName);
+        getSingleDocument(contentName, fullID);
+      } catch (e) {
+        return;
+      }
+    }
+  }
+
+  void makeTheListWidget(List ids, List titles, String contentName) {
+    setState(() {
+      listOfIDs = ids;
+      listOfTitels = titles;
+    });
+    for (int i = 0; i < ids.length; i++) {
+      double doubleId = int.parse(ids[i]) / 10000000000;
+
+      listOfTuorialWidget.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 2, bottom: 2),
+          child: ElevatedButton(
+            onPressed: () async {
+              animationController.reverse();
+              setState(() {
+                isMenuOpen = !isMenuOpen;
+              });
+              setState(() {
+                documentVew = const Center(child: CircularProgressIndicator());
+              });
+              String id = (double.parse(ids[i]) / 10000000000).toString();
+              await Future.delayed(const Duration(milliseconds: 300));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Contents(path: "/$contentName/$id"),
+                  settings: RouteSettings(name: "/$contentName/$id"),
+                ),
+              );
+            },
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "${doubleId.toInt()}: ",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "${titles[i]}",
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      setState(() {
+        allTutorialWidget = ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(10),
+          children: listOfTuorialWidget,
+        );
+      });
+    }
+  }
+
+  void getSingleDocument(String contentName, String id) async {
+    setState(() {
+      currentDoc = id;
+    });
+    setState(() {
+      getDocumentOneTime = false;
     });
     final documentRef =
-        FirebaseFirestore.instance.collection(widget.path).doc(widget.id);
+        FirebaseFirestore.instance.collection(contentName).doc(id);
     final document = await documentRef.get();
     if (document.exists) {
       final allDoc = jsonDecode(document['doc']);
@@ -85,9 +277,8 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                   }
                 },
                 child: SizedBox(
-                  height: 300,
-                  width: MediaQuery.of(context).size.width -
-                      MediaQuery.of(context).size.width / 10,
+                  height: MediaQuery.of(context).size.width * 0.60,
+                  width: MediaQuery.of(context).size.width,
                   child: CachedNetworkImage(
                     imageUrl: singleDoc['doc'],
                     progressIndicatorBuilder:
@@ -97,13 +288,26 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                             value: downloadProgress.progress),
                       ),
                     ),
-                    errorWidget: (context, url, error) => const SelectableText(
-                      'For Image Click Here',
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.blue,
+                    errorWidget: (context, url, error) => OutlinedButton(
+                      onPressed: () async {
+                        if (!await launchUrl(
+                          Uri.parse(
+                            singleDoc['doc'],
+                          ),
+                        )) {
+                          throw Exception(
+                            'Could not launch ${singleDoc['doc']}',
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'For Image Click Here',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 22,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -204,7 +408,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                     timeInSecForIosWeb: 3,
                                   );
 
-                                  if (widget.path == "python") {
+                                  if (contentName == "python") {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://replit.com/languages/python3',
@@ -219,7 +423,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == "java") {
+                                  } else if (contentName == "java") {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://replit.com/languages/java10',
@@ -234,7 +438,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == 'javascript') {
+                                  } else if (contentName == 'javascript') {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://replit.com/languages/nodejs',
@@ -249,7 +453,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == 'c++') {
+                                  } else if (contentName == 'c++') {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://replit.com/languages/cpp',
@@ -264,7 +468,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == 'c#') {
+                                  } else if (contentName == 'c#') {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://replit.com/languages/csharp',
@@ -279,7 +483,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == 'c') {
+                                  } else if (contentName == 'c') {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://replit.com/languages/c',
@@ -294,7 +498,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == 'dart') {
+                                  } else if (contentName == 'dart') {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://dartpad.dev/?',
@@ -309,8 +513,8 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                                         timeInSecForIosWeb: 3,
                                       );
                                     }
-                                  } else if (widget.path == 'html' ||
-                                      widget.path == 'css') {
+                                  } else if (contentName == 'html' ||
+                                      contentName == 'css') {
                                     if (!await launchUrl(
                                       Uri.parse(
                                         'https://www.programiz.com/html/online-compiler/',
@@ -451,38 +655,44 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                     const SizedBox(
                       height: 5,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SelectableText(
-                          "Title : ",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 70,
-                          child: SelectableText(title),
-                        ),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SelectableText(
+                            "Title : ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 70,
+                            child: SelectableText(title),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SelectableText(
-                          "Description : ",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width - 120,
-                          child: SelectableText(shortDes),
-                        ),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SelectableText(
+                            "Description : ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width - 120,
+                            child: SelectableText(shortDes),
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -526,7 +736,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
 
                         if (user != null) {
                           final temDocRef = FirebaseFirestore.instance
-                              .collection(widget.path)
+                              .collection(contentName)
                               .doc(document.id);
                           final temUserRef = FirebaseFirestore.instance
                               .collection('user')
@@ -546,7 +756,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                           }
 
                           temDocRef.update({"like": like});
-                          getFile();
+                          getSingleDocument(contentName, id);
                         } else {
                           await Navigator.push(
                             context,
@@ -554,7 +764,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                               builder: (context) => const Login(),
                             ),
                           );
-                          getFile();
+                          getSingleDocument(contentName, id);
                         }
                       },
                       icon: Icon(
@@ -582,7 +792,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                               builder: (context) => AllComment(
                                 comment: comment,
                                 id: document.id,
-                                path: widget.path,
+                                path: contentName,
                               ),
                             ),
                           );
@@ -618,8 +828,8 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ModifyPost(
-                                    path: widget.path, id: widget.id),
+                                builder: (context) =>
+                                    ModifyPost(path: contentName, id: id),
                               ),
                             );
                           } else {
@@ -632,8 +842,8 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ModifyPost(
-                                      path: widget.path, id: widget.id),
+                                  builder: (context) =>
+                                      ModifyPost(path: contentName, id: id),
                                 ),
                               );
                             } else {
@@ -670,11 +880,11 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
         ),
       );
       setState(() {
-        documentView = profile;
+        documentVew = profile;
       });
     } else {
       setState(() {
-        documentView = const Center(
+        documentVew = const Center(
           child: Text('No data'),
         );
       });
@@ -683,16 +893,208 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
 
   @override
   Widget build(BuildContext context) {
-    if (callOneTime) getFile();
+    if (oneTimeCall) getListOfTutorial();
     return Scaffold(
       appBar: AppBar(
-        title: SelectableText(widget.path),
+        title: Text(
+          widget.path.split("/")[1],
+        ),
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          documentView,
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      List splitedPath = widget.path.split("/");
+
+                      if (splitedPath.length < 2) return;
+                      if (currentDoc == null) {
+                        Fluttertoast.showToast(
+                          msg: "No tutorial avilable",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey[700],
+                          textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
+                        );
+
+                        return;
+                      } else {
+                        int len = listOfIDs.length;
+                        int index = listOfIDs.indexOf(currentDoc);
+
+                        if (len > 0 && index > 0) {
+                          String id = ((double.parse(listOfIDs[index - 1])) /
+                                  10000000000)
+                              .toString();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Contents(path: "/${splitedPath[1]}/$id"),
+                              settings: RouteSettings(
+                                  name: "/${splitedPath[1]}/$id}"),
+                            ),
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "No previous avilable",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[700],
+                            textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
+                          );
+                        }
+                      }
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.arrow_back_ios),
+                        Text("Previous"),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (isMenuOpen) {
+                        animationController.reverse();
+                        setState(() {
+                          isMenuOpen = !isMenuOpen;
+                        });
+                      } else {
+                        animationController.forward();
+                        setState(() {
+                          isMenuOpen = !isMenuOpen;
+                        });
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "All Tutoriall",
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Icon(isMenuOpen ? Icons.close : Icons.menu),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      String contributeArea = widget.path.split("/")[1];
+                      if (supportedContents.contains(contributeArea)) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Editor(
+                              contributionArea: contributeArea,
+                            ),
+                          ),
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "This not a Valid Area",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey[700],
+                          textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
+                        );
+                      }
+                    },
+                    child: const Text("Write a tutorial"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      List splitedPath = widget.path.split("/");
+                      if (splitedPath.length < 2) return;
+                      if (currentDoc == null) {
+                        Fluttertoast.showToast(
+                          msg: "No tutorial avilable",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.grey[700],
+                          textColor: Colors.white,
+                          timeInSecForIosWeb: 3,
+                        );
+                        return;
+                      } else {
+                        int len = listOfIDs.length;
+                        int index = listOfIDs.indexOf(currentDoc) + 1;
+                        if (len > index) {
+                          String id =
+                              ((double.parse(listOfIDs[index])) / 10000000000)
+                                  .toString();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Contents(path: "/${splitedPath[1]}/$id"),
+                              settings:
+                                  RouteSettings(name: "/${splitedPath[1]}/$id"),
+                            ),
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "No more avilable",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[700],
+                            textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
+                          );
+                        }
+                      }
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text("Next"), Icon(Icons.arrow_forward_ios)],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizeTransition(
+              sizeFactor: animator,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                  bottom: 10,
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(80, 182, 182, 182),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                  ),
+                  height: 300,
+                  child: allTutorialWidget,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            documentVew,
+          ],
+        ),
       ),
     );
   }

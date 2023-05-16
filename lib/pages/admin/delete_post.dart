@@ -75,6 +75,7 @@ class DeletePost extends StatelessWidget {
                                   gravity: ToastGravity.BOTTOM,
                                   backgroundColor: Colors.grey[700],
                                   textColor: Colors.white,
+                                  timeInSecForIosWeb: 3,
                                 );
                                 List address = deleteController.text.split("/");
                                 String path = address[0];
@@ -141,6 +142,7 @@ class DeletePost extends StatelessWidget {
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey[700],
                                     textColor: Colors.white,
+                                    timeInSecForIosWeb: 3,
                                   );
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
@@ -155,6 +157,7 @@ class DeletePost extends StatelessWidget {
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: Colors.grey[700],
                                     textColor: Colors.white,
+                                    timeInSecForIosWeb: 3,
                                   );
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);

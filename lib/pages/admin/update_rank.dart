@@ -68,6 +68,7 @@ class _UpdateRankState extends State<UpdateRank> {
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.grey[700],
       textColor: Colors.white,
+      timeInSecForIosWeb: 3,
     );
   }
 
