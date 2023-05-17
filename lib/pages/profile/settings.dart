@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../home/home_page.dart';
+
 class MySettings extends StatefulWidget {
   const MySettings({super.key});
 
@@ -20,6 +22,7 @@ class _MySettingsState extends State<MySettings> {
   Widget build(BuildContext context) {
     if (!buttonClickable) reload();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Text('Settings'),
       ),

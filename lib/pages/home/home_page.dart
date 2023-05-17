@@ -217,13 +217,20 @@ class _MyDrawerState extends State<MyDrawer>
                 style: ElevatedButton.styleFrom(shape: elevatedStyle),
                 onPressed: () {
                   if (FirebaseAuth.instance.currentUser != null) {
-                    setState(() {
-                      currentPage = Profile(
-                        email: FirebaseAuth.instance.currentUser!.email!,
-                      );
-                      title = const Text('My Profile');
-                      Navigator.pop(context);
-                    });
+                    // setState(() {
+                    //   currentPage = Profile(
+                    //     email: FirebaseAuth.instance.currentUser!.email!,
+                    //   );
+                    //   title = const Text('My Profile');
+                    //   Navigator.pop(context);
+                    // });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Profile(
+                            email: FirebaseAuth.instance.currentUser!.email!),
+                      ),
+                    );
                   } else {
                     Navigator.push(
                       context,
@@ -242,6 +249,13 @@ class _MyDrawerState extends State<MyDrawer>
                 onPressed: () async {
                   if (FirebaseAuth.instance.currentUser != null) {
                     await FirebaseAuth.instance.currentUser!.reload();
+                    // ignore: use_build_context_synchronously
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const MySettings(),
+                    //   ),
+                    // );
                     // ignore: use_build_context_synchronously
                     Navigator.push(
                       context,

@@ -1,8 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../widget/single_document_vewer.dart';
 
@@ -96,18 +104,21 @@ class _ProfileState extends State<Profile> {
               ),
             );
           },
-          child: Container(
-            height: 50,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(86, 145, 145, 145),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Text(
-                "${pendingPost[i]}",
-                style:
-                    const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(86, 145, 145, 145),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Text(
+                  "${pendingPost[i]}",
+                  style: const TextStyle(
+                      fontSize: 26, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ),
@@ -118,38 +129,158 @@ class _ProfileState extends State<Profile> {
     Widget lastWidget = ListView(
       physics: const BouncingScrollPhysics(),
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-          ),
-          child: CachedNetworkImage(
-            imageUrl: profile,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(
-              child: Center(
-                child:
-                    CircularProgressIndicator(value: downloadProgress.progress),
-              ),
-            ),
-            fit: BoxFit.contain,
-            errorWidget: (context, url, error) => Center(
-              child: OutlinedButton(
-                onPressed: () async {
-                  if (!await launchUrl(Uri.parse(profile))) {
-                    throw Exception('Could not launch $profile');
-                  }
-                },
-                child: const Text(
-                  'For Image Click Here',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.blue,
+        const SizedBox(
+          height: 5,
+        ),
+        Center(
+          child: SizedBox(
+            height: 300,
+            width: 300,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(1000),
+              child: CachedNetworkImage(
+                imageUrl: profile,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
                   ),
-                  textAlign: TextAlign.center,
+                ),
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Center(
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      if (!await launchUrl(Uri.parse(profile))) {
+                        throw Exception('Could not launch $profile');
+                      }
+                    },
+                    child: const Text(
+                      'For Image Click Here',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.blue,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(3),
+          child: ElevatedButton(
+            onPressed: () async {
+              String email = FirebaseAuth.instance.currentUser!.email!;
+              try {
+                if (!kIsWeb) {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    allowCompression: true,
+                    type: FileType.custom,
+                    allowMultiple: false,
+                    allowedExtensions: ['jpg', 'png'],
+                  );
+                  if (result != null) {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+
+                    final tem = result.files.first;
+                    String? extension = tem.extension;
+                    File imageFile = File(tem.path!);
+
+                    String uploadePath = "user/$email.$extension";
+                    final ref =
+                        FirebaseStorage.instance.ref().child(uploadePath);
+                    UploadTask uploadTask;
+                    uploadTask = ref.putFile(imageFile);
+                    final snapshot = await uploadTask.whenComplete(() {});
+                    String url = await snapshot.ref.getDownloadURL();
+                    final dataModifyLoc = FirebaseFirestore.instance
+                        .collection("user")
+                        .doc(email);
+                    await dataModifyLoc.update({"profile": url});
+                    Navigator.pop(context);
+                    Fluttertoast.showToast(
+                      msg: "SignUp Successfull !",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[700],
+                      textColor: Colors.white,
+                      timeInSecForIosWeb: 3,
+                    );
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Please Select a Profile Picture",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[700],
+                      textColor: Colors.white,
+                      timeInSecForIosWeb: 3,
+                    );
+                  }
+                }
+                if (kIsWeb) {
+                  FilePickerResult? result = await FilePicker.platform
+                      .pickFiles(
+                          type: FileType.custom,
+                          allowMultiple: false,
+                          allowCompression: true,
+                          allowedExtensions: ['jpg', 'png']);
+
+                  if (result != null) {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+
+                    final tem = result.files.first;
+                    Uint8List? selectedImage = tem.bytes;
+                    String? extension = tem.extension;
+                    String uploadePath = "user/$email.$extension";
+                    final ref =
+                        FirebaseStorage.instance.ref().child(uploadePath);
+                    UploadTask uploadTask;
+                    final metadata =
+                        SettableMetadata(contentType: 'image/jpeg');
+                    uploadTask = ref.putData(selectedImage!, metadata);
+                    final snapshot = await uploadTask.whenComplete(() {});
+                    String url = await snapshot.ref.getDownloadURL();
+                    final dataModifyLoc = FirebaseFirestore.instance
+                        .collection("user")
+                        .doc(email);
+                    await dataModifyLoc.update({"profile": url});
+                    Navigator.pop(context);
+                    Fluttertoast.showToast(
+                      msg: "SignUp Successfull !",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[700],
+                      textColor: Colors.white,
+                      timeInSecForIosWeb: 3,
+                    );
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Please Select a Profile Picture",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey[700],
+                      textColor: Colors.white,
+                      timeInSecForIosWeb: 3,
+                    );
+                  }
+                }
+              } catch (e) {}
+            },
+            child: const Text("Update Profile"),
           ),
         ),
         const SizedBox(
@@ -244,10 +375,15 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     if (getOneTime) get();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: Text(appTitle),
       ),
-      body: Center(child: myWidget),
+      body: Center(
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: myWidget,
+      )),
     );
   }
 }
