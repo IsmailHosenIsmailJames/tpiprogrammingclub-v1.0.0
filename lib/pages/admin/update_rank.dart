@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../home/home_page.dart';
+
 class UpdateRank extends StatefulWidget {
   const UpdateRank({super.key});
 
@@ -76,6 +78,7 @@ class _UpdateRankState extends State<UpdateRank> {
   Widget build(BuildContext context) {
     if (oneTileCall) task();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Text('Update Rank'),
       ),

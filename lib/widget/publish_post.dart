@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../pages/home/home_page.dart';
 import 'editor.dart';
 
 class PublishPost extends StatefulWidget {
@@ -30,6 +31,7 @@ class _PublishPostState extends State<PublishPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,

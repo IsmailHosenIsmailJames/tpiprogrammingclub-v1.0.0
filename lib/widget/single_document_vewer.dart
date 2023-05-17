@@ -685,6 +685,7 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
   Widget build(BuildContext context) {
     if (callOneTime) getFile();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: SelectableText(widget.path),
       ),

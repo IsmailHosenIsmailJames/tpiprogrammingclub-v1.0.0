@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../authentication/login.dart';
 import '../../widget/comment.dart';
 import '../../widget/modify_post.dart';
-import '../profile/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -44,12 +43,8 @@ class _HomeState extends State<Home> {
       final user = FirebaseAuth.instance.currentUser;
       List comment = document['comment'];
       final info = allDoc['info'];
-      String title = info['title'];
-      String shortDes = info['des'];
       int len = int.parse(info['len']);
       String email = info['email'];
-      String profilePhoto = info['profile'];
-      String name = info['name'];
 
       List<Widget> listOfContent = [];
       for (var i = 0; i < len - 1; i++) {
@@ -386,130 +381,6 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.only(top: 8, bottom: 8),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Profile(email: email),
-                  )),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: const Color.fromARGB(84, 153, 153, 153),
-                ),
-                height: 50,
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: CachedNetworkImage(
-                          imageUrl: profilePhoto,
-                          fit: BoxFit.cover,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Center(
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.image_outlined),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SelectableText(
-                          name,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        SelectableText(email),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 98,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color.fromARGB(81, 168, 168, 168),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SelectableText(
-                      "Rank : ${double.parse(document.id) ~/ 10000000000}",
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SelectableText(
-                            "Title : ",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 70,
-                            child: SelectableText(title),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SelectableText(
-                            "Description : ",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width - 120,
-                            child: SelectableText(shortDes),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
             Padding(
               padding: const EdgeInsets.all(1.5),
               child: Container(

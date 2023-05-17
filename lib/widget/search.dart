@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/home/home_page.dart';
 import 'single_document_vewer.dart';
 
 class Search extends StatefulWidget {
@@ -176,6 +177,7 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         toolbarHeight: 70,
         title: Padding(

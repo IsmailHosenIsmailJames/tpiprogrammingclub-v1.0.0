@@ -14,6 +14,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../pages/home/home_page.dart';
+
 class ModifyPost extends StatefulWidget {
   final String path;
   final String id;
@@ -273,6 +275,7 @@ class _ModifyPostState extends State<ModifyPost> {
   Widget build(BuildContext context) {
     if (oneTimeCall) getData();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Text('Modify Post'),
       ),

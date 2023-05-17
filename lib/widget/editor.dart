@@ -71,6 +71,7 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     if (callOneTime) get();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Text('Editor'),
       ),

@@ -896,6 +896,7 @@ class _ContentsState extends State<Contents>
   Widget build(BuildContext context) {
     if (oneTimeCall) getListOfTutorial();
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: Text(
           widget.path.split("/")[1],

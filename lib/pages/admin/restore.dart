@@ -27,6 +27,7 @@ class _RestoreState extends State<Restore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Text('Restore Post'),
       ),

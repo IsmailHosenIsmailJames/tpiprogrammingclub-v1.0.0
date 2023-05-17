@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tpiprogrammingclub/pages/profile/profile.dart';
 
+import '../pages/home/home_page.dart';
+
 class AllComment extends StatefulWidget {
   final List comment;
   final String path;
@@ -24,6 +26,7 @@ class _AllCommentState extends State<AllComment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MyDrawer(),
       appBar: AppBar(
         title: const Text("Comments"),
       ),
