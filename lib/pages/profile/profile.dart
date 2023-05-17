@@ -278,6 +278,7 @@ class _ProfileState extends State<Profile> {
                     );
                   }
                 }
+                get();
               } catch (e) {}
             },
             child: const Text("Update Profile"),
@@ -380,10 +381,11 @@ class _ProfileState extends State<Profile> {
         title: Text(appTitle),
       ),
       body: Center(
-          child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: myWidget,
-      )),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: myWidget,
+        ),
+      ),
     );
   }
 }
