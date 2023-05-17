@@ -128,6 +128,12 @@ class _PublishPostState extends State<PublishPost> {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                         int len = json.length;
                         json.addAll({
                           "info": {

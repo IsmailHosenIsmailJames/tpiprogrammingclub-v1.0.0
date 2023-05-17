@@ -1097,11 +1097,17 @@ class _MyDrawerState extends State<MyDrawer>
                     .get();
                 List adminList = addminDoc['admin'];
                 if (adminList.contains(user.email)) {
-                  setState(() {
-                    Navigator.pop(context);
-                    currentPage = const AdminPage();
-                    title = const Text('Admin Page');
-                  });
+                  // setState(() {
+                  //   Navigator.pop(context);
+                  //   currentPage = const AdminPage();
+                  //   title = const Text('Admin Page');
+                  // });
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AdminPage(),
+                      ));
                 } else {
                   // ignore: use_build_context_synchronously
                   showModalBottomSheet(

@@ -673,6 +673,12 @@ class _PendingPostState extends State<PendingPost> {
                           children: [
                             ElevatedButton(
                               onPressed: () async {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
                                 try {
                                   final json = {
                                     "doc": currentDoc['doc'],
@@ -683,6 +689,29 @@ class _PendingPostState extends State<PendingPost> {
                                       .collection(currentDoc['language'])
                                       .doc(currentDoc['id'])
                                       .set(json);
+                                  final searchRef = FirebaseFirestore.instance
+                                      .collection("search")
+                                      .doc(currentDoc['language']);
+                                  final searchFile = await searchRef.get();
+                                  if (searchFile.exists) {
+                                    List ids = searchFile['id'];
+                                    List titles = searchFile['title'];
+                                    List des = searchFile['des'];
+                                    ids.add(currentDoc['id']);
+                                    titles.add(info['title']);
+                                    des.add(info['des']);
+                                    await searchRef.set({
+                                      'id': ids,
+                                      'title': titles,
+                                      "des": des,
+                                    });
+                                  } else {
+                                    await searchRef.set({
+                                      'id': [currentDoc['id']],
+                                      'title': [info['title']],
+                                      "des": [info['des']],
+                                    });
+                                  }
                                   Fluttertoast.showToast(
                                     msg: "Successfully Approved and Published",
                                     toastLength: Toast.LENGTH_LONG,
@@ -704,6 +733,7 @@ class _PendingPostState extends State<PendingPost> {
                                     timeInSecForIosWeb: 3,
                                   );
                                 } catch (e) {
+                                  print(e);
                                   Fluttertoast.showToast(
                                     msg: "Something went wrong",
                                     toastLength: Toast.LENGTH_LONG,
@@ -713,6 +743,7 @@ class _PendingPostState extends State<PendingPost> {
                                     timeInSecForIosWeb: 3,
                                   );
                                 }
+                                Navigator.pop(context);
                               },
                               child: const Text('Approve'),
                             ),
