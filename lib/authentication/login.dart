@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                     enableSuggestions: false,
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value!.length < 3) {
+                      if (value!.length < 7) {
                         return "Password is too short";
                       }
                       return null;
@@ -321,10 +321,13 @@ class _LoginState extends State<Login> {
                             .collection('user')
                             .doc('allUser');
                         final allUser = await temRef.get();
-                        List allUserList = allUser['email'];
-                        allUserList.add(email.text.trim());
+                        List allUserList = [];
+                        if (allUser.exists) {
+                          allUserList = allUser['email'];
+                        } else {
+                          allUserList = [email.text.trim()];
+                        }
                         await temRef.set({'email': allUserList});
-
                         await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
                                 email: email.text, password: pass.text);

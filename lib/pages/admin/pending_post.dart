@@ -689,6 +689,7 @@ class _PendingPostState extends State<PendingPost> {
                                       .collection(currentDoc['language'])
                                       .doc(currentDoc['id'])
                                       .set(json);
+                                  // search optimization
                                   final searchRef = FirebaseFirestore.instance
                                       .collection("search")
                                       .doc(currentDoc['language']);
@@ -712,6 +713,27 @@ class _PendingPostState extends State<PendingPost> {
                                       "des": [info['des']],
                                     });
                                   }
+                                  // remove user data of pending post and adding data of approved post
+                                  final userRef = FirebaseFirestore.instance
+                                      .collection("user")
+                                      .doc(email);
+                                  final userData = await userRef.get();
+                                  List pendingPost = userData['pendingPost'];
+                                  List post = userData['post'];
+                                  pendingPost.remove(currentDoc.id);
+                                  if (post.isEmpty) {
+                                    post = [
+                                      "$postlanguage/${currentDoc['id']}"
+                                    ];
+                                  } else {
+                                    post.add(
+                                        "$postlanguage/${currentDoc['id']}");
+                                  }
+                                  await userRef.update({
+                                    "post": post,
+                                    "pendingPost": pendingPost,
+                                  });
+
                                   Fluttertoast.showToast(
                                     msg: "Successfully Approved and Published",
                                     toastLength: Toast.LENGTH_LONG,
