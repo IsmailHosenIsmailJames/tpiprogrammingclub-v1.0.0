@@ -24,6 +24,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool getOneTime = true;
+  bool owener = false;
   String appTitle = "";
   Widget myWidget = const Center(
     child: CircularProgressIndicator(),
@@ -169,121 +170,124 @@ class _ProfileState extends State<Profile> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(3),
-          child: ElevatedButton(
-            onPressed: () async {
-              String email = FirebaseAuth.instance.currentUser!.email!;
-              try {
-                if (!kIsWeb) {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(
-                    allowCompression: true,
-                    type: FileType.custom,
-                    allowMultiple: false,
-                    allowedExtensions: ['jpg', 'png'],
-                  );
-                  if (result != null) {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+        if (FirebaseAuth.instance.currentUser != null &&
+            FirebaseAuth.instance.currentUser!.email == widget.email)
+          Padding(
+            padding: const EdgeInsets.all(3),
+            child: ElevatedButton(
+              onPressed: () async {
+                String email = FirebaseAuth.instance.currentUser!.email!;
+                try {
+                  if (!kIsWeb) {
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(
+                      allowCompression: true,
+                      type: FileType.custom,
+                      allowMultiple: false,
+                      allowedExtensions: ['jpg', 'png'],
                     );
+                    if (result != null) {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
 
-                    final tem = result.files.first;
-                    String? extension = tem.extension;
-                    File imageFile = File(tem.path!);
+                      final tem = result.files.first;
+                      String? extension = tem.extension;
+                      File imageFile = File(tem.path!);
 
-                    String uploadePath = "user/$email.$extension";
-                    final ref =
-                        FirebaseStorage.instance.ref().child(uploadePath);
-                    UploadTask uploadTask;
-                    uploadTask = ref.putFile(imageFile);
-                    final snapshot = await uploadTask.whenComplete(() {});
-                    String url = await snapshot.ref.getDownloadURL();
-                    final dataModifyLoc = FirebaseFirestore.instance
-                        .collection("user")
-                        .doc(email);
-                    await dataModifyLoc.update({"profile": url});
-                    Navigator.pop(context);
-                    Fluttertoast.showToast(
-                      msg: "SignUp Successfull !",
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.grey[700],
-                      textColor: Colors.white,
-                      timeInSecForIosWeb: 3,
-                    );
-                  } else {
-                    Fluttertoast.showToast(
-                      msg: "Please Select a Profile Picture",
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.grey[700],
-                      textColor: Colors.white,
-                      timeInSecForIosWeb: 3,
-                    );
+                      String uploadePath = "user/$email.$extension";
+                      final ref =
+                          FirebaseStorage.instance.ref().child(uploadePath);
+                      UploadTask uploadTask;
+                      uploadTask = ref.putFile(imageFile);
+                      final snapshot = await uploadTask.whenComplete(() {});
+                      String url = await snapshot.ref.getDownloadURL();
+                      final dataModifyLoc = FirebaseFirestore.instance
+                          .collection("user")
+                          .doc(email);
+                      await dataModifyLoc.update({"profile": url});
+                      Navigator.pop(context);
+                      Fluttertoast.showToast(
+                        msg: "SignUp Successfull !",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[700],
+                        textColor: Colors.white,
+                        timeInSecForIosWeb: 3,
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "Please Select a Profile Picture",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[700],
+                        textColor: Colors.white,
+                        timeInSecForIosWeb: 3,
+                      );
+                    }
                   }
-                }
-                if (kIsWeb) {
-                  FilePickerResult? result = await FilePicker.platform
-                      .pickFiles(
-                          type: FileType.custom,
-                          allowMultiple: false,
-                          allowCompression: true,
-                          allowedExtensions: ['jpg', 'png']);
+                  if (kIsWeb) {
+                    FilePickerResult? result = await FilePicker.platform
+                        .pickFiles(
+                            type: FileType.custom,
+                            allowMultiple: false,
+                            allowCompression: true,
+                            allowedExtensions: ['jpg', 'png']);
 
-                  if (result != null) {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
+                    if (result != null) {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
 
-                    final tem = result.files.first;
-                    Uint8List? selectedImage = tem.bytes;
-                    String? extension = tem.extension;
-                    String uploadePath = "user/$email.$extension";
-                    final ref =
-                        FirebaseStorage.instance.ref().child(uploadePath);
-                    UploadTask uploadTask;
-                    final metadata =
-                        SettableMetadata(contentType: 'image/jpeg');
-                    uploadTask = ref.putData(selectedImage!, metadata);
-                    final snapshot = await uploadTask.whenComplete(() {});
-                    String url = await snapshot.ref.getDownloadURL();
-                    final dataModifyLoc = FirebaseFirestore.instance
-                        .collection("user")
-                        .doc(email);
-                    await dataModifyLoc.update({"profile": url});
-                    Navigator.pop(context);
-                    Fluttertoast.showToast(
-                      msg: "SignUp Successfull !",
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.grey[700],
-                      textColor: Colors.white,
-                      timeInSecForIosWeb: 3,
-                    );
-                  } else {
-                    Fluttertoast.showToast(
-                      msg: "Please Select a Profile Picture",
-                      toastLength: Toast.LENGTH_LONG,
-                      gravity: ToastGravity.BOTTOM,
-                      backgroundColor: Colors.grey[700],
-                      textColor: Colors.white,
-                      timeInSecForIosWeb: 3,
-                    );
+                      final tem = result.files.first;
+                      Uint8List? selectedImage = tem.bytes;
+                      String? extension = tem.extension;
+                      String uploadePath = "user/$email.$extension";
+                      final ref =
+                          FirebaseStorage.instance.ref().child(uploadePath);
+                      UploadTask uploadTask;
+                      final metadata =
+                          SettableMetadata(contentType: 'image/jpeg');
+                      uploadTask = ref.putData(selectedImage!, metadata);
+                      final snapshot = await uploadTask.whenComplete(() {});
+                      String url = await snapshot.ref.getDownloadURL();
+                      final dataModifyLoc = FirebaseFirestore.instance
+                          .collection("user")
+                          .doc(email);
+                      await dataModifyLoc.update({"profile": url});
+                      Navigator.pop(context);
+                      Fluttertoast.showToast(
+                        msg: "SignUp Successfull !",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[700],
+                        textColor: Colors.white,
+                        timeInSecForIosWeb: 3,
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "Please Select a Profile Picture",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: Colors.grey[700],
+                        textColor: Colors.white,
+                        timeInSecForIosWeb: 3,
+                      );
+                    }
                   }
-                }
-                get();
-              } catch (e) {}
-            },
-            child: const Text("Update Profile"),
+                  get();
+                  // ignore: empty_catches
+                } catch (e) {}
+              },
+              child: const Text("Update Profile"),
+            ),
           ),
-        ),
         const SizedBox(
           height: 10,
         ),

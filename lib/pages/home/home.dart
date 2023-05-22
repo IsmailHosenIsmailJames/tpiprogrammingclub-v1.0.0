@@ -9,10 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../authentication/login.dart';
+import '../../main.dart';
 import '../../widget/comment.dart';
 import '../../widget/modify_post.dart';
 
@@ -125,9 +125,8 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(3),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.black,
-                ),
+                    borderRadius: BorderRadius.circular(15),
+                    color: const Color.fromARGB(151, 0, 0, 0)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -166,7 +165,6 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(right: 7),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  shape: elevatedStyle,
                                   backgroundColor: Colors.blueGrey,
                                 ),
                                 onPressed: () {
@@ -196,7 +194,6 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(right: 7),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  shape: elevatedStyle,
                                   backgroundColor: Colors.blueGrey,
                                 ),
                                 onPressed: () async {
@@ -575,11 +572,19 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     if (getDocumentOneTime) getSingleDocument("home", "00000000050000000000");
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: gradiantOfcontaner,
+        ),
+        child: SingleChildScrollView(
           child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: documentVew,
-      )),
+            padding: const EdgeInsets.all(3.0),
+            child: documentVew,
+          ),
+        ),
+      ),
     );
   }
 }

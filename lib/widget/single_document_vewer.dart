@@ -14,6 +14,7 @@ import 'package:tpiprogrammingclub/widget/modify_post.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../authentication/login.dart';
+import '../main.dart';
 import '../pages/home/home_page.dart';
 import 'comment.dart';
 
@@ -157,10 +158,6 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                             Padding(
                               padding: const EdgeInsets.only(right: 7),
                               child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: elevatedStyle,
-                                  backgroundColor: Colors.blueGrey,
-                                ),
                                 onPressed: () {
                                   Clipboard.setData(
                                     ClipboardData(
@@ -187,10 +184,6 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
                             Padding(
                               padding: const EdgeInsets.only(right: 7),
                               child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: elevatedStyle,
-                                  backgroundColor: Colors.blueGrey,
-                                ),
                                 onPressed: () async {
                                   Clipboard.setData(
                                     ClipboardData(text: singleDoc['doc']),
@@ -692,11 +685,14 @@ class _SingleDocumentViewerState extends State<SingleDocumentViewer> {
       appBar: AppBar(
         title: SelectableText(widget.path),
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          documentView,
-        ],
+      body: Container(
+        decoration: BoxDecoration(gradient: gradiantOfcontaner),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            documentView,
+          ],
+        ),
       ),
     );
   }

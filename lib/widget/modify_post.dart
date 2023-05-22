@@ -14,6 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../main.dart';
 import '../pages/home/home_page.dart';
 
 class ModifyPost extends StatefulWidget {
@@ -279,174 +280,129 @@ class _ModifyPostState extends State<ModifyPost> {
       appBar: AppBar(
         title: const Text('Modify Post'),
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        reverse: true,
-        children: [
-          QuillToolbar.basic(
-            controller: quillController,
-            customButtons: [
-              QuillCustomButton(
-                icon: Icons.image,
-                onTap: () async {
-                  if (!kIsWeb) {
-                    FilePickerResult? result =
-                        await FilePicker.platform.pickFiles(
-                      allowCompression: true,
-                      type: FileType.custom,
-                      allowMultiple: false,
-                      allowedExtensions: ['jpg', 'png'],
-                    );
-                    if (result != null) {
-                      final tem = result.files.first;
-                      String? extension = tem.extension;
-                      File imageFile = File(tem.path!);
+      body: Container(
+        decoration: BoxDecoration(gradient: gradiantOfcontaner),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          reverse: true,
+          children: [
+            QuillToolbar.basic(
+              controller: quillController,
+              customButtons: [
+                QuillCustomButton(
+                  icon: Icons.image,
+                  onTap: () async {
+                    if (!kIsWeb) {
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles(
+                        allowCompression: true,
+                        type: FileType.custom,
+                        allowMultiple: false,
+                        allowedExtensions: ['jpg', 'png'],
+                      );
+                      if (result != null) {
+                        final tem = result.files.first;
+                        String? extension = tem.extension;
+                        File imageFile = File(tem.path!);
 
-                      String uploadePath =
-                          "${widget.path}/${Random().nextDouble()}.$extension";
-                      final ref =
-                          FirebaseStorage.instance.ref().child(uploadePath);
-                      UploadTask uploadTask;
-                      uploadTask = ref.putFile(imageFile);
-                      final snapshot = await uploadTask.whenComplete(() {});
-                      String url = await snapshot.ref.getDownloadURL();
-                      setState(() {
-                        jsonDataList.insert(indexForEditing + 1,
-                            {"doc": url, "type": "image", "loc": "fire"});
-                        editingWidgetMaker(indexForEditing + 1);
-                      });
+                        String uploadePath =
+                            "${widget.path}/${Random().nextDouble()}.$extension";
+                        final ref =
+                            FirebaseStorage.instance.ref().child(uploadePath);
+                        UploadTask uploadTask;
+                        uploadTask = ref.putFile(imageFile);
+                        final snapshot = await uploadTask.whenComplete(() {});
+                        String url = await snapshot.ref.getDownloadURL();
+                        setState(() {
+                          jsonDataList.insert(indexForEditing + 1,
+                              {"doc": url, "type": "image", "loc": "fire"});
+                          editingWidgetMaker(indexForEditing + 1);
+                        });
+                      }
                     }
-                  }
-                  if (kIsWeb) {
-                    FilePickerResult? result = await FilePicker.platform
-                        .pickFiles(
-                            type: FileType.custom,
-                            allowMultiple: false,
-                            allowCompression: true,
-                            allowedExtensions: ['jpg', 'png']);
+                    if (kIsWeb) {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(
+                              type: FileType.custom,
+                              allowMultiple: false,
+                              allowCompression: true,
+                              allowedExtensions: ['jpg', 'png']);
 
-                    if (result != null) {
-                      final tem = result.files.first;
-                      Uint8List? selectedImage = tem.bytes;
-                      String? extension = tem.extension;
+                      if (result != null) {
+                        final tem = result.files.first;
+                        Uint8List? selectedImage = tem.bytes;
+                        String? extension = tem.extension;
 
-                      String uploadePath =
-                          "${widget.path}/${Random().nextDouble()}.$extension";
-                      final ref =
-                          FirebaseStorage.instance.ref().child(uploadePath);
-                      UploadTask uploadTask;
-                      final metadata =
-                          SettableMetadata(contentType: 'image/jpeg');
-                      uploadTask = ref.putData(selectedImage!, metadata);
-                      final snapshot = await uploadTask.whenComplete(() {});
-                      String url = await snapshot.ref.getDownloadURL();
-                      setState(() {
-                        jsonDataList.insert(indexForEditing + 1,
-                            {"doc": url, "type": "image", "loc": "fire"});
-                        editingWidgetMaker(indexForEditing + 1);
-                      });
+                        String uploadePath =
+                            "${widget.path}/${Random().nextDouble()}.$extension";
+                        final ref =
+                            FirebaseStorage.instance.ref().child(uploadePath);
+                        UploadTask uploadTask;
+                        final metadata =
+                            SettableMetadata(contentType: 'image/jpeg');
+                        uploadTask = ref.putData(selectedImage!, metadata);
+                        final snapshot = await uploadTask.whenComplete(() {});
+                        String url = await snapshot.ref.getDownloadURL();
+                        setState(() {
+                          jsonDataList.insert(indexForEditing + 1,
+                              {"doc": url, "type": "image", "loc": "fire"});
+                          editingWidgetMaker(indexForEditing + 1);
+                        });
+                      }
                     }
-                  }
-                },
-              ),
-              QuillCustomButton(
-                icon: FontAwesomeIcons.link,
-                onTap: () {
-                  final temController = TextEditingController();
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Link Image'),
-                      ),
-                      body: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              autofocus: true,
-                              controller: temController,
-                              decoration: InputDecoration(
-                                hintText: "Link of image",
-                                labelText: "Link",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                  },
+                ),
+                QuillCustomButton(
+                  icon: FontAwesomeIcons.link,
+                  onTap: () {
+                    final temController = TextEditingController();
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) => Scaffold(
+                        appBar: AppBar(
+                          title: const Text('Link Image'),
+                        ),
+                        body: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                autofocus: true,
+                                controller: temController,
+                                decoration: InputDecoration(
+                                  hintText: "Link of image",
+                                  labelText: "Link",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    jsonDataList.insert(indexForEditing + 1, {
-                                      "doc": temController.text.trim(),
-                                      "type": "image",
-                                      "loc": "url"
-                                    });
-                                    editingWidgetMaker(indexForEditing + 1);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Done"),
-                              ),
-                              const SizedBox(
-                                width: 30,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-              QuillCustomButton(
-                icon: FontAwesomeIcons.code,
-                onTap: () {
-                  final controller = TextEditingController();
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(
-                        title: const Text('Code'),
-                      ),
-                      body: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: ListView(
-                          reverse: true,
-                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    String code = controller.text;
                                     setState(() {
                                       jsonDataList.insert(indexForEditing + 1, {
-                                        "doc": code,
-                                        "type": "code",
+                                        "doc": temController.text.trim(),
+                                        "type": "image",
+                                        "loc": "url"
                                       });
                                       editingWidgetMaker(indexForEditing + 1);
                                     });
                                     Navigator.pop(context);
                                   },
-                                  child: const Text("Add"),
+                                  child: const Text("Done"),
+                                ),
+                                const SizedBox(
+                                  width: 30,
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
@@ -455,105 +411,155 @@ class _ModifyPostState extends State<ModifyPost> {
                                   child: const Text('Cancel'),
                                 ),
                               ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              controller: controller,
-                              scribbleEnabled: true,
-                              autocorrect: false,
-                              autofocus: true,
-                              maxLines: 1000,
-                              minLines: 7,
-                              decoration: InputDecoration(
-                                labelText: "Code",
-                                hintText: "Type or Paste your code",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
+                            )
                           ],
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {
-                  previous();
-                },
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_outlined,
-                  size: 20,
+                    );
+                  },
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  delete();
-                },
-                icon: const Icon(
-                  Icons.delete_forever_rounded,
-                  size: 20,
+                QuillCustomButton(
+                  icon: FontAwesomeIcons.code,
+                  onTap: () {
+                    final controller = TextEditingController();
+                    showCupertinoModalPopup(
+                      context: context,
+                      builder: (context) => Scaffold(
+                        appBar: AppBar(
+                          title: const Text('Code'),
+                        ),
+                        body: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: ListView(
+                            reverse: true,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      String code = controller.text;
+                                      setState(() {
+                                        jsonDataList
+                                            .insert(indexForEditing + 1, {
+                                          "doc": code,
+                                          "type": "code",
+                                        });
+                                        editingWidgetMaker(indexForEditing + 1);
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Add"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              TextField(
+                                controller: controller,
+                                scribbleEnabled: true,
+                                autocorrect: false,
+                                autofocus: true,
+                                maxLines: 1000,
+                                minLines: 7,
+                                decoration: InputDecoration(
+                                  labelText: "Code",
+                                  hintText: "Type or Paste your code",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  getData();
-                },
-                icon: const Icon(
-                  Icons.restore,
-                  size: 20,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  add();
-                },
-                icon: const Icon(
-                  Icons.add_box,
-                  size: 20,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  publish();
-                },
-                icon: const Icon(
-                  Icons.publish,
-                  size: 20,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  next();
-                },
-                icon: const Icon(
-                  Icons.arrow_forward_ios_outlined,
-                  size: 20,
-                ),
-              ),
-            ],
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(64, 162, 162, 162),
-              borderRadius: BorderRadius.circular(20),
+              ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: editingWidget,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    previous();
+                  },
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_outlined,
+                    size: 20,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    delete();
+                  },
+                  icon: const Icon(
+                    Icons.delete_forever_rounded,
+                    size: 20,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    getData();
+                  },
+                  icon: const Icon(
+                    Icons.restore,
+                    size: 20,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    add();
+                  },
+                  icon: const Icon(
+                    Icons.add_box,
+                    size: 20,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    publish();
+                  },
+                  icon: const Icon(
+                    Icons.publish,
+                    size: 20,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    next();
+                  },
+                  icon: const Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    size: 20,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(64, 162, 162, 162),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: editingWidget,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
 import '../pages/home/home_page.dart';
 import 'single_document_vewer.dart';
 
@@ -205,7 +206,9 @@ class _SearchState extends State<Search> {
           ),
         ],
       ),
-      body: mySearchResult,
+      body: Container(
+          decoration: BoxDecoration(gradient: gradiantOfcontaner),
+          child: mySearchResult),
     );
   }
 }

@@ -38,7 +38,6 @@ dependencies:
   firebase_core: ^2.7.0
   firebase_auth: ^4.2.8
   email_validator: ^2.1.17
-  provider: ^6.0.5
   cached_network_image: ^3.2.3
   flutter_quill: ^7.1.18
   cloud_firestore: ^4.4.2
@@ -52,6 +51,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   fluttertoast: ^8.2.1
   url_strategy: ^0.2.0
+  adaptive_theme: ^3.2.1
 
 dev_dependencies:
   flutter_test:

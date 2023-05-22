@@ -14,6 +14,7 @@ import 'package:tpiprogrammingclub/widget/editor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../authentication/login.dart';
+import '../../main.dart';
 import '../../widget/comment.dart';
 import '../../widget/modify_post.dart';
 import '../home/home_page.dart';
@@ -138,6 +139,7 @@ class _ContentsState extends State<Contents>
         fullID = fillString + fullID;
         makeTheListWidget(ids, title, contentName);
         getSingleDocument(contentName, fullID);
+        // ignore: empty_catches
       } catch (e) {}
     }
 
@@ -363,7 +365,6 @@ class _ContentsState extends State<Contents>
                               padding: const EdgeInsets.only(right: 7),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  shape: elevatedStyle,
                                   backgroundColor: Colors.blueGrey,
                                 ),
                                 onPressed: () {
@@ -393,7 +394,6 @@ class _ContentsState extends State<Contents>
                               padding: const EdgeInsets.only(right: 7),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  shape: elevatedStyle,
                                   backgroundColor: Colors.blueGrey,
                                 ),
                                 onPressed: () async {
@@ -902,151 +902,24 @@ class _ContentsState extends State<Contents>
           widget.path.split("/")[1],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.all(2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      List splitedPath = widget.path.split("/");
-
-                      if (splitedPath.length < 2) return;
-                      if (currentDoc == null) {
-                        Fluttertoast.showToast(
-                          msg: "No tutorial avilable",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Colors.grey[700],
-                          textColor: Colors.white,
-                          timeInSecForIosWeb: 3,
-                        );
-
-                        return;
-                      } else {
-                        int len = listOfIDs.length;
-                        int index = listOfIDs.indexOf(currentDoc);
-
-                        if (len > 0 && index > 0) {
-                          String id = ((double.parse(listOfIDs[index - 1])) /
-                                  10000000000)
-                              .toString();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Contents(path: "/${splitedPath[1]}/$id"),
-                              settings: RouteSettings(
-                                  name: "/${splitedPath[1]}/$id}"),
-                            ),
-                          );
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: "No previous avilable",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            backgroundColor: Colors.grey[700],
-                            textColor: Colors.white,
-                            timeInSecForIosWeb: 3,
-                          );
-                        }
-                      }
-                    },
-                    child: const Icon(Icons.arrow_back_ios),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (isMenuOpen) {
-                        animationController.reverse();
-                        setState(() {
-                          isMenuOpen = !isMenuOpen;
-                        });
-                      } else {
-                        animationController.forward();
-                        setState(() {
-                          isMenuOpen = !isMenuOpen;
-                        });
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "All Tutoriall",
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Icon(isMenuOpen ? Icons.close : Icons.menu),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      String contributeArea = widget.path.split("/")[1];
-                      if (supportedContents.contains(contributeArea)) {
-                        if (FirebaseAuth.instance.currentUser != null) {
-                          bool isVerifided =
-                              FirebaseAuth.instance.currentUser!.emailVerified;
-                          if (isVerifided) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Editor(
-                                  contributionArea: contributeArea,
-                                ),
-                              ),
-                            );
-                          } else {
-                            Fluttertoast.showToast(
-                              msg: "First verify your account. Go to settings",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: Colors.grey[700],
-                              textColor: Colors.white,
-                              timeInSecForIosWeb: 3,
-                            );
-                          }
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: "Log or create account first",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            backgroundColor: Colors.grey[700],
-                            textColor: Colors.white,
-                            timeInSecForIosWeb: 3,
-                          );
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Login(),
-                            ),
-                          );
-                        }
-                      } else {
-                        Fluttertoast.showToast(
-                          msg: "This not a Valid Area",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Colors.grey[700],
-                          textColor: Colors.white,
-                          timeInSecForIosWeb: 3,
-                        );
-                      }
-                    },
-                    child: const Icon(FontAwesomeIcons.filePen),
-                  ),
-                  ElevatedButton(
+      body: Container(
+        decoration: BoxDecoration(gradient: gradiantOfcontaner),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
                       onPressed: () {
                         List splitedPath = widget.path.split("/");
+
                         if (splitedPath.length < 2) return;
                         if (currentDoc == null) {
                           Fluttertoast.showToast(
@@ -1057,26 +930,28 @@ class _ContentsState extends State<Contents>
                             textColor: Colors.white,
                             timeInSecForIosWeb: 3,
                           );
+
                           return;
                         } else {
                           int len = listOfIDs.length;
-                          int index = listOfIDs.indexOf(currentDoc) + 1;
-                          if (len > index) {
-                            String id =
-                                ((double.parse(listOfIDs[index])) / 10000000000)
-                                    .toString();
+                          int index = listOfIDs.indexOf(currentDoc);
+
+                          if (len > 0 && index > 0) {
+                            String id = ((double.parse(listOfIDs[index - 1])) /
+                                    10000000000)
+                                .toString();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     Contents(path: "/${splitedPath[1]}/$id"),
                                 settings: RouteSettings(
-                                    name: "/${splitedPath[1]}/$id"),
+                                    name: "/${splitedPath[1]}/$id}"),
                               ),
                             );
                           } else {
                             Fluttertoast.showToast(
-                              msg: "No more avilable",
+                              msg: "No previous avilable",
                               toastLength: Toast.LENGTH_LONG,
                               gravity: ToastGravity.BOTTOM,
                               backgroundColor: Colors.grey[700],
@@ -1086,36 +961,165 @@ class _ContentsState extends State<Contents>
                           }
                         }
                       },
-                      child: const Icon(Icons.arrow_forward_ios)),
-                ],
-              ),
-            ),
-            SizeTransition(
-              sizeFactor: animator,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 30,
-                  right: 30,
-                  bottom: 10,
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(80, 182, 182, 182),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15),
+                      child: const Icon(Icons.arrow_back_ios),
                     ),
-                  ),
-                  height: 300,
-                  child: allTutorialWidget,
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (isMenuOpen) {
+                          animationController.reverse();
+                          setState(() {
+                            isMenuOpen = !isMenuOpen;
+                          });
+                        } else {
+                          animationController.forward();
+                          setState(() {
+                            isMenuOpen = !isMenuOpen;
+                          });
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "All Tutoriall",
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Icon(isMenuOpen ? Icons.close : Icons.menu),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        String contributeArea = widget.path.split("/")[1];
+                        if (supportedContents.contains(contributeArea)) {
+                          if (FirebaseAuth.instance.currentUser != null) {
+                            bool isVerifided = FirebaseAuth
+                                .instance.currentUser!.emailVerified;
+                            if (isVerifided) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Editor(
+                                    contributionArea: contributeArea,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                msg:
+                                    "First verify your account. Go to settings",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey[700],
+                                textColor: Colors.white,
+                                timeInSecForIosWeb: 3,
+                              );
+                            }
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Log or create account first",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[700],
+                              textColor: Colors.white,
+                              timeInSecForIosWeb: 3,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                              ),
+                            );
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "This not a Valid Area",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.grey[700],
+                            textColor: Colors.white,
+                            timeInSecForIosWeb: 3,
+                          );
+                        }
+                      },
+                      child: const Icon(FontAwesomeIcons.filePen),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          List splitedPath = widget.path.split("/");
+                          if (splitedPath.length < 2) return;
+                          if (currentDoc == null) {
+                            Fluttertoast.showToast(
+                              msg: "No tutorial avilable",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: Colors.grey[700],
+                              textColor: Colors.white,
+                              timeInSecForIosWeb: 3,
+                            );
+                            return;
+                          } else {
+                            int len = listOfIDs.length;
+                            int index = listOfIDs.indexOf(currentDoc) + 1;
+                            if (len > index) {
+                              String id = ((double.parse(listOfIDs[index])) /
+                                      10000000000)
+                                  .toString();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      Contents(path: "/${splitedPath[1]}/$id"),
+                                  settings: RouteSettings(
+                                      name: "/${splitedPath[1]}/$id"),
+                                ),
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "No more avilable",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.grey[700],
+                                textColor: Colors.white,
+                                timeInSecForIosWeb: 3,
+                              );
+                            }
+                          }
+                        },
+                        child: const Icon(Icons.arrow_forward_ios)),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            documentVew,
-          ],
+              SizeTransition(
+                sizeFactor: animator,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 30,
+                    right: 30,
+                    bottom: 10,
+                  ),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(80, 182, 182, 182),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                    ),
+                    height: 300,
+                    child: allTutorialWidget,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              documentVew,
+            ],
+          ),
         ),
       ),
     );

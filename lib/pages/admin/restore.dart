@@ -184,10 +184,6 @@ class _RestoreState extends State<Restore> {
                                         padding:
                                             const EdgeInsets.only(right: 7),
                                         child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: elevatedStyle,
-                                            backgroundColor: Colors.blueGrey,
-                                          ),
                                           onPressed: () {
                                             Clipboard.setData(
                                               ClipboardData(
@@ -215,10 +211,6 @@ class _RestoreState extends State<Restore> {
                                         padding:
                                             const EdgeInsets.only(right: 7),
                                         child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: elevatedStyle,
-                                            backgroundColor: Colors.blueGrey,
-                                          ),
                                           onPressed: () async {
                                             Clipboard.setData(
                                               ClipboardData(

@@ -6,9 +6,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 import 'package:tpiprogrammingclub/pages/profile/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../main.dart';
 
 class Contributors extends StatefulWidget {
   const Contributors({super.key});
@@ -132,7 +133,6 @@ class _ContributorsState extends State<Contributors> {
                 const Divider(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    shape: elevatedStyle,
                     minimumSize:
                         Size(MediaQuery.of(context).size.width * 0.95, 35),
                   ),
@@ -174,161 +174,164 @@ class _ContributorsState extends State<Contributors> {
   Widget build(BuildContext context) {
     if (onetimeCall) getRankList();
     return Scaffold(
-      body: ListView(
-        addAutomaticKeepAlives: true,
-        physics: const BouncingScrollPhysics(),
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(1000),
-              child: Container(
-                height: 300,
-                width: 300,
-                color: const Color.fromARGB(80, 170, 170, 170),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://firebasestorage.googleapis.com/v0/b/tpiprogrammingclub.appspot.com/o/user%2FmyProfile.jpg?alt=media&token=0853f603-379d-4246-a74c-684655ff5036",
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                          value: downloadProgress.progress),
+      body: Container(
+        decoration: BoxDecoration(gradient: gradiantOfcontaner),
+        child: ListView(
+          addAutomaticKeepAlives: true,
+          physics: const BouncingScrollPhysics(),
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(1000),
+                child: Container(
+                  height: 300,
+                  width: 300,
+                  color: const Color.fromARGB(80, 170, 170, 170),
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        "https://firebasestorage.googleapis.com/v0/b/tpiprogrammingclub.appspot.com/o/developer%2F341767444_749301903487999_5375831444786999205_n.jpg?alt=media&token=dcbb55bf-b39b-41af-909c-1153e367d4e0",
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
+                      ),
                     ),
-                  ),
-                  fit: BoxFit.cover,
-                  errorWidget: (context, url, error) => Center(
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        if (!await launchUrl(
-                          Uri.parse(
-                            "https://scontent.fdac24-1.fna.fbcdn.net/v/t39.30808-6/257764352_421357696128525_3923772872302578932_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeEk28nnx2EaxvIbYoua520YhnIBAGJbQyuGcgEAYltDK9FpyaWJ5ZLcILRiIH6wL5ooDCvdIxrRLRuEzpR2PL-l&_nc_ohc=9wIUOX1ivlAAX-U0kh8&_nc_ht=scontent.fdac24-1.fna&oh=00_AfB7bn7M9bVakeVGWqT6lhJzZK0FUSMONFAQuvXYJhaZtQ&oe=64064D87",
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => Center(
+                      child: OutlinedButton(
+                        onPressed: () async {
+                          if (!await launchUrl(
+                            Uri.parse(
+                              "https://scontent.fdac24-1.fna.fbcdn.net/v/t39.30808-6/257764352_421357696128525_3923772872302578932_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeEk28nnx2EaxvIbYoua520YhnIBAGJbQyuGcgEAYltDK9FpyaWJ5ZLcILRiIH6wL5ooDCvdIxrRLRuEzpR2PL-l&_nc_ohc=9wIUOX1ivlAAX-U0kh8&_nc_ht=scontent.fdac24-1.fna&oh=00_AfB7bn7M9bVakeVGWqT6lhJzZK0FUSMONFAQuvXYJhaZtQ&oe=64064D87",
+                            ),
+                          )) {
+                            throw Exception(
+                              'Could not launch',
+                            );
+                          }
+                        },
+                        child: const Text(
+                          'For Image Click Here',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.blue,
                           ),
-                        )) {
-                          throw Exception(
-                            'Could not launch',
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'For Image Click Here',
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.blue,
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const Center(
-            child: Text(
-              'Developer of this WebApp and Android App',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+            const SizedBox(
+              height: 10,
             ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          const Divider(
-            height: 2,
-            color: Colors.black,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                'Follow me :',
+            const Center(
+              child: Text(
+                'Developer of this WebApp and Android App',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              IconButton(
-                onPressed: () async {
-                  if (!await launchUrl(
-                    Uri.parse(
-                      "https://github.com/IsmailHosenIsmailJames",
-                    ),
-                  )) {
-                    throw Exception(
-                      'Could not launch "https://github.com/IsmailHosenIsmailJames"',
-                    );
-                  }
-                },
-                icon: const Icon(FontAwesomeIcons.github,
-                    size: 30.0, color: Colors.blue),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (!await launchUrl(
-                    Uri.parse(
-                      "https://www.facebook.com/mdismailhosen.james",
-                    ),
-                  )) {
-                    throw Exception(
-                      'Could not launch "https://www.facebook.com/mdismailhosen.james"',
-                    );
-                  }
-                },
-                icon: const Icon(FontAwesomeIcons.facebook,
-                    size: 30.0, color: Colors.blue),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (!await launchUrl(
-                    Uri.parse(
-                      "https://www.linkedin.com/in/ismail-hosen-3756a4211/",
-                    ),
-                  )) {
-                    throw Exception(
-                      'Could not launch "https://www.linkedin.com/in/ismail-hosen-3756a4211/"',
-                    );
-                  }
-                },
-                icon: const Icon(FontAwesomeIcons.linkedin,
-                    size: 30.0, color: Colors.blue),
-              ),
-              IconButton(
-                onPressed: () async {
-                  if (!await launchUrl(
-                    Uri.parse(
-                      "https://stackoverflow.com/users/20796524/md-ismail-hosen-james",
-                    ),
-                  )) {
-                    throw Exception(
-                      'Could not launch "https://stackoverflow.com/users/20796524/md-ismail-hosen-james"',
-                    );
-                  }
-                },
-                icon: const Icon(FontAwesomeIcons.stackOverflow,
-                    size: 30.0, color: Colors.blue),
-              ),
-            ],
-          ),
-          const Divider(
-            height: 2,
-            color: Colors.black,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Center(
-            child: mywidget,
-          ),
-        ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Divider(
+              height: 2,
+              color: Colors.black,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Follow me :',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (!await launchUrl(
+                      Uri.parse(
+                        "https://github.com/IsmailHosenIsmailJames",
+                      ),
+                    )) {
+                      throw Exception(
+                        'Could not launch "https://github.com/IsmailHosenIsmailJames"',
+                      );
+                    }
+                  },
+                  icon: const Icon(FontAwesomeIcons.github,
+                      size: 30.0, color: Colors.blue),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (!await launchUrl(
+                      Uri.parse(
+                        "https://www.facebook.com/mdismailhosen.james",
+                      ),
+                    )) {
+                      throw Exception(
+                        'Could not launch "https://www.facebook.com/mdismailhosen.james"',
+                      );
+                    }
+                  },
+                  icon: const Icon(FontAwesomeIcons.facebook,
+                      size: 30.0, color: Colors.blue),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (!await launchUrl(
+                      Uri.parse(
+                        "https://www.linkedin.com/in/ismail-hosen-3756a4211/",
+                      ),
+                    )) {
+                      throw Exception(
+                        'Could not launch "https://www.linkedin.com/in/ismail-hosen-3756a4211/"',
+                      );
+                    }
+                  },
+                  icon: const Icon(FontAwesomeIcons.linkedin,
+                      size: 30.0, color: Colors.blue),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (!await launchUrl(
+                      Uri.parse(
+                        "https://stackoverflow.com/users/20796524/md-ismail-hosen-james",
+                      ),
+                    )) {
+                      throw Exception(
+                        'Could not launch "https://stackoverflow.com/users/20796524/md-ismail-hosen-james"',
+                      );
+                    }
+                  },
+                  icon: const Icon(FontAwesomeIcons.stackOverflow,
+                      size: 30.0, color: Colors.blue),
+                ),
+              ],
+            ),
+            const Divider(
+              height: 2,
+              color: Colors.black,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: mywidget,
+            ),
+          ],
+        ),
       ),
     );
   }

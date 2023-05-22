@@ -4,6 +4,7 @@ import 'package:tpiprogrammingclub/pages/admin/pending_post.dart';
 import 'package:tpiprogrammingclub/pages/admin/update_rank.dart';
 import 'package:tpiprogrammingclub/pages/home/home_page.dart';
 
+import '../../main.dart';
 import 'restore.dart';
 
 class AdminPage extends StatefulWidget {
@@ -21,81 +22,80 @@ class _AdminPageState extends State<AdminPage> {
       appBar: AppBar(
         title: const Text("Admin Page"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: elevatedStyle,
-                minimumSize: const Size(270, 40),
+      body: Container(
+        decoration: BoxDecoration(gradient: gradiantOfcontaner),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(270, 40),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PendingPost(),
+                    ),
+                  );
+                },
+                child: const Text('All Pending Post'),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PendingPost(),
-                  ),
-                );
-              },
-              child: const Text('All Pending Post'),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: elevatedStyle,
-                minimumSize: const Size(270, 40),
+              const SizedBox(
+                height: 15,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const DeletePost(),
-                  ),
-                );
-              },
-              child: const Text('Delete a Post'),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: elevatedStyle,
-                minimumSize: const Size(270, 40),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(270, 40),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DeletePost(),
+                    ),
+                  );
+                },
+                child: const Text('Delete a Post'),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Restore(),
-                  ),
-                );
-              },
-              child: const Text('Restore a Post'),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: elevatedStyle,
-                minimumSize: const Size(270, 40),
+              const SizedBox(
+                height: 15,
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UpdateRank(),
-                  ),
-                );
-              },
-              child: const Text('Update All The Rank'),
-            ),
-          ],
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(270, 40),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Restore(),
+                    ),
+                  );
+                },
+                child: const Text('Restore a Post'),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(270, 40),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UpdateRank(),
+                    ),
+                  );
+                },
+                child: const Text('Update All The Rank'),
+              ),
+            ],
+          ),
         ),
       ),
     );

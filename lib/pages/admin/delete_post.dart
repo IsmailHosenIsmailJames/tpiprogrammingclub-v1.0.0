@@ -109,9 +109,11 @@ class DeletePost extends StatelessWidget {
                                     "comment": result['comment'],
                                     "doc": result['doc'],
                                     "like": result['like'],
+                                    "email": result['email'],
                                     "language": path,
                                     "id": sId,
                                   });
+
                                   FirebaseFirestore.instance
                                       .collection(path)
                                       .doc(sId)
